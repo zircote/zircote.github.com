@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[zircote.com]]></title>
-  <link href="http://zircote.com/atom.xml" rel="self"/>
-  <link href="http://zircote.com/"/>
-  <updated>2012-11-19T00:38:53-06:00</updated>
-  <id>http://zircote.com/</id>
+  <link href="http://zircote.github.com/atom.xml" rel="self"/>
+  <link href="http://zircote.github.com/"/>
+  <updated>2012-11-19T01:44:31-06:00</updated>
+  <id>http://zircote.github.com/</id>
   <author>
     <name><![CDATA[Robert Allen]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Functional testing PHP SSH2 workflows with PHPUnit and Vagrant]]></title>
-    <link href="http://zircote.com/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant/"/>
+    <link href="http://zircote.github.com/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant/"/>
     <updated>2012-09-03T20:35:48-05:00</updated>
-    <id>http://zircote.com/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant</id>
+    <id>http://zircote.github.com/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant</id>
     <content type="html"><![CDATA[<p>When <code><code>$this->markTestIncomplete()</code></code> just won’t do. Enter Vagrant.</p>
 
 
@@ -99,26 +99,26 @@ You will find many good write-ups on its installation and use. For the sake of b
   
   <entry>
     <title type="html"><![CDATA[Amazon Web Services at Ifbyphone Deck]]></title>
-    <link href="http://zircote.com/blog/2012/06/26/amazon-web-services-at-ifbyphone-deck/"/>
+    <link href="http://zircote.github.com/blog/2012/06/26/amazon-web-services-at-ifbyphone-deck/"/>
     <updated>2012-06-26T20:21:26-05:00</updated>
-    <id>http://zircote.com/blog/2012/06/26/amazon-web-services-at-ifbyphone-deck</id>
+    <id>http://zircote.github.com/blog/2012/06/26/amazon-web-services-at-ifbyphone-deck</id>
     <content type="html"><![CDATA[<p>Presented to Soliant Consulting, Chicago, IL 2012/06/26
-<script async class="speakerdeck-embed" data-id="4fea17d5cd9eca002200a65d" data-ratio="1.3333333333333333" src="http://zircote.com//speakerdeck.com/assets/embed.js"></script></p>
+<script async class="speakerdeck-embed" data-id="4fea17d5cd9eca002200a65d" data-ratio="1.3333333333333333" src="http://zircote.github.com//speakerdeck.com/assets/embed.js"></script></p>
 
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[ReSTful web services via RFC-2616]]></title>
-    <link href="http://zircote.com/blog/2012/06/13/restful-web-services-via-rfc-2616/"/>
+    <link href="http://zircote.github.com/blog/2012/06/13/restful-web-services-via-rfc-2616/"/>
     <updated>2012-06-13T01:00:58-05:00</updated>
-    <id>http://zircote.com/blog/2012/06/13/restful-web-services-via-rfc-2616</id>
+    <id>http://zircote.github.com/blog/2012/06/13/restful-web-services-via-rfc-2616</id>
     <content type="html"><![CDATA[<p>My slides relating to my presentation at the inaugural <a href="http://www.meetup.com/API-Craft-Chicago/" title="API-Craft Chicago Meetup" target="_blank">API-Craft Chicago Meetup</a>.</p>
 
 
 
 
-<script async class="speakerdeck-embed" data-id="4fd7e426a14e86001f002168" data-ratio="1.299492385786802" src="http://zircote.com//speakerdeck.com/assets/embed.js"></script>
+<script async class="speakerdeck-embed" data-id="4fd7e426a14e86001f002168" data-ratio="1.299492385786802" src="http://zircote.github.com//speakerdeck.com/assets/embed.js"></script>
 
 
 
@@ -130,9 +130,9 @@ You will find many good write-ups on its installation and use. For the sake of b
   
   <entry>
     <title type="html"><![CDATA[Why Composer?]]></title>
-    <link href="http://zircote.com/blog/2012/05/19/why-composer/"/>
+    <link href="http://zircote.github.com/blog/2012/05/19/why-composer/"/>
     <updated>2012-05-19T02:33:04-05:00</updated>
-    <id>http://zircote.com/blog/2012/05/19/why-composer</id>
+    <id>http://zircote.github.com/blog/2012/05/19/why-composer</id>
     <content type="html"><![CDATA[<p>The efforts to decouple services and isolate application tiers can be a tricky business. Currently, at Ifbyphone we are in the process of decoupling many application segments and improving the agility of our development process. This effort comes at the expense of many things that are often taken for granted in many environments. It is no different at Ifbyphone. A significant pain point of this process is application dependencies.  We implement several dependencies in our applications Zend Framework, Rediska, PHPUnit and many others. The challenge is, applications often have their own deployment schedules; development processes and are often times at different stages of their life cycle.</p>
 
 
@@ -237,9 +237,9 @@ You will find many good write-ups on its installation and use. For the sake of b
   
   <entry>
     <title type="html"><![CDATA[The challenges of moving forward.]]></title>
-    <link href="http://zircote.com/blog/2012/05/15/the-challenges-of-moving-forward/"/>
+    <link href="http://zircote.github.com/blog/2012/05/15/the-challenges-of-moving-forward/"/>
     <updated>2012-05-15T15:47:15-05:00</updated>
-    <id>http://zircote.com/blog/2012/05/15/the-challenges-of-moving-forward</id>
+    <id>http://zircote.github.com/blog/2012/05/15/the-challenges-of-moving-forward</id>
     <content type="html"><![CDATA[<p>As business moves forward, technology expands into new concepts and applications of theory, and Ifbyphone is no exception. Unlike most startups we hear about these days, creating solutions with the latest technologies, developing new markets and the freedom of a clean backlog. We find ourselves at Ifbyphone with technical debt, established customer expectations and a backlog of tasks that can be daunting on a good day. This isn’t to say these challenges are insurmountable. They do, however, pose not so unique challenges; for every aspect of the company. Luckily we have a great team of software engineers and support staff working hard each day to distill the backlog to the most valuable sprint tasks each week so that we may deliver the most value to our customers.</p>
 
 
@@ -279,9 +279,9 @@ You will find many good write-ups on its installation and use. For the sake of b
   
   <entry>
     <title type="html"><![CDATA[What is an expert?]]></title>
-    <link href="http://zircote.com/blog/2011/12/29/what-is-an-expert/"/>
+    <link href="http://zircote.github.com/blog/2011/12/29/what-is-an-expert/"/>
     <updated>2011-12-29T16:28:52-06:00</updated>
-    <id>http://zircote.com/blog/2011/12/29/what-is-an-expert</id>
+    <id>http://zircote.github.com/blog/2011/12/29/what-is-an-expert</id>
     <content type="html"><![CDATA[<p>One of the joys of my current profession is constant exposure to
 individuals and organizations that label themselves “experts” in any given
 discipline. Having been exposed to this perk yet again this holiday season, I
@@ -375,9 +375,9 @@ good from the trash.</p>
   
   <entry>
     <title type="html"><![CDATA[A quick ternary joyride.]]></title>
-    <link href="http://zircote.com/blog/2011/11/17/a-quick-ternary-joyride/"/>
+    <link href="http://zircote.github.com/blog/2011/11/17/a-quick-ternary-joyride/"/>
     <updated>2011-11-17T23:59:31-06:00</updated>
-    <id>http://zircote.com/blog/2011/11/17/a-quick-ternary-joyride</id>
+    <id>http://zircote.github.com/blog/2011/11/17/a-quick-ternary-joyride</id>
     <content type="html"><![CDATA[<p>I am not a fan of @ but I have not found a way to use the new ternary operator without otherwise throwing the notice.</p>
 
 <pre class="brush:shell">[ zircote ~/Workspace/CtaTrack ] php -a
@@ -399,9 +399,9 @@ php ></pre>
   
   <entry>
     <title type="html"><![CDATA[The revolution around us...]]></title>
-    <link href="http://zircote.com/blog/2011/09/08/the-revolution-around-us/"/>
+    <link href="http://zircote.github.com/blog/2011/09/08/the-revolution-around-us/"/>
     <updated>2011-09-08T02:05:38-05:00</updated>
-    <id>http://zircote.com/blog/2011/09/08/the-revolution-around-us</id>
+    <id>http://zircote.github.com/blog/2011/09/08/the-revolution-around-us</id>
     <content type="html"><![CDATA[<p>I was remembering back to 1997 when I was working in IT for a fortune 500 as the stir for Y2K upgrades were on the rise, buyouts of smaller companies were daily and the transition from copper pair telecommunications systems were being replaced by VOIP. The latter was an odd transition; the use of a somewhat new thing (Ethernet) was being retasked to now handle phone traffic which heretofore was managed not by IT but rather by tel-co. This transition meant that the phone systems which had to date been managed by groups of switch technicians and troubleshooting performed with tone generators, butt-sets and amplifiers where now handled by neck-bearded pale-faced sociophobes in the basement  (not exactly) where no one dared venture. Many lost their jobs unable to embrace the change, many couldn&#8217;t make the transition believing it would pass and some embraced it striving to stay on the curve.</p>
 
 <p>Enter 2011, a new revolution has been well under way reminding me of those days long since passed; the cloud. While some see the cloud as just the most recent fad, a passing annoyance or the next thing to crash and burn; I however believe this is the next revolution. There will be those that will lose their jobs refusing to embrace the inevitable, more will not make the transition believing it will pass and some will successfully embrace it riding the curve. Much like the tel-co department of old, ops groups will now have to begin thinking more like a developer; it will require them to become part of the development process designing and interacting with aspects not specifically relating to the assets and hardware. Similarly, developers will have to become more mindful of ops related requirements that intersect their daily thought processes; considering technical details of deployment, concurrency and the like. The ability for even the most meagerly funded organizations to have as robust and thoroughly sound infrastructure as a Fortune 500, by which they may build, grow and continuously deliver their message to the world; making the cloud a cornerstone that is here to stay.</p>
@@ -410,9 +410,9 @@ php ></pre>
   
   <entry>
     <title type="html"><![CDATA[Prowl Push Notifications with Zend_Log]]></title>
-    <link href="http://zircote.com/blog/2011/07/02/prowl-push-notifications-with-zend_log/"/>
+    <link href="http://zircote.github.com/blog/2011/07/02/prowl-push-notifications-with-zend_log/"/>
     <updated>2011-07-02T23:13:18-05:00</updated>
-    <id>http://zircote.com/blog/2011/07/02/prowl-push-notifications-with-zend_log</id>
+    <id>http://zircote.github.com/blog/2011/07/02/prowl-push-notifications-with-zend_log</id>
     <content type="html"><![CDATA[<p>I wanted a contained method to send push notifications from various tasks and perhaps even a list of recipients for critical alerts; all the while still be able to hook into existing application code and error reporting. This lead me to writing Skulk_Log_Writer_Prowl as part of the <del>0.1.4</del> 0.1.5 release of the <a href="https://github.com/zircote/Skulk">Skulk</a> package.</p>
 
 <p>While currently simple in implementation it provides configurable support for provider keys, single or multiple recipient keys, linking URL and notice title. I may add layout support for more detailed messaging formats later with Zend_Layout. Implementing the  Zend_Log_Writer API, drop in use with minor configuration details is as follows:</p>
@@ -439,7 +439,7 @@ $zendLog-&gt;emerg('this is a emerg test 3 ');</code></pre></noscript></div>
 
 <p>The messages received should appear something like these:</p>
 
-<p><a href="http://zircote.com/images/2011/07/skulk_log_list.png"><img class="alignnone size-medium wp-image-332" title="skulk_log_list" src="http://zircote.com/images/2011/07/skulk_log_list-200x300.png" alt="Skulk Log Output" width="200" height="300" /></a> <a href="http://zircote.com/images/2011/07/skulk_log_pop.png"><img class="alignnone size-medium wp-image-333" title="skulk_log_pop" src="http://zircote.com/images/2011/07/skulk_log_pop-200x300.png" alt="" width="200" height="300" /></a></p>
+<p><a href="http://zircote.github.com/images/2011/07/skulk_log_list.png"><img class="alignnone size-medium wp-image-332" title="skulk_log_list" src="http://zircote.github.com/images/2011/07/skulk_log_list-200x300.png" alt="Skulk Log Output" width="200" height="300" /></a> <a href="http://zircote.github.com/images/2011/07/skulk_log_pop.png"><img class="alignnone size-medium wp-image-333" title="skulk_log_pop" src="http://zircote.github.com/images/2011/07/skulk_log_pop-200x300.png" alt="" width="200" height="300" /></a></p>
 
 <p>EDIT:</p>
 
@@ -473,9 +473,9 @@ $mail-&gt;setBodyText('this is a skulk test')
   
   <entry>
     <title type="html"><![CDATA[Zend Server Cluster Manager and Capistrano Deployments]]></title>
-    <link href="http://zircote.com/blog/2011/06/26/zend-server-cluster-manager-and-capistrano-deployments/"/>
+    <link href="http://zircote.github.com/blog/2011/06/26/zend-server-cluster-manager-and-capistrano-deployments/"/>
     <updated>2011-06-26T03:17:39-05:00</updated>
-    <id>http://zircote.com/blog/2011/06/26/zend-server-cluster-manager-and-capistrano-deployments</id>
+    <id>http://zircote.github.com/blog/2011/06/26/zend-server-cluster-manager-and-capistrano-deployments</id>
     <content type="html"><![CDATA[<p>One of the challenges of deploying applications in an elastic environment is the target servers are ever changing; from one moment to the next your environment may consist of four, twenty or more target hosts.  The process of determining these targets can be a tedious and time consuming task; requiring the examination of cluster member lists within the Zend Server Manager Gui or executing the ec2-describe-instances then parsing through the results for the correct group; either of these methods is time consuming and thwart with the possibility of mistyping a hostname, missing one or just breaking the process.</p>
 
 <p>I approach deployments from an angle that no human interaction (beyond security dictated by my comfort level) should be required;  a programmatic method of gathering this dynamic list of target hosts is required. To gather this list I have created and employed a library for interacting with the API interface for <a href="http://www.zend.com/en/">Zend Server</a> and <a href="http://www.zend.com/en/">Zend Server Cluster Manager</a>, <a href="https://github.com/zircote/Jazsl">Jazsl</a> (Just Another Zend Server Library.)  <a href="https://github.com/zircote/Jazsl">Jazsl</a> provides methods for all current Zend Server API calls:</p>
@@ -526,7 +526,7 @@ zf enable config.provider Jazsl_Tool_JazslClusterProvider</code></pre></noscript
 
 <p>Before continuing we must configure an api key (read-only access is all we require.) To generate the api key we must log into the Zend Server Cluster Manager Gui, refer to the Zend Server documentation for details. The deployment hosts portion only requires a read-only api key. Once you have this key you can resume configuration of Jazsl tool as follows:</p>
 
-<p><a href="http://zircote.com/images/2011/06/zend-server-cluster-apikeys.png"><img class="alignnone size-medium wp-image-317" title="zend-server-cluster-apikeys" src="http://zircote.com/images/2011/06/zend-server-cluster-apikeys-300x248.png" alt="" width="300" height="248" /></a></p>
+<p><a href="http://zircote.github.com/images/2011/06/zend-server-cluster-apikeys.png"><img class="alignnone size-medium wp-image-317" title="zend-server-cluster-apikeys" src="http://zircote.github.com/images/2011/06/zend-server-cluster-apikeys-300x248.png" alt="" width="300" height="248" /></a></p>
 
 <pre>zf add-server-key jazsl zcsm https://10.0.0.12:10082/ZendServerManager key_full xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</pre>
 
@@ -600,9 +600,9 @@ set :repository, &quot;https://svn.myproject.com/svn/MyProject/tags/production&q
   
   <entry>
     <title type="html"><![CDATA[Access Control By IP Address Ranges]]></title>
-    <link href="http://zircote.com/blog/2011/06/13/access-controls-by-ip-address-ranges/"/>
+    <link href="http://zircote.github.com/blog/2011/06/13/access-controls-by-ip-address-ranges/"/>
     <updated>2011-06-13T05:37:52-05:00</updated>
-    <id>http://zircote.com/blog/2011/06/13/access-controls-by-ip-address-ranges</id>
+    <id>http://zircote.github.com/blog/2011/06/13/access-controls-by-ip-address-ranges</id>
     <content type="html"><![CDATA[<p>Simple example of controlling access to resources based on origin IP address, this example validates origin is a private IP range.</p>
 
 <div><script src='https://gist.github.com/1022368.js?file=PrivateIPAssertion.php'></script>
@@ -752,9 +752,9 @@ class PrivateIPAssertionTest extends PHPUnit_Framework_TestCase
   
   <entry>
     <title type="html"><![CDATA[Zend_Acl storage with redis]]></title>
-    <link href="http://zircote.com/blog/2011/06/12/zend_acl-storage-with-redis/"/>
+    <link href="http://zircote.github.com/blog/2011/06/12/zend_acl-storage-with-redis/"/>
     <updated>2011-06-12T05:58:36-05:00</updated>
-    <id>http://zircote.com/blog/2011/06/12/zend_acl-storage-with-redis</id>
+    <id>http://zircote.github.com/blog/2011/06/12/zend_acl-storage-with-redis</id>
     <content type="html"><![CDATA[<p>Recently I have been playing around with Rediska and Zend_Acl looking at different ways to store the lists and manipulate them so I put together a few of my scribbles to share.</p>
 
 <p>Requirements:</p>
@@ -994,9 +994,9 @@ echo SomeAclService::getInstance('BugsService')
   
   <entry>
     <title type="html"><![CDATA[Testing Web-Service Clients with Zend Framework]]></title>
-    <link href="http://zircote.com/blog/2011/06/04/testing-web-service-clients-with-zend-framework/"/>
+    <link href="http://zircote.github.com/blog/2011/06/04/testing-web-service-clients-with-zend-framework/"/>
     <updated>2011-06-04T14:49:30-05:00</updated>
-    <id>http://zircote.com/blog/2011/06/04/testing-web-service-clients-with-zend-framework</id>
+    <id>http://zircote.github.com/blog/2011/06/04/testing-web-service-clients-with-zend-framework</id>
     <content type="html"><![CDATA[<p>It seems the majority of my time these days is spent writing clients to consume all of the fantastic web-services that people and companies create for us, we are the fortunate beneficiaries of these peoples efforts. Developing clients to consume web-services has at times the additional sticky points that other efforts development may not, there may be a  case were we can not afford to make actual real-live calls to an endpoint (no test sandbox, monetary charges or we simply do not possess actual access to the endpoint.) In these case and most especially while testing we do not want to make &#8216;real-live&#8217; calls to the endpoint. It is not nor should it be the purpose of our tests to test the endpoints performance. A functional test of an endpoint is unrelated to the client libraries we have developed and wish to test and as such should never be dependent on the endpoint for testing its performance characteristics.</p>
 
 <p>I hate reinventing the wheel for common problems that many very smart people have already solved and solved well; which is why most of my personal development is based on a framework, specifically Zend Framework.  The Zend Framework has great support for testing in a vast majority of its components and for the purpose of this article we will be utilizing the <a title="Zend_Http_Client" href="http://framework.zend.com/manual/en/zend.http.html" target="_blank">Zend_Http_Client</a> for the examples.</p>
@@ -1043,9 +1043,9 @@ echo SomeAclService::getInstance('BugsService')
   
   <entry>
     <title type="html"><![CDATA[Adding DocBlox to your Continuous Integration]]></title>
-    <link href="http://zircote.com/blog/2011/06/02/adding-docblox-to-your-continuous-integration/"/>
+    <link href="http://zircote.github.com/blog/2011/06/02/adding-docblox-to-your-continuous-integration/"/>
     <updated>2011-06-02T15:03:50-05:00</updated>
-    <id>http://zircote.com/blog/2011/06/02/adding-docblox-to-your-continuous-integration</id>
+    <id>http://zircote.github.com/blog/2011/06/02/adding-docblox-to-your-continuous-integration</id>
     <content type="html"><![CDATA[<p>Recently inspired by <a href="http://sebastian-bergmann.de/">Sebastian Bergmanns</a>, <a href="http://jenkins-php.org">jenkins-php.org</a> I have begun making a push to put all of my projects both personal and professional under continuous integration management; however one project I work with was so large it was impossible to complete the build. This lead me to discover <a href="http://www.docblox-project.org/">DocBlox</a>: &#8221;a Documentation Generation Application (DGA) for use with PHP applications.&#8221; It was built with this problem in mind and is gaining rapid adoption throughout the PHP community.</p>
 
 <p>Integrating DocBlox in your Jenkins instance is simple and straight forward implementing the changes are as follows:</p>
@@ -1110,9 +1110,9 @@ index 0342c23..2608ddf 100644
   
   <entry>
     <title type="html"><![CDATA[Capturing Ec2 instance meta-data]]></title>
-    <link href="http://zircote.com/blog/2011/05/31/capturing-ec2-instance-meta-data/"/>
+    <link href="http://zircote.github.com/blog/2011/05/31/capturing-ec2-instance-meta-data/"/>
     <updated>2011-05-31T03:16:47-05:00</updated>
-    <id>http://zircote.com/blog/2011/05/31/capturing-ec2-instance-meta-data</id>
+    <id>http://zircote.github.com/blog/2011/05/31/capturing-ec2-instance-meta-data</id>
     <content type="html"><![CDATA[<p>A simple class to grab the meta data of an EC2 instance for shell scripting as well as use in other actions on the server. I utilize it as part of the cluster member adding and deleting when autoscaling instances.</p>
 
 <div><script src='https://gist.github.com/999797.js?file='></script>
@@ -1196,9 +1196,9 @@ class Zircote_Service_Ec2_Metadata extends Zend_Service_Abstract
   
   <entry>
     <title type="html"><![CDATA[Starting a Zend Framework Project [2/2]]]></title>
-    <link href="http://zircote.com/blog/2011/05/15/starting-a-zend-framework-project-23/"/>
+    <link href="http://zircote.github.com/blog/2011/05/15/starting-a-zend-framework-project-23/"/>
     <updated>2011-05-15T07:41:43-05:00</updated>
-    <id>http://zircote.com/blog/2011/05/15/starting-a-zend-framework-project-23</id>
+    <id>http://zircote.github.com/blog/2011/05/15/starting-a-zend-framework-project-23</id>
     <content type="html"><![CDATA[<p>Previously I discussed the creation of a ZF project skeleton; having established the test suite, build file, phpdoc and phpcs processing, we can now begin building the database models. I will also expand on relationships within the models and will cover the implementation of model relationships using Zend_Db_Table_Relationship.</p>
 
 <h2>The Database</h2>
@@ -1553,9 +1553,9 @@ Zend_Application_Resource_Cachemanager</a> and detailed in enabling it for the d
   
   <entry>
     <title type="html"><![CDATA[Starting a Zend Framework Project [1/2]]]></title>
-    <link href="http://zircote.com/blog/2011/05/13/starting-a-zend-framework-project/"/>
+    <link href="http://zircote.github.com/blog/2011/05/13/starting-a-zend-framework-project/"/>
     <updated>2011-05-13T14:29:23-05:00</updated>
-    <id>http://zircote.com/blog/2011/05/13/starting-a-zend-framework-project</id>
+    <id>http://zircote.github.com/blog/2011/05/13/starting-a-zend-framework-project</id>
     <content type="html"><![CDATA[<p>Recently I have been asked to introduce and assist with starting Zend Framework projects; over time I have learned through trial, error and banging my head against a wall a few tricks, shortcuts and nuances. In this series I will take the life cycle of a Zend Framework project from beginning to never-end and cover each portion as completely as I can and provide a place for discussion to improve my process or detail it further. It should be clear the intent of this article is not to discuss development methodology or any process outside of the scope of using Zend Framework itself.</p>
 
 <h1>A project is born.</h1>
@@ -1679,9 +1679,9 @@ touch phpcs.xml phpunit.xml</code></pre></noscript></div>
   
   <entry>
     <title type="html"><![CDATA[Cleaning up your product]]></title>
-    <link href="http://zircote.com/blog/2011/05/11/cleaning-up-your-product/"/>
+    <link href="http://zircote.github.com/blog/2011/05/11/cleaning-up-your-product/"/>
     <updated>2011-05-11T04:41:25-05:00</updated>
-    <id>http://zircote.com/blog/2011/05/11/cleaning-up-your-product</id>
+    <id>http://zircote.github.com/blog/2011/05/11/cleaning-up-your-product</id>
     <content type="html"><![CDATA[<p>I recently made the embarrassing mistake of creating a push request to a well respected PHP author&#8217;s project and to my horror I saw he had to &#8216;detabify&#8217; my push. I had recently reset my Zend Studio workspace and neglected to reconfigure the default format standard from PHP => Zend.</p>
 
 <p>Once I sorted out my studio client, I began to look into ways to test this all before it&#8217;s even committed, to insure I have not overlooked a detail. To help with syntax, formatting and style, I have employed <a title="PHP_CodeSniffer" href="http://pear.php.net/package/PHP_CodeSniffer" target="_blank">PHP_CodeSniffer</a>, a <a title="http://pear.php.net" href="http://pear.php.net" target="_blank">PEAR</a> package. Its use is simple and straightforward with informational documentation; Rulesets or Sniffs are varying and customizable in the form of a ruleset xml file. Available Sniff Collections are grouped as follows:</p>
@@ -1739,9 +1739,9 @@ touch phpcs.xml phpunit.xml</code></pre></noscript></div>
   
   <entry>
     <title type="html"><![CDATA[Skulk PEAR release 0.1.2]]></title>
-    <link href="http://zircote.com/blog/2011/05/09/skulk-pear-release-0-1-2/"/>
+    <link href="http://zircote.github.com/blog/2011/05/09/skulk-pear-release-0-1-2/"/>
     <updated>2011-05-09T02:40:46-05:00</updated>
-    <id>http://zircote.com/blog/2011/05/09/skulk-pear-release-0-1-2</id>
+    <id>http://zircote.github.com/blog/2011/05/09/skulk-pear-release-0-1-2</id>
     <content type="html"><![CDATA[<p>I am happy to announce the release of Skulk 0.1.2 for use with <a title="prowlapp" href="https://www.prowlapp.com" target="_blank">Prowl</a>. This release introduces a command line zf provider for your messaging pleasure. More on its use and source code may be found at github@<a title="Skulk" href="https://github.com/zircote/Skulk" target="_blank">Skulk</a>.</p>
 
 <p>For PEAR installation and channel information, please see: <a href="http://pear.zircote.com/" target="_blank">http://pear.zircote.com/</a> for more details.</p>
@@ -1781,9 +1781,9 @@ touch phpcs.xml phpunit.xml</code></pre></noscript></div>
   
   <entry>
     <title type="html"><![CDATA[Writing a custom provider]]></title>
-    <link href="http://zircote.com/blog/2011/05/08/writing-a-custom-provider/"/>
+    <link href="http://zircote.github.com/blog/2011/05/08/writing-a-custom-provider/"/>
     <updated>2011-05-08T21:30:08-05:00</updated>
-    <id>http://zircote.com/blog/2011/05/08/writing-a-custom-provider</id>
+    <id>http://zircote.github.com/blog/2011/05/08/writing-a-custom-provider</id>
     <content type="html"><![CDATA[<p>I decided I wanted to have a CLI interface to my Skulk library and provide a method to send messages from scripts without requiring any additional coding overhead. To do this I employed the Zend_Tool CLI [zf] and began by deciding on the functionality it would possess. After some thought, I settled ultimately that sending messages would be sufficient for the time being; however, it would require some supporting methods for api key management, naming, adding and deleting.</p>
 
 <pre class="brush:php">class Skulk_Tool_ProwlProvider extends Zend_Tool_Project_Provider_Abstract
