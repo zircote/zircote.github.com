@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Functional testing PHP SSH2 workflows with PHPUnit and Vagrant - zircote.com</title>
+  <meta name="author" content="Robert Allen">
+
+  
+  <meta name="description" content="When $this->markTestIncomplete() just won’t do. Enter Vagrant. To begin with the tools you will need to become familiar with at as follows: Vagrant: &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://zircote.com/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="zircote.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">zircote.com</a></h1>
+  
+    <h2>development (in)action</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:zircote.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Functional Testing PHP SSH2 Workflows With PHPUnit and Vagrant</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-03T20:35:48-05:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>When <code><code>$this->markTestIncomplete()</code></code> just won’t do. Enter Vagrant.</p>
+
+
+
+
+<p>To begin with the tools you will need to become familiar with at as follows:</p>
+
+
+
+
+<p><strong>Vagrant</strong>: <a href="http://vagrantup.com" title="http://vagrantup.com">http://vagrantup.com</a>
+You will find many good write-ups on its installation and use. For the sake of brevity I will provide links to a few I found useful and not provide much detail on this. I suggest begining here: <a href="http://vagrantup.com/v1/docs/getting-started/index.html" title="http://vagrantup.com/v1/docs/getting-started/index.html">http://vagrantup.com/v1/docs/getting-started/index.html</a></p>
+
+
+
+
+<p><strong>PHPUnit</strong>: <a href="http://www.phpunit.de" title="http://www.phpunit.de">http://www.phpunit.de</a></p>
+
+
+
+
+<p>There are four ssh2 authentication methods provided with the php ssh2 tools:</p>
+
+
+
+
+<ul>
+<li><strong>ssh2_auth_hostbased_file</strong> — Authenticate using a public hostkey</li>
+<li><strong>ssh2_auth_none</strong> — Authenticate as &#8220;none&#8221;</li>
+<li><strong>ssh2_auth_password</strong> — Authenticate over SSH using a plain password</li>
+<li><strong>ssh2_auth_pubkey_file</strong> — Authenticate using a public key</li>
+</ul>
+
+
+
+
+<p>For my project I needed to functionally validate a workflow of uploading a file to a server utilizing <strong>ssh2_auth_password</strong> and <strong>ssh2_auth_pubkey</strong>. I need to test the following to validate my results:</p>
+
+
+
+
+<ul>
+<li>Can I authenticate with the desired method?</li>
+<li>Can I validate the fingerprint of the servers key?</li>
+<li>Can I put the contents of a file to a known path on the remote server?</li>
+<li>Can I validate those contents and destination filename are as expected?</li>
+</ul>
+
+
+
+
+<p>To accomplish these goals I require an environment with a known public and private key this provides the fingerprint and both known keys to establish the connection without much work. For password based authentication I need an environment that will allow non-tty password based auth over ssh (this feature is generally disabled and must be changed at vagrant provisioning or you must create a image that is configured.) Not wanting to create a custom box for this case I utilize the provisioning tools built into vagrant and sed. From here it’s really a matter of writing tests and running vagrant, take a look at the gist for examples I have provided.</p>
+
+
+
+
+<p>Example Gist <a href="https://gist.github.com/3612867">https://gist.github.com/3612867</a></p>
+
+
+
+
+<p>The TL;DR:</p>
+
+
+
+
+<ol>
+<li>Write your tests</li>
+<li>Fetch the Vagrant SSH keys</li>
+<li>Create or grab the example VagrantFIle</li>
+<li>run `vagrant init`</li>
+<li>run `vagrant up`</li>
+<li>run the tests</li>
+<li>rinse / repeat</li>
+</ol>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Robert Allen</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-03T20:35:48-05:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://zircote.com/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant/" data-via="" data-counturl="http://zircote.com/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/06/26/amazon-web-services-at-ifbyphone-deck/" title="Previous Post: Amazon Web Services at Ifbyphone Deck">&laquo; Amazon Web Services at Ifbyphone Deck</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant/">Functional testing PHP SSH2 workflows with PHPUnit and Vagrant</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/26/amazon-web-services-at-ifbyphone-deck/">Amazon Web Services at Ifbyphone Deck</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/13/restful-web-services-via-rfc-2616/">ReSTful web services via RFC-2616</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/19/why-composer/">Why Composer?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/15/the-challenges-of-moving-forward/">The challenges of moving forward.</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Robert Allen -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

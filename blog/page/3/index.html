@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>zircote.com</title>
+  <meta name="author" content="Robert Allen">
+
+  
+  <meta name="description" content="Recent additions to the Zend Framework command line tool &lt;strong&gt;zf&lt;/strong&gt; have made provisioning of a Zend Framework application much &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://zircote.com/blog/page/3/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="zircote.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">zircote.com</a></h1>
+  
+    <h2>development (in)action</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:zircote.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/05/08/zend-framework-project-providers/">Zend Framework Project Providers</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-08T17:40:31-05:00" pubdate data-updated="true">May 8<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Recent additions to the Zend Framework command line tool <code>&lt;strong&gt;zf&lt;/strong&gt;</code> have made provisioning of a Zend Framework application much simpler, in addition to expanding global/system wide functionality for tools and hooks in library application hooks through the use of the zend tool providers. I will cover the creation of a Zend Framework project as well as provisioning various project resources (models, forms and database table models) with the use of the <code>zf</code> tool.</p>
+
+<p>First insure the zf tool installed, and is the latest version as only the most recent ZF version supports many of the operations covered in this post. I prefer maintaining my installation of Zend Framework via PEAR; the approach has eliminated many headaches around version control of the library, availability for deployments. I utilize zfcampus&#8217; PEAR release as it packages the zf tool where others do not.</p>
+
+<pre class="brush:shell">$ sudo pear channel-discover pear.zfcampus.org
+$ sudo pear install zfcampus/zf</pre>
+
+
+<p>At this point you should have all that is required to proceed. Next we build a ZF project utilizing the zf tool as outlined below.</p>
+
+<pre class="brush:shell">$ cd ~/public_html
+$ zf create project Tardis
+
+Creating project at /Users/zircote/test/Tardis</pre>
+
+
+<p>Note: This command created a web project, for more information setting up your VHOST, please see docs/README
+This will result in the layout of the project and all supporting folders and files. Examine the docs/Readme.txt for project related configuration information.</p>
+
+<p>I prefer to have all supporting classnames reflect the context of the application in which they reside; therefore I will change the class top level namespace identifier using the tool, this affords me a touch more clarity when having many projects under development and insures I dont make a mistake by having all of my project files beginning with &#8216;Application&#8217;:</p>
+
+<pre class="brush:shell">$ zf change application.class-name-prefix Tardis
+Note: the name provided "Tardis" was altered to "Tardis_" for correctness.
+Note: All existing models will need to be altered to this new namespace by hand
+application.ini updated with new appnamespace Tardis_
+Updating project profile '/Users/zircote/test/Tardis/.zfproject.xml'</pre>
+
+
+<p>In addition to this I also want to enable several items, which are not configured by default, layout, database, and create a table.</p>
+
+<pre class="brush:shell">$ zf enable layout
+Layouts have been enabled, and a default layout created at /Users/zircote/test/Tardis/application/layouts/scripts/layout.phtml
+A layout entry has been added to the application config file.
+
+$ zf configure db-adapter 'adapter=PDO_Mysql&amp;username=tardis&amp;password=tardis&amp;database=Tardis&amp;host=localhost'
+A db configuration for the production section has been written to the application config file.
+
+$ zf enable form
+Enabling forms directory at /Users/zircote/test/Tardis/application/forms
+Updating project profile '/Users/zircote/test/Tardis/.zfproject.xml'</pre>
+
+
+<p>We may also specify the database settings from the zf tool as follows:</p>
+
+<pre class="brush:shell">$ zf configure db-adapter 'adapter=PDO_Mysql&amp;username=tardis&amp;password=tardis&amp;database=Tardis&amp;host=localhost'
+A db configuration for the production section has been written to the application config file.</pre>
+
+
+<p>There are two types of model creation tools provided</p>
+
+<ul>
+    <li>Model    `zf create model name module`</li>
+    <li>DbTable `zf create db-table`</li>
+</ul>
+
+
+<p>To create a database model execute the command:</p>
+
+<pre class="brush:shell">$ zf create db-table Companion companion
+Creating a DbTable at /Users/zircote/test/Tardis/application/models/DbTable/Companion.php
+Updating project profile '/Users/zircote/test/Tardis/.zfproject.xml'</pre>
+
+
+<p>The resulting class below provides the Zend_Db_Table model allowing for customization as well as additional related methods to be added.</p>
+
+<pre class="brush:php">class Tardis_Model_DbTable_Test extends Zend_Db_Table_Abstract
+{
+
+    protected $_name = 'Tardis.test';
+
+}</pre>
+
+
+<p>The second model type produced with the following command:</p>
+
+<pre class="brush:shell">$ zf create model Moffat
+Creating a model at /Users/zircote/test/Tardis/application/models/Moffat.php
+Updating project profile '/Users/zircote/test/Tardis/.zfproject.xml'</pre>
+
+
+<p>Generates the following class may serve as a container for all non-database related material.</p>
+
+<pre class="brush:php">class Tardis_Model_Moffat
+{
+
+}</pre>
+
+
+<p>This is intended to serve as a high level overview of the functionality available and an outline of what it does. In future discussions I will expand on these topics as well as unit testing for models, creating custom project providers and global providers.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/2/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant/">Functional testing PHP SSH2 workflows with PHPUnit and Vagrant</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/26/amazon-web-services-at-ifbyphone-deck/">Amazon Web Services at Ifbyphone Deck</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/13/restful-web-services-via-rfc-2616/">ReSTful web services via RFC-2616</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/19/why-composer/">Why Composer?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/15/the-challenges-of-moving-forward/">The challenges of moving forward.</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Robert Allen -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

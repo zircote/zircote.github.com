@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Capturing Ec2 instance meta-data - zircote.com</title>
+  <meta name="author" content="Robert Allen">
+
+  
+  <meta name="description" content="A simple class to grab the meta data of an EC2 instance for shell scripting as well as use in other actions on the server. I utilize it as part of &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://zircote.com/blog/2011/05/31/capturing-ec2-instance-meta-data/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="zircote.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">zircote.com</a></h1>
+  
+    <h2>development (in)action</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:zircote.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Capturing Ec2 Instance Meta-data</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-31T03:16:47-05:00" pubdate data-updated="true">May 31<span>st</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>A simple class to grab the meta data of an EC2 instance for shell scripting as well as use in other actions on the server. I utilize it as part of the cluster member adding and deleting when autoscaling instances.</p>
+
+<div><script src='https://gist.github.com/999797.js?file='></script>
+<noscript><pre><code>&lt;?php
+require_once 'Zend/Service/Abstract.php';
+/**
+ * 
+ * 
+ * @author zircote@zircote.com
+ * 
+ * &lt;code&gt;
+ * &lt;?php
+ * $metadata = new Zircote_Service_Ec2_Metadata;
+ * echo $metadata-&gt;amiID;
+ * echo $metadata-&gt;hostname;
+ * echo $metadata-&gt;instanceId
+ * echo $metadata-&gt;kernelId
+ * echo $metadata-&gt;userData;
+ * echo $metadata-&gt;publicHostname;
+ * &lt;/code&gt;
+ * &lt;p&gt;CLI example (but note curl -s would probably be more suitable)&lt;/p&gt;
+ * &lt;code&gt;
+ * #!/usr/bin/env php
+ * &lt;?php
+ * require_once 'Zircote/Service/Ec2/Metadata.php';
+ * $metadata = new Zircote_Service_Ec2_Metadata;
+ * try{
+ *     file_put_contents('php://stdout',$metadata-&gt;__get($_SERVER['argv'][1]));
+ * } catch (Exception $e){
+ *     file_put_contents('php://stderr', $e-&gt;getMessage());
+ *     exit(0);
+ * }
+ * &lt;/code&gt;
+ */
+class Zircote_Service_Ec2_Metadata extends Zend_Service_Abstract
+{
+    protected $_endpoint = 'http://169.254.169.254';
+    protected $_methods = array(
+        'amiID' =&gt; '/latest/meta-data/ami-id',
+        'amiLaunchIndex' =&gt; '/latest/meta-data/ami-launch-index',
+        'amiManifestPath' =&gt; '/latest/meta-data/ami-manifest-path',
+        'ancestorAmiIds' =&gt; '/latest/meta-data/ancestor-ami-ids',
+        'blockDeviceMapping' =&gt; '/latest/meta-data/block-device-mapping/',
+        'hostname' =&gt; '/latest/meta-data/hostname',
+        'instanceAction' =&gt; '/latest/meta-data/instance-action',
+        'instanceId' =&gt; '/latest/meta-data/instance-id',
+        'instanceType' =&gt; '/latest/meta-data/instance-type',
+        'kernelId' =&gt; '/latest/meta-data/kernel-id',
+        'localHostname' =&gt; '/latest/meta-data/local-hostname',
+        'localIpv4' =&gt; '/latest/meta-data/local-ipv4',
+        'placement' =&gt; '/latest/meta-data/placement/',
+        'publicHostname' =&gt; '/latest/meta-data/public-hostname',
+        'publicIpv4' =&gt; '/latest/meta-data/public-ipv4',
+        'publicKeys' =&gt; '/latest/meta-data/public-keys/',
+        'ramdiskId' =&gt; '/latest/meta-data/ramdisk-id',
+        'reservationId' =&gt; '/latest/meta-data/reservation-id',
+        'securityGroups' =&gt; '/latest/meta-data/security-groups',
+        'userData' =&gt; '/latest/user-data',
+    );
+
+    public function __get($name)
+    {
+        if(!array_key_exists($name, $this-&gt;_methods)){
+            throw new Exception(sprintf('method [%s] does not exist', $name));
+        }
+        self::getHttpClient()-&gt;setUri($this-&gt;_endpoint)
+            -&gt;getUri()-&gt;setPath($this-&gt;_methods[$name]);
+        $result = self::getHttpClient()-&gt;request();
+        if($result-&gt;getStatus() == 200){
+            return $result-&gt;getBody();
+        } else {
+            return false;
+        }
+    }
+}</code></pre></noscript></div>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Robert Allen</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-31T03:16:47-05:00" pubdate data-updated="true">May 31<span>st</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://zircote.com/blog/2011/05/31/capturing-ec2-instance-meta-data/" data-via="" data-counturl="http://zircote.com/blog/2011/05/31/capturing-ec2-instance-meta-data/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/05/15/starting-a-zend-framework-project-23/" title="Previous Post: Starting a Zend Framework Project [2/2]">&laquo; Starting a Zend Framework Project [2/2]</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/06/02/adding-docblox-to-your-continuous-integration/" title="Next Post: Adding DocBlox to your Continuous Integration">Adding DocBlox to your Continuous Integration &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant/">Functional testing PHP SSH2 workflows with PHPUnit and Vagrant</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/26/amazon-web-services-at-ifbyphone-deck/">Amazon Web Services at Ifbyphone Deck</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/13/restful-web-services-via-rfc-2616/">ReSTful web services via RFC-2616</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/19/why-composer/">Why Composer?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/15/the-challenges-of-moving-forward/">The challenges of moving forward.</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Robert Allen -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

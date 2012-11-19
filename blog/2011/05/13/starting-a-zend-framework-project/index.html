@@ -1,0 +1,330 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Starting a Zend Framework Project [1/2] - zircote.com</title>
+  <meta name="author" content="Robert Allen">
+
+  
+  <meta name="description" content="Recently I have been asked to introduce and assist with starting Zend Framework projects; over time I have learned through trial, error and banging &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://zircote.com/blog/2011/05/13/starting-a-zend-framework-project/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="zircote.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">zircote.com</a></h1>
+  
+    <h2>development (in)action</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:zircote.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Starting a Zend Framework Project [1/2]</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-13T14:29:23-05:00" pubdate data-updated="true">May 13<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Recently I have been asked to introduce and assist with starting Zend Framework projects; over time I have learned through trial, error and banging my head against a wall a few tricks, shortcuts and nuances. In this series I will take the life cycle of a Zend Framework project from beginning to never-end and cover each portion as completely as I can and provide a place for discussion to improve my process or detail it further. It should be clear the intent of this article is not to discuss development methodology or any process outside of the scope of using Zend Framework itself.</p>
+
+<h1>A project is born.</h1>
+
+
+<p>Beginning with a name for the project established (for the purpose of this write-up I have decided on ZendDB) we should begin by creating the project reference within Eclipse, Zend Studio or your preferred editors method. Before we begin any code creation or development we need to insure we have the required tools on our system to begin.<div><script src='https://gist.github.com/970586.js?file=setup-pear.sh'></script>
+<noscript><pre><code>#discover all relevant channels
+sudo pear channel-discover pear.zfcampus.org/
+sudo pear channel-discover pear.phpunit.de
+sudo pear channel-discover components.ez.no
+sudo pear channel-discover pear.symfony-project.com</p>
+
+<h1>install required/desired packages</h1>
+
+<p>sudo pear install PHPDocumentor
+sudo pear install PHP_CodeSniffer
+sudo pear install --alldeps phpunit/PHPUnit
+sudo pear install --alldeps zfcampus/ZF</p>
+
+<p></code></pre></noscript></div>
+ Following this we must establish where we will edit, build and work on the project and initialize the project contents using the <strong>zf</strong> tool, create additional directories for build and validation.<div><script src='https://gist.github.com/970586.js?file=build-dirs.sh'></script>
+<noscript><pre><code># If you use Zend Studio or Eclipse PDT create a new</p>
+
+<h1><code>PHP Project</code> named ZfBugs in your workspace</h1>
+
+<h1>workspace could easily be in /usr/local/zend/apache2/htdocs</h1>
+
+<h1>if you utilize Zend Server the location is up to you</h1>
+
+<p>cd ~/${Workspace}
+zf create project ZendDb</p>
+
+<h1>create the build structure, build.xml and build container</h1>
+
+<p>touch ZendDb/build.xml</p>
+
+<h1>edit the build.xml</h1>
+
+<p>mkdir ZendDb/build
+cd ZendDb/build
+touch phpcs.xml phpunit.xml</code></pre></noscript></div>
+ The build related files and directories tie all components into a collective suite of tools, utilizing ant or phing we will be able to execute all reports as one single command. This practice also lays the foundation for continuous integration, which this project will evolve into as time goes on. To enable each of these tools we will use we must create their associated configurations, begin by editing build.phpcs.xml <div><script src='https://gist.github.com/970586.js?file=phpcs.xml'></script>
+<noscript><pre><code>#edit the phpcs.xml&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;ruleset name=&quot;Zend Standard&quot;&gt;</p>
+
+<pre><code>&amp;lt;description&amp;gt;Zend Standard, exclude extraneous&amp;lt;/description&amp;gt;
+&amp;lt;exclude-pattern&amp;gt;*/tests/*&amp;lt;/exclude-pattern&amp;gt;
+&amp;lt;exclude-pattern&amp;gt;*/db/*&amp;lt;/exclude-pattern&amp;gt;
+&amp;lt;exclude-pattern&amp;gt;*.js&amp;lt;/exclude-pattern&amp;gt;
+&amp;lt;exclude-pattern&amp;gt;*.css&amp;lt;/exclude-pattern&amp;gt;
+&amp;lt;rule ref=&amp;quot;Zend&amp;quot; /&amp;gt;
+</code></pre>
+
+<p>&lt;/ruleset&gt;</code></pre></noscript></div>
+ I have intentionally kept this example simple and to the point, I strongly recommend you visit the <a href="http://pear.php.net/package/PHP_CodeSniffer/">PHP_CodeSniffer</a> project for more details on its capabilities. Once complete the PHPUnit configuration is setup with the various types of reports it should generate, the test suites it will cover.<div><script src='https://gist.github.com/970586.js?file=phpunit.xml'></script>
+<noscript><pre><code>&lt;phpunit bootstrap=&quot;../tests/bootstrap.php&quot;&gt;</p>
+
+<pre><code>&amp;lt;testsuite name=&amp;quot;ZendDb Test Suite&amp;quot;&amp;gt;
+    &amp;lt;directory&amp;gt;../tests/application&amp;lt;/directory&amp;gt;
+&amp;lt;/testsuite&amp;gt;
+&amp;lt;testsuite name=&amp;quot;ZendDb Test Suite&amp;quot;&amp;gt;
+    &amp;lt;directory&amp;gt;../tests/library&amp;lt;/directory&amp;gt;
+&amp;lt;/testsuite&amp;gt;
+&amp;lt;logging&amp;gt;
+    &amp;lt;log type=&amp;quot;coverage-html&amp;quot; target=&amp;quot;coverage&amp;quot; title=&amp;quot;ZendDb&amp;quot;
+        charset=&amp;quot;UTF-8&amp;quot; yui=&amp;quot;true&amp;quot; highlight=&amp;quot;true&amp;quot; lowUpperBound=&amp;quot;35&amp;quot;
+        highLowerBound=&amp;quot;70&amp;quot; /&amp;gt;
+&amp;lt;/logging&amp;gt;
+&amp;lt;filter&amp;gt;
+    &amp;lt;whitelist&amp;gt;
+        &amp;lt;directory suffix=&amp;quot;.php&amp;quot;&amp;gt;library/&amp;lt;/directory&amp;gt;
+    &amp;lt;/whitelist&amp;gt;
+&amp;lt;/filter&amp;gt;
+</code></pre>
+
+<p>&lt;/phpunit&gt;</code></pre></noscript></div>
+ For more details on PHPUnits report capabilities and xml configuration options visit the <a href="http://www.phpunit.de/manual/current/en/appendixes.configuration.html">PHPUnit Documentation</a>. Now this is established we may bring it all together with the ant build.xml file. This file will allow us to create/remove required build artifacts, report directories and execute phpunit, phpcs and phpdoc all in a single stack.<div><script src='https://gist.github.com/970586.js?file=build.xml'></script>
+<noscript><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;project name=&quot;ZendDb&quot; default=&quot;build&quot; basedir=&quot;.&quot;&gt;</p>
+
+<pre><code>&amp;lt;property name=&amp;quot;source&amp;quot; value=&amp;quot;.&amp;quot; /&amp;gt;
+&amp;lt;target name=&amp;quot;clean&amp;quot; description=&amp;quot;Clean up and create report directories&amp;quot;&amp;gt;
+    &amp;lt;!-- This will clear previous files and directories, then create 
+        them for the next run --&amp;gt;
+    &amp;lt;delete dir=&amp;quot;${basedir}/build/api&amp;quot; /&amp;gt;
+    &amp;lt;delete dir=&amp;quot;${basedir}/build/coverage&amp;quot; /&amp;gt;
+    &amp;lt;delete dir=&amp;quot;${basedir}/build/logs&amp;quot; /&amp;gt;
+    &amp;lt;mkdir dir=&amp;quot;${basedir}/build/api&amp;quot; /&amp;gt;
+    &amp;lt;mkdir dir=&amp;quot;${basedir}/build/coverage&amp;quot; /&amp;gt;
+    &amp;lt;mkdir dir=&amp;quot;${basedir}/build/logs&amp;quot; /&amp;gt;
+    &amp;lt;touch file=&amp;quot;${basedir}/build/logs/codeSniffer.txt&amp;quot; /&amp;gt;
+&amp;lt;/target&amp;gt;
+&amp;lt;target name=&amp;quot;phpunit&amp;quot; description=&amp;quot;Run PHPUnit&amp;quot;&amp;gt;
+    &amp;lt;exec executable=&amp;quot;phpunit&amp;quot; failonerror=&amp;quot;true&amp;quot;&amp;gt;
+        &amp;lt;arg line=&amp;quot;-c ${basedir}/build/phpunit.xml&amp;quot; /&amp;gt;
+    &amp;lt;/exec&amp;gt;
+&amp;lt;/target&amp;gt;
+&amp;lt;target name=&amp;quot;phpcs&amp;quot; description=&amp;quot;Generate codeSniffer.txt using PHP_CodeSniffer&amp;quot;&amp;gt;
+    &amp;lt;exec executable=&amp;quot;phpcs&amp;quot;&amp;gt;
+        &amp;lt;arg
+            line=&amp;quot;--report=full
+          --report-file=${basedir}/build/logs/codeSniffer.txt
+          --standard=${basedir}/build/phpcs.xml
+          ${basedir}&amp;quot; /&amp;gt;
+    &amp;lt;/exec&amp;gt;
+&amp;lt;/target&amp;gt;
+&amp;lt;target name=&amp;quot;phpdoc&amp;quot; description=&amp;quot;Generate API documentation using PHPDocumentor&amp;quot;&amp;gt;
+    &amp;lt;exec executable=&amp;quot;phpdoc&amp;quot;&amp;gt;
+        &amp;lt;arg line=&amp;quot;-d ${source} -t ${basedir}/build/api&amp;quot; /&amp;gt;
+    &amp;lt;/exec&amp;gt;
+&amp;lt;/target&amp;gt;
+&amp;lt;target name=&amp;quot;build&amp;quot; depends=&amp;quot;clean,phpunit,phpcs,phpdoc&amp;quot; /&amp;gt;
+</code></pre>
+
+<p>&lt;/project&gt;</code></pre></noscript></div>
+ For a more detailed overview of an ant build file please see <a href="http://ant.apache.org/manual/using.html">Apache Ant</a>; it should also be noted that <a href="http://www.phing.info/trac/">Phing</a> is a php alternative to ant and should be interoperable with ant. To utilize the build script you need only execute <strong>ant </strong> within the top-level directory of the project, the example file provided will create phpdocs, code sniff the project and execute all unit tests. Reports will be stored within build/* for review.</p>
+
+<p>In the next edition to this I will cover database configuration and model creation.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Robert Allen</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-13T14:29:23-05:00" pubdate data-updated="true">May 13<span>th</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://zircote.com/blog/2011/05/13/starting-a-zend-framework-project/" data-via="" data-counturl="http://zircote.com/blog/2011/05/13/starting-a-zend-framework-project/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/05/11/cleaning-up-your-product/" title="Previous Post: Cleaning up your product">&laquo; Cleaning up your product</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/05/15/starting-a-zend-framework-project-23/" title="Next Post: Starting a Zend Framework Project [2/2]">Starting a Zend Framework Project [2/2] &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant/">Functional testing PHP SSH2 workflows with PHPUnit and Vagrant</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/26/amazon-web-services-at-ifbyphone-deck/">Amazon Web Services at Ifbyphone Deck</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/13/restful-web-services-via-rfc-2616/">ReSTful web services via RFC-2616</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/19/why-composer/">Why Composer?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/15/the-challenges-of-moving-forward/">The challenges of moving forward.</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Robert Allen -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

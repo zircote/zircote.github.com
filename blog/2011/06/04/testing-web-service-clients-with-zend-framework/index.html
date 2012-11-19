@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Testing Web-Service Clients with Zend Framework - zircote.com</title>
+  <meta name="author" content="Robert Allen">
+
+  
+  <meta name="description" content="It seems the majority of my time these days is spent writing clients to consume all of the fantastic web-services that people and companies create &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://zircote.com/blog/2011/06/04/testing-web-service-clients-with-zend-framework/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="zircote.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">zircote.com</a></h1>
+  
+    <h2>development (in)action</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:zircote.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Testing Web-Service Clients With Zend Framework</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-04T14:49:30-05:00" pubdate data-updated="true">Jun 4<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>It seems the majority of my time these days is spent writing clients to consume all of the fantastic web-services that people and companies create for us, we are the fortunate beneficiaries of these peoples efforts. Developing clients to consume web-services has at times the additional sticky points that other efforts development may not, there may be a  case were we can not afford to make actual real-live calls to an endpoint (no test sandbox, monetary charges or we simply do not possess actual access to the endpoint.) In these case and most especially while testing we do not want to make &#8216;real-live&#8217; calls to the endpoint. It is not nor should it be the purpose of our tests to test the endpoints performance. A functional test of an endpoint is unrelated to the client libraries we have developed and wish to test and as such should never be dependent on the endpoint for testing its performance characteristics.</p>
+
+<p>I hate reinventing the wheel for common problems that many very smart people have already solved and solved well; which is why most of my personal development is based on a framework, specifically Zend Framework.  The Zend Framework has great support for testing in a vast majority of its components and for the purpose of this article we will be utilizing the <a title="Zend_Http_Client" href="http://framework.zend.com/manual/en/zend.http.html" target="_blank">Zend_Http_Client</a> for the examples.</p>
+
+<p>The strategy for testing web-services is to simply mock the Zend_Http_Client_Adapter_* the request employs; each test will decide in the setup of the test what status code will be sent, what headers and what the body content will contain. The approach I take with this is creating static files within a fixtures directory ( tests/fixtures/http/someEndpoint.200.xml),  making an effort to identify each documents purpose and how it should be used in the test. I may include in these files the any number of unwanted errors, malformed documents entities in an attempt to expose weaknesses in my handling, (this is especially handy when bugs are discovered that are undocumented in the provider API or unforeseen in development):</p>
+
+<div><script src='https://gist.github.com/1007931.js?file=accountStatus.200.xml'></script>
+<noscript><pre><code>&lt;?xml version='1.0' encoding='UTF-8'?&gt;
+&lt;eveapi version=&quot;2&quot;&gt;
+  &lt;currentTime&gt;2010-10-05 20:28:55&lt;/currentTime&gt;
+  &lt;result&gt;
+    &lt;userID&gt;3000000&lt;/userID&gt;
+    &lt;paidUntil&gt;2011-01-01 00:00:00&lt;/paidUntil&gt;
+    &lt;createDate&gt;2004-01-01 00:00:00&lt;/createDate&gt;
+    &lt;logonCount&gt;9999&lt;/logonCount&gt;
+    &lt;logonMinutes&gt;9999&lt;/logonMinutes&gt;
+    &lt;rowset name=&quot;Offers&quot; key=&quot;offerID&quot; columns=&quot;offerID,offeredDate,from,to,ISK&quot; /&gt;
+  &lt;/result&gt;
+  &lt;cachedUntil&gt;2010-10-05 20:33:55&lt;/cachedUntil&gt;
+&lt;/eveapi&gt;</code></pre></noscript></div>
+
+
+<p>Examples of the http response status and content-type should reside in strings similar to the following (note additional headers may be appended following this forming the expected document preamble:</p>
+
+<div><script src='https://gist.github.com/.js?file='></script>
+<noscript><pre><code>&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;https://github.com/gist&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</code></pre></noscript></div>
+
+
+<p>The test belows demonstrates the key points of setting up the test; the setup method provisions the class being tested which in this case extends the Zend_Http_Client. This provides a method <code>setAdapter</code>; with this method we are able to provide the Zend_Http_Client_Adapter_Test for use in our testing. We will test one method, <code>accountStatus</code> and are only demonstrating one test case <code>testApiSuccess</code> within this test case we read in the fixtures file contents and append them to the <code>responseHeader</code> we declared in the #setUp method; this string is passed to the call:<code>$this-&gt;Api-&gt;getAdapter()-&gt;setResponse($fixture);</code> and becomes the desired result of our web-service call. This process of mock returns affords us the ability to generate infinite result sets across a varying range of expected or anticipated failure scenarios.</p>
+
+<div><script src='https://gist.github.com/.js?file='></script>
+<noscript><pre><code>&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;https://github.com/gist&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</code></pre></noscript></div>
+
+
+
+
+<div><script src='https://gist.github.com/.js?file='></script>
+<noscript><pre><code>&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;https://github.com/gist&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</code></pre></noscript></div>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Robert Allen</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-04T14:49:30-05:00" pubdate data-updated="true">Jun 4<span>th</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://zircote.com/blog/2011/06/04/testing-web-service-clients-with-zend-framework/" data-via="" data-counturl="http://zircote.com/blog/2011/06/04/testing-web-service-clients-with-zend-framework/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/06/02/adding-docblox-to-your-continuous-integration/" title="Previous Post: Adding DocBlox to your Continuous Integration">&laquo; Adding DocBlox to your Continuous Integration</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/06/12/zend_acl-storage-with-redis/" title="Next Post: Zend_Acl storage with redis">Zend_Acl storage with redis &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant/">Functional testing PHP SSH2 workflows with PHPUnit and Vagrant</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/26/amazon-web-services-at-ifbyphone-deck/">Amazon Web Services at Ifbyphone Deck</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/13/restful-web-services-via-rfc-2616/">ReSTful web services via RFC-2616</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/19/why-composer/">Why Composer?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/15/the-challenges-of-moving-forward/">The challenges of moving forward.</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Robert Allen -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

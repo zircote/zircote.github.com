@@ -1,0 +1,331 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Zend Server Cluster Manager and Capistrano Deployments - zircote.com</title>
+  <meta name="author" content="Robert Allen">
+
+  
+  <meta name="description" content="One of the challenges of deploying applications in an elastic environment is the target servers are ever changing; from one moment to the next your &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://zircote.com/blog/2011/06/26/zend-server-cluster-manager-and-capistrano-deployments/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="zircote.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">zircote.com</a></h1>
+  
+    <h2>development (in)action</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:zircote.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Zend Server Cluster Manager and Capistrano Deployments</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-26T03:17:39-05:00" pubdate data-updated="true">Jun 26<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>One of the challenges of deploying applications in an elastic environment is the target servers are ever changing; from one moment to the next your environment may consist of four, twenty or more target hosts.  The process of determining these targets can be a tedious and time consuming task; requiring the examination of cluster member lists within the Zend Server Manager Gui or executing the ec2-describe-instances then parsing through the results for the correct group; either of these methods is time consuming and thwart with the possibility of mistyping a hostname, missing one or just breaking the process.</p>
+
+<p>I approach deployments from an angle that no human interaction (beyond security dictated by my comfort level) should be required;  a programmatic method of gathering this dynamic list of target hosts is required. To gather this list I have created and employed a library for interacting with the API interface for <a href="http://www.zend.com/en/">Zend Server</a> and <a href="http://www.zend.com/en/">Zend Server Cluster Manager</a>, <a href="https://github.com/zircote/Jazsl">Jazsl</a> (Just Another Zend Server Library.)  <a href="https://github.com/zircote/Jazsl">Jazsl</a> provides methods for all current Zend Server API calls:</p>
+
+<ul>
+    <li>clusterAddServer</li>
+    <li>clusterRemoveServer</li>
+    <li>clusterDisableServer</li>
+    <li>clusterEnableServer</li>
+    <li>clusterGetServerStatus</li>
+    <li>getSystemInfo</li>
+    <li>restartPhp</li>
+    <li>configurationExport</li>
+    <li>configurationImport</li>
+</ul>
+
+
+<p>More on these methods may be explored in the Zend Server documentation at <a href="http://www.zend.com/topics/zscm/Zend-Server-CM-Reference-Manual.pdf">Zend-Server-CM-Reference-Manual</a>.  I will assume the target stage for this will be production, and the stage files is production.rb; construction of the dynamic servers list within the production.rb requires certain dependancies:</p>
+
+<ul>
+    <li>gem: capistrano</li>
+    <li>gem: capistrano-ext</li>
+    <li>gem: json</li>
+    <li>Zend Framework</li>
+    <li>Jazsl</li>
+</ul>
+
+
+<p>These procedures will assume you have a working capistrano deployment configuration for your php project, the details of installing and configuring Jazsl are as follows. First install the pear packages for Jazsl and Zend Framework on the machine you intend to deploy from.</p>
+
+<div><script src='https://gist.github.com/.js?file='></script>
+<noscript><pre><code>&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;https://github.com/gist&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</code></pre></noscript></div>
+
+
+<p>Now you must enable the zf configuration as well as enable each of the provider within the Jazsl project you intend to utilize; for the purpose of deployments we only require the JazslProvider JazslClusterProvider. To configuration of covered in the following gist:</p>
+
+<div><script src='https://gist.github.com/4109253.js?file=config-jazsl.sh'></script>
+<noscript><pre><code>zf create config
+zf enable config.provider Jazsl_Tool_JazslProvider
+zf enable config.provider Jazsl_Tool_JazslClusterProvider</code></pre></noscript></div>
+
+
+<p>Confirm your setup and configuration of Jazsl providers by executing zf ? , the out put of which should contain:</p>
+
+<div><script src='https://gist.github.com/.js?file='></script>
+<noscript><pre><code>&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;https://github.com/gist&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</code></pre></noscript></div>
+
+
+<p>Before continuing we must configure an api key (read-only access is all we require.) To generate the api key we must log into the Zend Server Cluster Manager Gui, refer to the Zend Server documentation for details. The deployment hosts portion only requires a read-only api key. Once you have this key you can resume configuration of Jazsl tool as follows:</p>
+
+<p><a href="/images/2011/06/zend-server-cluster-apikeys.png"><img class="alignnone size-medium wp-image-317" title="zend-server-cluster-apikeys" src="/images/2011/06/zend-server-cluster-apikeys-300x248.png" alt="" width="300" height="248" /></a></p>
+
+<pre>zf add-server-key jazsl zcsm https://10.0.0.12:10082/ZendServerManager key_full xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</pre>
+
+
+<p>The parameters are described as follows:</p>
+
+<pre>zf add-server-key jazsl zendserver url keyname apikey</pre>
+
+
+<ul>
+    <li><code>zendserver</code> the identifying name for the key-set/host</li>
+    <li><code>url</code> the full Uri for the Zend Server originating this api-key set</li>
+    <li><code>keyname</code> the identifying name of the api-key given in the Zend Server Admin Gui Section</li>
+    <li><code>apikey</code> the api-key hash provided</li>
+</ul>
+
+
+<p>You may then validate its operation by executing:</p>
+
+<pre>zf cluster-status jazsl-server zcsm</pre>
+
+
+<p>where <code><strong>zcsm </strong></code>name of the key you just saved in the previous command; this command should return either an error message or a table of cluster members (provided you have cluster member)</p>
+
+<div><script src='https://gist.github.com/4109253.js?file=cluster-members.txt'></script>
+<noscript><pre><code>[ zircote ~/Workspace/Jazsl ] zf cluster-status jazsl-server zcsm
+Cluster Members:
+┌──────────┬───────────────┬───────────────┬────────────────────────────────────────────────────────────┐
+│Server ID │Status         │Instance-Name  │URI                                                         │
+├──────────┼───────────────┼───────────────┼────────────────────────────────────────────────────────────┤
+│25        │OK             │i-07982fff     │ec2-00-00-00-01.compute-1.amazonaws.com                     │
+├──────────┼───────────────┼───────────────┼────────────────────────────────────────────────────────────┤
+│28        │OK             │i-25765fff     │ec2-00-00-00-00.compute-1.amazonaws.com                     │
+├──────────┼───────────────┼───────────────┼────────────────────────────────────────────────────────────┤
+│31        │OK             │i-2e988fff     │ec2-00-00-00-00.us-west-1.compute.amazonaws.com             │
+└──────────┴───────────────┴───────────────┴────────────────────────────────────────────────────────────┘
+
+
+[ zircote ~/Workspace/Jazsl ] zf get-servers jazsl-cluster zcsm
+[&quot;ec2-00-00-00-01.compute-1.amazonaws.com&quot;,&quot;ec2-00-00-00-00.compute-1.amazonaws.com&quot;,&quot;ec2-00-00-00-00.us-west-1.compute.amazonaws.com&quot;]</code></pre></noscript></div>
+
+
+<p>Once this is confirmed you are now ready to use the jazsl-cluster tool to return the json string that will be used by Capistrano for the target lists as shown in the above gist.
+To utilize this json string we modify our production.rb file to execute the jazsl-cluster command and parse it as part of the roles determination as shown:</p>
+
+<div><script src='https://gist.github.com/4109253.js?file=production.rb'></script>
+<noscript><pre><code>require 'json'
+
+role (:app) do
+  JSON.parse(`zf get-servers jazsl`)
+end
+role (:web) do
+  JSON.parse(`zf get-servers jazsl`)
+end
+
+role (:db) do
+  JSON.parse(`zf get-server jazsl`)
+end
+
+set :rails_env,           &quot;production&quot;
+set :branch,              &quot;production&quot;
+set :repository, &quot;https://svn.myproject.com/svn/MyProject/tags/production&quot;
+</code></pre></noscript></div>
+
+
+<p>You will note for the :db roles section, I utilize a zf get-server jazsl-cluster command to return a single target host, I utilize this for database migrations which I only need to run on one instance in the cluster; while understanding that there are no static instances in an elastic environment. Finally deployment is executed as usual with capistrano: cap deploy production this will parse the servers list and execute all deployment commands on each server as usual.</p>
+
+<p>&nbsp;</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Robert Allen</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-26T03:17:39-05:00" pubdate data-updated="true">Jun 26<span>th</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://zircote.com/blog/2011/06/26/zend-server-cluster-manager-and-capistrano-deployments/" data-via="" data-counturl="http://zircote.com/blog/2011/06/26/zend-server-cluster-manager-and-capistrano-deployments/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/06/13/access-controls-by-ip-address-ranges/" title="Previous Post: Access Control By IP Address Ranges">&laquo; Access Control By IP Address Ranges</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/07/02/prowl-push-notifications-with-zend_log/" title="Next Post: Prowl Push Notifications with Zend_Log">Prowl Push Notifications with Zend_Log &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant/">Functional testing PHP SSH2 workflows with PHPUnit and Vagrant</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/26/amazon-web-services-at-ifbyphone-deck/">Amazon Web Services at Ifbyphone Deck</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/13/restful-web-services-via-rfc-2616/">ReSTful web services via RFC-2616</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/19/why-composer/">Why Composer?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/15/the-challenges-of-moving-forward/">The challenges of moving forward.</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Robert Allen -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

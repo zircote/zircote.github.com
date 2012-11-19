@@ -1,0 +1,456 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Writing a custom provider - zircote.com</title>
+  <meta name="author" content="Robert Allen">
+
+  
+  <meta name="description" content="I decided I wanted to have a CLI interface to my Skulk library and provide a method to send messages from scripts without requiring any additional &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://zircote.com/blog/2011/05/08/writing-a-custom-provider/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="zircote.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">zircote.com</a></h1>
+  
+    <h2>development (in)action</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:zircote.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Writing a Custom Provider</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-08T21:30:08-05:00" pubdate data-updated="true">May 8<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I decided I wanted to have a CLI interface to my Skulk library and provide a method to send messages from scripts without requiring any additional coding overhead. To do this I employed the Zend_Tool CLI [zf] and began by deciding on the functionality it would possess. After some thought, I settled ultimately that sending messages would be sufficient for the time being; however, it would require some supporting methods for api key management, naming, adding and deleting.</p>
+
+<pre class="brush:php">class Skulk_Tool_ProwlProvider extends Zend_Tool_Project_Provider_Abstract
+{
+}</pre>
+
+
+<p>I started the process by creating the provider class Skulk_Tool_ProwlProvider; the &#8220;Provider&#8221; portion of the name is important as the IncludePathLoader will not otherwise recognize the class as such and extending the Zend_Tool_Project_Provider_Abstract.</p>
+
+<pre class="brush:php">require_once ('Zend/Tool/Project/Provider/Abstract.php');
+class Skulk_Tool_ProwlProvider extends Zend_Tool_Project_Provider_Abstract{
+    public function addkey($keyname, $apikey){
+    }
+    public function delkey($keyname){
+    }
+    public function sendMessage($message, $priority = 'normal', $description = null, $url = null){
+    }
+}</pre>
+
+
+<p>Having established the class we may now move on to the public methods. We have established our required methods as follows:</p>
+
+<ul>
+    <li>Adding an api key</li>
+    <li>Removing an apikey</li>
+    <li>Sending a message</li>
+</ul>
+
+
+<pre class="brush:php">require_once ('Zend/Tool/Project/Provider/Abstract.php');
+
+class Skulk_Tool_ProwlProvider extends Zend_Tool_Project_Provider_Abstract{
+
+    public function addkey($keyname, $apikey){
+        if(!$this->_registry->getConfig()->skulk){
+            $skulk = array(
+                'defaults' => array( 'priority' => 'normal'),
+                'keys' => array($keyname => $apikey)
+            );
+            $this->_registry->getConfig ()->skulk = $skulk;
+            $this->_registry->getConfig ()->save();
+        } else {
+            if($this->_registry->getConfig()->skulk->keys){
+                $this->_registry->getConfig()->skulk->keys->$keyname = $apikey;
+            } else {
+                $this->_registry->getConfig()->skulk->keys = array();
+                $this->_registry->getConfig()->skulk->keys->$keyname = $apikey;
+            }
+            $this->_registry->getConfig ()->save();
+        }
+    }
+}</pre>
+
+
+<p>To add the API key we will need to be able to write to the configuration file in the user&#8217;s home directory or where otherwise specified at runtime. This will require interaction with the internal registry property; testing if the relevant properties exist in the configuration, modify it in the event it does or initialize it if not. We perform the various configuration operations through the _registry property as demonstrated in the example below adding the required options followed by the save method to write the configuration file.</p>
+
+<pre class="brush:php">$this->_registry->getResponse()
+    ->appendContent('api key saved!', array('color' => 'green'));</pre>
+
+
+<p>We also may want to provide feedback to the user regarding the status of the operation. This also is provided through the access of the _registry property with the response object, which may be formatted for color, tab depth, centering and blocking. For the purpose of this demonstration, we will use the color decorator to make the output green, leaving our example well established and ready for the next steps.</p>
+
+<pre class="brush:php">    public function addkey($keyname, $apikey){
+        $skulk = $this->_registry->getConfig()->skulk;
+        if(!$skulk){
+            $this->_registry->getResponse()
+                ->appendContent('initializing default config for Skulk...', array('color' => 'cyan'))
+                ->appendContent('default priority [normal]...', array('color' => 'cyan'));
+            $skulk = array(
+                'defaults' => array( 'priority' => 'normal'),
+                'keys' => array($keyname => $apikey)
+            );
+            $this->_registry->getConfig ()->skulk = $skulk;
+            $this->_registry->getConfig ()->save();
+        } else {
+            if($this->_registry->getConfig()->skulk->keys){
+                $this->_registry->getConfig()->skulk->keys->$keyname = $apikey;
+            } else {
+                $this->_registry->getConfig()->skulk->keys = array();
+                $this->_registry->getConfig()->skulk->keys->$keyname = $apikey;
+            }
+            $this->_registry->getConfig ()->save();
+        }
+        $this->_registry->getResponse()
+            ->appendContent('api key saved!', array('color' => 'green'));
+    }</pre>
+
+
+<p>Now to add the delkey method using the same tools as before, with the addition of an unset on the existing property followed by the save method, as in the addkey logic writing the file with the updated values.</p>
+
+<pre class="brush:php">    public function delkey($keyname){
+        $config = $this->_registry->getConfig();
+        if($config->skulk->keys->$keyname){
+            unset($config->skulk->keys->$keyname);
+            $this->_registry->getConfig ()->save();
+            $this->_registry->getResponse()
+                ->appendContent($keyname . ' apikey removed...', array('color' => 'red'));
+        } else {
+            $this->_registry->getResponse()
+                ->appendContent($keyname . ' apikey does not exist...', array('color' => 'red'));
+        }
+    }</pre>
+
+
+<p>Finally this brings us to the sendMessage call, which will require ancillary methods to create the outgoing message container, the API object that sends the message as well as a priorities method to convert users input into a value expected by the API actor. The details of which are less about Providers and more about the code being employed, leaving us with a final product ready to send messages to an iOS device near you.</p>
+
+<pre class="brush:php">require_once ('Zend/Tool/Project/Provider/Abstract.php');
+
+/**
+ * @author zircote
+ *
+ * zf enable config.provider Skulk_Tool_ProwlProvider
+ * zf create config
+ * zf ? prowl
+ */
+class Skulk_Tool_ProwlProvider extends Zend_Tool_Project_Provider_Abstract
+    implements Zend_Tool_Framework_Provider_Pretendable{
+    /**
+     *
+     * @var Skulk_Client_Message
+     */
+    protected $message;
+    /**
+     *
+     * @var Skulk_Client
+     */
+    protected $api;
+    /**
+     *
+     * @example zf addkey prowl iPhone sdf234g9i24t09j23r...
+     * @param string $keyname
+     * @param string $apikey
+     */
+    public function addkey($keyname, $apikey){
+        $skulk = $this->_registry->getConfig()->skulk;
+        if(!$skulk){
+            $this->_registry->getResponse()
+                ->appendContent('initializing default config for Skulk...', array('color' => 'cyan'))
+                ->appendContent('default priority [normal]...', array('color' => 'cyan'));
+            $skulk = array(
+                'defaults' => array( 'priority' => 'normal'),
+                'keys' => array($keyname => $apikey)
+            );
+            $this->_registry->getConfig ()->skulk = $skulk;
+            $this->_registry->getConfig ()->save();
+        } else {
+            if($this->_registry->getConfig()->skulk->keys){
+                $this->_registry->getConfig()->skulk->keys->$keyname = $apikey;
+            } else {
+                $this->_registry->getConfig()->skulk->keys = array();
+                $this->_registry->getConfig()->skulk->keys->$keyname = $apikey;
+            }
+            $this->_registry->getConfig ()->save();
+        }
+        $this->_registry->getResponse()
+            ->appendContent('api key saved!', array('color' => 'green'));
+    }
+
+    /**
+     *
+     * zf delkey prowl iPhone
+     * @param string $keyname
+     */
+    public function delkey($keyname){
+        $config = $this->_registry->getConfig();
+        if($config->skulk->keys->$keyname){
+            unset($config->skulk->keys->$keyname);
+            $this->_registry->getConfig ()->save();
+            $this->_registry->getResponse()
+                ->appendContent($keyname . ' apikey removed...', array('color' => 'red'));
+        } else {
+            $this->_registry->getResponse()
+                ->appendContent($keyname . ' apikey does not exist...', array('color' => 'red'));
+        }
+    }
+
+    /**
+     *
+     * zf send-message prowl 'test message' normal 'long description here' 'http://zircote.com'
+     * @param string $message
+     * @param string $priority
+     * @param string $url
+     * @param string $description
+     */
+    public function sendMessage($message, $priority = 'normal', $description = null, $url = null){
+        $this->_init();
+        $this->message->setApikey($this->apikeys->toArray())
+            ->setEvent($message)
+            ->setPriority($this->getPriority($priority))
+            ->setDescription($description ? $description : $message);
+        if(null !== $url){
+            $this->message->setUrl($url);
+        }
+        $response = $this->api->add($this->message);
+        $result = $response->getResult();
+        if(key_exists('success', $result)){
+            $this->_registry->getResponse()
+                ->appendContent($response->getRemaining() . ' messages left until '
+                 . $response->getResetDate(), array('color' => 'cyan'));
+        } else {
+            $this->_registry->getResponse()
+                ->appendContent($result['error']['detail'], array('color' => 'red'));
+        }
+
+    }
+
+    /**
+     *
+     * returns integer value for priorityfrom a simple string
+     * @param string $priority
+     * @return integer
+     */
+    protected function getPriority($priority){
+        $priorities = array(
+            'verylow' => Skulk_Client_Message::PRIORITY_VERYLOW,
+            'normal' => Skulk_Client_Message::PRIORITY_NORMAL,
+            'moderate' => Skulk_Client_Message::PRIORITY_MODERATE,
+            'high' => Skulk_Client_Message::PRIORITY_HIGH,
+            'emergency' => Skulk_Client_Message::PRIORITY_EMERGENCY
+        );
+        return  $priorities[strtolower($priority)];
+    }
+
+    protected function _init(){
+        $this->apikeys = $this->_registry->getConfig()->skulk->keys;
+        require_once 'Skulk/Client.php';
+        require_once 'Skulk/Client/Message.php';
+        $this->message = new Skulk_Client_Message();
+        $this->api = new Skulk_Client;
+    }
+
+}</pre>
+
+
+<p>When completed it affords us the functionality list:</p>
+
+<pre class="brush:shell">$ zf ? prowl
+Zend Framework Command Line Console Tool v1.11.5
+Actions supported by provider "Prowl"
+  Prowl
+    zf addkey prowl keyname apikey
+    zf delkey prowl keyname
+    zf send-message prowl message priority[=normal] description url</pre>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Robert Allen</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-08T21:30:08-05:00" pubdate data-updated="true">May 8<span>th</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://zircote.com/blog/2011/05/08/writing-a-custom-provider/" data-via="" data-counturl="http://zircote.com/blog/2011/05/08/writing-a-custom-provider/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/05/08/zend-framework-project-providers/" title="Previous Post: Zend Framework Project Providers">&laquo; Zend Framework Project Providers</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/05/09/skulk-pear-release-0-1-2/" title="Next Post: Skulk PEAR release 0.1.2">Skulk PEAR release 0.1.2 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant/">Functional testing PHP SSH2 workflows with PHPUnit and Vagrant</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/26/amazon-web-services-at-ifbyphone-deck/">Amazon Web Services at Ifbyphone Deck</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/13/restful-web-services-via-rfc-2616/">ReSTful web services via RFC-2616</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/19/why-composer/">Why Composer?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/15/the-challenges-of-moving-forward/">The challenges of moving forward.</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Robert Allen -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

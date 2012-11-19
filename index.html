@@ -1,1 +1,999 @@
-My Octopress Page is coming soon &hellip;
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>zircote.com</title>
+  <meta name="author" content="Robert Allen">
+
+  
+  <meta name="description" content="When $this->markTestIncomplete() just won’t do. Enter Vagrant. To begin with the tools you will need to become familiar with at as follows: Vagrant: &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://zircote.com/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="zircote.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">zircote.com</a></h1>
+  
+    <h2>development (in)action</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:zircote.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant/">Functional Testing PHP SSH2 Workflows With PHPUnit and Vagrant</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-03T20:35:48-05:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>When <code><code>$this->markTestIncomplete()</code></code> just won’t do. Enter Vagrant.</p>
+
+
+
+
+<p>To begin with the tools you will need to become familiar with at as follows:</p>
+
+
+
+
+<p><strong>Vagrant</strong>: <a href="http://vagrantup.com" title="http://vagrantup.com">http://vagrantup.com</a>
+You will find many good write-ups on its installation and use. For the sake of brevity I will provide links to a few I found useful and not provide much detail on this. I suggest begining here: <a href="http://vagrantup.com/v1/docs/getting-started/index.html" title="http://vagrantup.com/v1/docs/getting-started/index.html">http://vagrantup.com/v1/docs/getting-started/index.html</a></p>
+
+
+
+
+<p><strong>PHPUnit</strong>: <a href="http://www.phpunit.de" title="http://www.phpunit.de">http://www.phpunit.de</a></p>
+
+
+
+
+<p>There are four ssh2 authentication methods provided with the php ssh2 tools:</p>
+
+
+
+
+<ul>
+<li><strong>ssh2_auth_hostbased_file</strong> — Authenticate using a public hostkey</li>
+<li><strong>ssh2_auth_none</strong> — Authenticate as &#8220;none&#8221;</li>
+<li><strong>ssh2_auth_password</strong> — Authenticate over SSH using a plain password</li>
+<li><strong>ssh2_auth_pubkey_file</strong> — Authenticate using a public key</li>
+</ul>
+
+
+
+
+<p>For my project I needed to functionally validate a workflow of uploading a file to a server utilizing <strong>ssh2_auth_password</strong> and <strong>ssh2_auth_pubkey</strong>. I need to test the following to validate my results:</p>
+
+
+
+
+<ul>
+<li>Can I authenticate with the desired method?</li>
+<li>Can I validate the fingerprint of the servers key?</li>
+<li>Can I put the contents of a file to a known path on the remote server?</li>
+<li>Can I validate those contents and destination filename are as expected?</li>
+</ul>
+
+
+
+
+<p>To accomplish these goals I require an environment with a known public and private key this provides the fingerprint and both known keys to establish the connection without much work. For password based authentication I need an environment that will allow non-tty password based auth over ssh (this feature is generally disabled and must be changed at vagrant provisioning or you must create a image that is configured.) Not wanting to create a custom box for this case I utilize the provisioning tools built into vagrant and sed. From here it’s really a matter of writing tests and running vagrant, take a look at the gist for examples I have provided.</p>
+
+
+
+
+<p>Example Gist <a href="https://gist.github.com/3612867">https://gist.github.com/3612867</a></p>
+
+
+
+
+<p>The TL;DR:</p>
+
+
+
+
+<ol>
+<li>Write your tests</li>
+<li>Fetch the Vagrant SSH keys</li>
+<li>Create or grab the example VagrantFIle</li>
+<li>run `vagrant init`</li>
+<li>run `vagrant up`</li>
+<li>run the tests</li>
+<li>rinse / repeat</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/06/26/amazon-web-services-at-ifbyphone-deck/">Amazon Web Services at Ifbyphone Deck</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-26T20:21:26-05:00" pubdate data-updated="true">Jun 26<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Presented to Soliant Consulting, Chicago, IL 2012/06/26
+<script async class="speakerdeck-embed" data-id="4fea17d5cd9eca002200a65d" data-ratio="1.3333333333333333" src="//speakerdeck.com/assets/embed.js"></script></p>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/06/13/restful-web-services-via-rfc-2616/">ReSTful Web Services via RFC-2616</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-13T01:00:58-05:00" pubdate data-updated="true">Jun 13<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>My slides relating to my presentation at the inaugural <a href="http://www.meetup.com/API-Craft-Chicago/" title="API-Craft Chicago Meetup" target="_blank">API-Craft Chicago Meetup</a>.</p>
+
+
+
+
+<script async class="speakerdeck-embed" data-id="4fd7e426a14e86001f002168" data-ratio="1.299492385786802" src="//speakerdeck.com/assets/embed.js"></script>
+
+
+
+
+<p><a href="https://speakerdeck.com/u/zircote/p/restful-web-services-via-rfc-1" title="ResTful Web Services via RFC-2616" target="_blank"></a></p>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/05/19/why-composer/">Why Composer?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-19T02:33:04-05:00" pubdate data-updated="true">May 19<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The efforts to decouple services and isolate application tiers can be a tricky business. Currently, at Ifbyphone we are in the process of decoupling many application segments and improving the agility of our development process. This effort comes at the expense of many things that are often taken for granted in many environments. It is no different at Ifbyphone. A significant pain point of this process is application dependencies.  We implement several dependencies in our applications Zend Framework, Rediska, PHPUnit and many others. The challenge is, applications often have their own deployment schedules; development processes and are often times at different stages of their life cycle.</p>
+
+
+
+
+<p>To date we have relied on PEAR to act as the manager of these dependencies. However, as virtualization of hardware and automated deployments of applications with such things as Puppet and Capistrano become more prevalent, the necessity of ‘pinning’ versions of libraries becomes crucial.  An example is Zend Framework and PHPUnit; currently PHPUnit version is 3.6.10 (at the time of this writing) yet Zend Framework 1 requires, due to interface additions to PHPUnit, PHPUnit version 3.4. It is our preference to use the latest version of PHPUnit where possible. However this preference is prohibitive when working with Zend Framework 1. While it is possible to maintain two separate installations this does not help with things such as continuous integration and only adds complexity. In addition to this, versions change rapidly in open source development and a <code>pear upgrade-all</code> is risky on production server.</p>
+
+
+
+
+<p>Enter <code>composer</code> [<a href="http://getcomposer.org/" title="http://getcomposer.org/">http://getcomposer.org/</a>], composer provides the tools to atomically maintain dependencies for a given application, to pin those versions and segregates the dependencies from other deployments and development environments.  Its near seamless implementation of Hg and git make its use simple and a pleasure.  More over, it provides the tools for deployments to reside safely along side one another without the fear of unwanted version creep or accidental conflict of versioning. Composer provides a large list of schema properties allowing for a simple yet detailed manifest of dependencies.</p>
+
+
+
+
+<p>When I began using composer I feared that it would only suffice for select packages. I was concerned that a project that did not implement a <code>composer.json</code> schema would be exempt from the manifest inclusion. I have since learned with exploration that this is in fact not the case. Having the ability to deploy libraries via archive [zip,tar, etc], git, svn (see gist below), PEAR packages, and it’s own clearing house of packages, <a href="http://packagist.org" title="http://packagist.org">http://packagist.org</a> . As a project maintainer you are given the option of defining packages within your project <code>composer.json</code> pinning versions, repository locations etc. This provides the flexibility that has been missing from PHP for years.  Github has changed the opensource community in many ways, removing the ‘fear’ of submitting changes to a project. What Github has done for development, I look to composer to do for PHP in the delivery of this mass creativity.</p>
+
+
+
+
+<p>You may learn more about <code>composer</code> at <a href="http://getcomposer.org" title="getcomposer.org">http://getcomposer.org</a>. You may find the the project github site is https://github.com/composer/composer and keep up with much of its development on its google groups list at <a href="https://groups.google.com/forum/?fromgroups#!forum/composer-dev" title="Composer-Dev">Composer-De Google Group</a>  and finally packagist at <a href="http://packagist.org" title="packagist.org">http://packagist.org</a> for a list of composer friendly projects.</p>
+
+
+
+
+<p><div><script src='https://gist.github.com/2728721.js?file='></script>
+<noscript><pre><code>{
+    &quot;name&quot;: &quot;zircote/Org&quot;,
+    &quot;type&quot;: &quot;library&quot;,
+    &quot;version&quot;: &quot;0.2.0&quot;,
+    &quot;time&quot; : &quot;2012-04-21&quot;,
+    &quot;description&quot;: &quot;New world API Order&quot;,
+    &quot;keywords&quot;: [&quot;api&quot;],
+    &quot;homepage&quot;: &quot;http://github.com/zircote/Org/&quot;,
+    &quot;repositories&quot;: [
+        {
+            &quot;type&quot;: &quot;vcs&quot;,
+            &quot;url&quot;: &quot;git@github.com:zircote/oauth2-php.git&quot;
+        },
+        {
+            &quot;type&quot;: &quot;vcs&quot;,
+            &quot;url&quot;: &quot;git@github.com:zircote/swagger-php.git&quot;
+        },
+        {
+            &quot;type&quot; : &quot;vcs&quot;,
+            &quot;url&quot; : &quot;git@github.com:zircote/Hal.git&quot;
+        },
+        {
+            &quot;type&quot; : &quot;package&quot;,
+            &quot;package&quot; : {
+                &quot;name&quot;: &quot;rediska/rediska&quot;,
+                &quot;version&quot; : &quot;master-dev&quot;,
+                &quot;source&quot; : {
+                    &quot;type&quot; : &quot;git&quot;,
+                    &quot;url&quot; : &quot;git@github.com:zircote/Rediska.git&quot;,
+                    &quot;reference&quot; : &quot;master&quot;
+                },
+                &quot;autoload&quot;: {
+                    &quot;psr-0&quot;: {&quot;Rediska&quot;: &quot;library&quot;}
+                }
+            }
+        },
+        {
+            &quot;type&quot;: &quot;package&quot;,
+            &quot;package&quot;: {
+                &quot;name&quot;: &quot;zend/zendframework&quot;,
+                &quot;version&quot; : &quot;1.11.9&quot;,
+                &quot;source&quot;: {
+                    &quot;url&quot;: &quot;http://framework.zend.com/svn/framework/standard&quot;,
+                    &quot;type&quot;: &quot;svn&quot;,
+                    &quot;reference&quot;: &quot;tags/release-1.11.9/&quot;
+                },
+                &quot;autoload&quot;: {
+                    &quot;psr-0&quot;: {
+                        &quot;Zend&quot;: &quot;library&quot;,
+                        &quot;ZendX&quot; : &quot;library&quot;
+                    }
+                },
+                &quot;config&quot;: {
+                    &quot;bin-dir&quot;: &quot;bin&quot;
+                }
+            }
+        }
+    ],
+    &quot;require&quot;: {
+        &quot;php&quot;: &quot;&gt;=5.3.3&quot;,
+        &quot;zircote/Hal&quot;: &quot;master-dev&quot;,
+        &quot;zircote/swagger-php&quot;: &quot;master-dev&quot;,
+        &quot;videlalvaro/php-amqplib&quot; : &quot;master-dev&quot;,
+        &quot;rediska/rediska&quot; : &quot;master-dev&quot;,
+        &quot;zend/zendframework&quot; : &quot;*&quot;
+    },
+    &quot;autoload&quot;: {
+        &quot;psr-0&quot;: {&quot;Org&quot;: &quot;library&quot;}
+    }
+}
+</code></pre></noscript></div>
+</p>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/05/15/the-challenges-of-moving-forward/">The Challenges of Moving Forward.</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-15T15:47:15-05:00" pubdate data-updated="true">May 15<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As business moves forward, technology expands into new concepts and applications of theory, and Ifbyphone is no exception. Unlike most startups we hear about these days, creating solutions with the latest technologies, developing new markets and the freedom of a clean backlog. We find ourselves at Ifbyphone with technical debt, established customer expectations and a backlog of tasks that can be daunting on a good day. This isn’t to say these challenges are insurmountable. They do, however, pose not so unique challenges; for every aspect of the company. Luckily we have a great team of software engineers and support staff working hard each day to distill the backlog to the most valuable sprint tasks each week so that we may deliver the most value to our customers.</p>
+
+
+
+
+<p>Recently we have begun several initiatives to bring more stability and agility to our development process, including upgrading software, implementing new platform services and implementing peer code reviews. Of the new platform services recently implemented or that are in the process of implementation are: Redis, Zend Server, CometD, MongoDB, MySQL, Amazon Web Services, RabbitMQ, Puppet, OAuth2 and others. Working with a list of technologies such as this is daunting when you consider the imperative goal of not introducing any service outages. This requires vast amounts of planning, testing and preparation, but most importantly communication. Communication with one another, with our customers, and with our upstream providers is key to a successful endeavor; all of which leads us to further expand our list of initiatives to modernize and improve our services and provide a great service to our clients. We have implemented improved database change control, software deployments and continuous integration; however we are still looking forward by planning to address such challenges as improved reporting, improved statistical analysis, capacity scaling, monitoring, security enhancements and many more enhancements.</p>
+
+
+
+
+<p>We are not nor do we believe we are unique in these challenges: many companies around the world are faced with similar obstacles. The difference is often times the application of theory, money and manpower. Mistakes are made, but the lessons gleaned from them are invaluable to growth and progress. The greatest lessons learned are the seemingly obvious ones; where one looks back and wonders, “Why (or how) did we let this happen?” Our most recent efforts have been focused on database improvements: upgrading hardware and versioning, but also updating legacy code to implement more efficient database drivers. Vast quantities of code have been refactored: the entire team was sequestered in a conference room for multiple days to peruse diff files and perform peer code reviews. It was challenging, tedious and monotonous, yet successful. The lessons we are able to take away from this are such:</p>
+
+
+
+
+<ul>
+    <li>Do not let fear paralyze the progress; it only gets harder the longer you wait.</li>
+    <li>Keep the team involved. Large projects should always have full team involvement.</li>
+    <ul>
+    <li>Succeed as a team or fail as a team.</li>
+    <li>Communicate with one another. While sequestering the team in a room is not always the preferred method of team interaction; the simple act of shared hardship can foster camaraderie.</li>
+    </ul>
+</ul>
+
+
+
+
+<p>I am a big fan of peer code reviews and this particular undertaking has only served to bolster my support of this process: both the reviewer and the reviewed can take from each session many lessons that go well beyond the simple technicalities of the code. The junior reviewer learns restraint and constructive mentorship of the peer developers he has reviewed; while from the senior developers being reviewed, he/she learns to be more assertive and prepared in getting results ‘without authority.’ This collectively provides a great opportunity and experience in their career. As developers being reviewed, we learn to interact with each other in harmonious ways, to openly communicate our goals and methods. We are at times humbled and learn to put aside our egos (<sarcasm>not that I have ever met an egotistical developer </sarcasm>) and embrace critique.</p>
+
+
+
+
+<p>Today at Ifbyphone we have many projects well underway and even more on the backlog; there are no shortages of challenges to be undertaken, and frankly I wouldn’t have it any other way. I am fortunate to be in a place professionally where I absolutely love what I do: I am challenged daily, work with a great group of people and have excellent leaders to keep me on track. Over the years I have learned that the best jobs are often the hard ones and all of those constraints of technical debt that pose the greatest challenge—while frustrating—give the greatest rewards.</p>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/29/what-is-an-expert/">What Is an Expert?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-29T16:28:52-06:00" pubdate data-updated="true">Dec 29<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>One of the joys of my current profession is constant exposure to
+individuals and organizations that label themselves “experts” in any given
+discipline. Having been exposed to this perk yet again this holiday season, I
+feel compelled to draft my thoughts on the subject. It should be noted I do not
+claim to be an expert in any given discipline; I do however feel my experience
+lends itself to a unique perspective on many topics and subjects. My technical
+career spans several fields seemingly unrelated and diverse. I have been
+employed professionally as the following in no particular order:</p>
+
+<ul>
+    <li>Automotive Technician</li>
+<ul>
+    <li><a title="ASE" href="https://www.ase.com/default.aspx" target="_blank">ASE</a> Certified Master Auto, L1, Body and Heavy Truck</li>
+    <li>Automatic Transmissions</li>
+    <li>Electronics Drivability</li>
+    <li>Diesel Fuel Injection</li>
+    <li>Heavy Line</li>
+    <li>Fuel &amp; Ignition pit crew in an <a title="ARCA" href="http://www.arcaracing.com/" target="_blank">ARCA</a> stock car team</li>
+</ul>
+    <li>Director of Information technology for a Fortune 500 company.</li>
+    <li>Shop Foreman for the manufacturing and maintenance of oil-field equipment.</li>
+    <li>Garde Manger and Saucier Chef.</li>
+    <li>Software Developer and Software Architect.</li>
+</ul>
+
+
+<p>There is more; for the sake of brevity, I have kept this list short. For
+many years, I have kept this list a secret professionally, as it often sparks
+questions of ability, sanity and reliability. My lack of formal secondary
+education is often raised in job interviews and is just as often difficult to
+address, depending on the job market. With my introductions complete, I would
+like to share my thoughts on what does and does not make an expert. The list of
+things I believe that do make an expert will most assuredly be a list much
+smaller than what is generally accepted.</p>
+
+<h3>The expert</h3>
+
+
+<p><span>It is my belief that to become an expert in any field one must know
+enough to not be entirely sure of all aspects of a given problem. An expert will
+have the experience and wisdom to know there are no simple solutions; that all
+problems can and usually do have multiple facets. This expert will know that
+answers cannot come from one book, author, magazine or periodical; but rather
+from the mistakes and pains of failure. This individual will recognize that
+while there is the most common solution, there will one day be that problem
+that is rarely seen; knowing this and knowing how to address it is the making
+of an expert.</span></p>
+
+<h3>Not the expert</h3>
+
+
+<p>An individual reading one or two books that present canned problems and
+solutions as examples does not make a person an expert regardless of how well
+this person absorbs the lessons. This individual possesses only enough knowledge
+to begin the path to understanding one or two facets of the possibilities that
+can and will arise. It is important to understand that these publications have
+carefully filtered these problems for the most common denominator and to be
+publicly consumable. These solutions are merely best case recipes one can
+hope for and, often times, serve no real world problem solving knowledge on
+the topic.  Until the individual can readily find oneself presented with
+problems that does not return results in a Google search and solve these
+problems without the help of IRC or any others, he should not claim the title
+of expert in such matters.</p>
+
+<p>Commercially there are also companies that ply their wares, posing as experts
+in a given problem field hoping to take your money and make you happy. Far too
+often, I find these companies have a narrow range of problems they solve and it
+is far too easy to get started on a solution only to discover your particular
+use case is not supported or solved by the experts&#8217; offerings. This is similar
+to the individual case of not having seen enough of the problems or simply
+not having possessed the user base to be adaquate to solve the problem.</p>
+
+<h3>In Summary</h3>
+
+
+<p>Ultimately, it is important to recognize that consultant companies are often
+motivated for more selfish reasons than the individual to obfuscate their
+status, or lack thereof, as experts, so that they may lure us into a contractual
+obligation.  For individuals, it is often ignorance, narcissism and/or pride
+that often motivates the proclamations of subject matter experts from all parts
+of life. The holidays are especially bountiful for examining these persons to
+watch them in the wild and view their natural behaviors. Whether it is a parent
+instructing you in the disciplines of child rearing or a CEO expounding the
+joys of the latest whiz-bang idea they read on Joe Schmoes Blog; it is
+up to us non-experts to filter the wheat from the chaff, filter the
+good from the trash.</p>
+
+<p>&nbsp;</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/11/17/a-quick-ternary-joyride/">A Quick Ternary Joyride.</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-17T23:59:31-06:00" pubdate data-updated="true">Nov 17<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I am not a fan of @ but I have not found a way to use the new ternary operator without otherwise throwing the notice.</p>
+
+<pre class="brush:shell">[ zircote ~/Workspace/CtaTrack ] php -a
+Interactive shell
+
+php > $v = array();
+php > echo $v['test']?: 'no';
+PHP Notice:  Undefined index: test in php shell code on line 1
+no
+php > echo @$v['test']?: 'no';
+no
+php > $v['test'] = 'yes';
+php > echo @$v['test']?: 'no';
+yes
+php ></pre>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/09/08/the-revolution-around-us/">The Revolution Around Us&#8230;</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-09-08T02:05:38-05:00" pubdate data-updated="true">Sep 8<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was remembering back to 1997 when I was working in IT for a fortune 500 as the stir for Y2K upgrades were on the rise, buyouts of smaller companies were daily and the transition from copper pair telecommunications systems were being replaced by VOIP. The latter was an odd transition; the use of a somewhat new thing (Ethernet) was being retasked to now handle phone traffic which heretofore was managed not by IT but rather by tel-co. This transition meant that the phone systems which had to date been managed by groups of switch technicians and troubleshooting performed with tone generators, butt-sets and amplifiers where now handled by neck-bearded pale-faced sociophobes in the basement  (not exactly) where no one dared venture. Many lost their jobs unable to embrace the change, many couldn&#8217;t make the transition believing it would pass and some embraced it striving to stay on the curve.</p>
+
+<p>Enter 2011, a new revolution has been well under way reminding me of those days long since passed; the cloud. While some see the cloud as just the most recent fad, a passing annoyance or the next thing to crash and burn; I however believe this is the next revolution. There will be those that will lose their jobs refusing to embrace the inevitable, more will not make the transition believing it will pass and some will successfully embrace it riding the curve. Much like the tel-co department of old, ops groups will now have to begin thinking more like a developer; it will require them to become part of the development process designing and interacting with aspects not specifically relating to the assets and hardware. Similarly, developers will have to become more mindful of ops related requirements that intersect their daily thought processes; considering technical details of deployment, concurrency and the like. The ability for even the most meagerly funded organizations to have as robust and thoroughly sound infrastructure as a Fortune 500, by which they may build, grow and continuously deliver their message to the world; making the cloud a cornerstone that is here to stay.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/07/02/prowl-push-notifications-with-zend_log/">Prowl Push Notifications With Zend_Log</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-07-02T23:13:18-05:00" pubdate data-updated="true">Jul 2<span>nd</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I wanted a contained method to send push notifications from various tasks and perhaps even a list of recipients for critical alerts; all the while still be able to hook into existing application code and error reporting. This lead me to writing Skulk_Log_Writer_Prowl as part of the <del>0.1.4</del> 0.1.5 release of the <a href="https://github.com/zircote/Skulk">Skulk</a> package.</p>
+
+<p>While currently simple in implementation it provides configurable support for provider keys, single or multiple recipient keys, linking URL and notice title. I may add layout support for more detailed messaging formats later with Zend_Layout. Implementing the  Zend_Log_Writer API, drop in use with minor configuration details is as follows:</p>
+
+<div><script src='https://gist.github.com/1061734.js?file=prowl-logging.php'></script>
+<noscript><pre><code>&lt;?php
+
+$prowl = array(
+    'apikey' =&gt; '072a7159e...e36ebe57',
+//  'apikey' =&gt; array('072a7159e...e36ebe57','072a7159e...e36ebe57','072a7159e...e36ebe57'), //for multi-keys
+    'priority' =&gt; Skulk_Client_Message::PRIORITY_EMERGENCY, // optional 
+    'url' =&gt; 'http://www.zircote.com/admin/console', // optional url to forward the user to.
+    'event' =&gt; 'Error logging via Prowl with Zend_Log', // optional Your message header 
+//  'providerkey' =&gt; '072a7159e9e8f......e7765cd11c229e36ebe57' // optional 
+);
+$prowlWriter = Skulk_Log_Writer_Prowl::factory($prowl);
+$prowlWriter-&gt;addFilter(new Zend_Log_Filter_Priority(Zend_Log::EMERG));
+$zendLog = new Zend_Log($prowlWriter);
+$zendLog-&gt;info('This wont be sent');
+$zendLog-&gt;emerg('this is a emerg test 1');
+$zendLog-&gt;emerg('this is a emerg test 2 ');
+$zendLog-&gt;emerg('this is a emerg test 3 ');</code></pre></noscript></div>
+
+
+<p>The messages received should appear something like these:</p>
+
+<p><a href="/images/2011/07/skulk_log_list.png"><img class="alignnone size-medium wp-image-332" title="skulk_log_list" src="/images/2011/07/skulk_log_list-200x300.png" alt="Skulk Log Output" width="200" height="300" /></a> <a href="/images/2011/07/skulk_log_pop.png"><img class="alignnone size-medium wp-image-333" title="skulk_log_pop" src="/images/2011/07/skulk_log_pop-200x300.png" alt="" width="200" height="300" /></a></p>
+
+<p>EDIT:</p>
+
+<p>I have also added recently a working yet rough Zend_Mail transport for prowl as well will expand tests and finalize it after the holidays:</p>
+
+<div><script src='https://gist.github.com/1061734.js?file=prowl-mail.php'></script>
+<noscript><pre><code>&lt;?php
+$prowl = array(
+    'apikey' =&gt; '072a7159e...e36ebe57',
+    'priority' =&gt; Skulk_Client_Message::PRIORITY_NORMAL,
+    'url' =&gt; 'http://www.zircote.com/admin/console',
+    'event' =&gt; 'Error logging via Prowl with Zend_Log',
+//    'providerkey' =&gt; '072a7159e9e8f......e7765cd11c229e36ebe57'
+);
+$tansport = new Skulk_Mail_Transport_Prowl($prowl)
+$mail = new Zend_Mail();
+$mail-&gt;setBodyText('this is a skulk test')
+    -&gt;send($transport);</code></pre></noscript></div>
+
+
+<p>For more information on:</p>
+
+<ul>
+    <li><a href="https://www.prowlapp.com">ProwlApp</a></li>
+    <li><a href="https://github.com/zircote/Skulk">Skulk</a></li>
+    <li><a href="http://framework.zend.com/manual/en/zend.log.writers.html">Zend_Log_Writers Documentation</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/06/26/zend-server-cluster-manager-and-capistrano-deployments/">Zend Server Cluster Manager and Capistrano Deployments</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-26T03:17:39-05:00" pubdate data-updated="true">Jun 26<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>One of the challenges of deploying applications in an elastic environment is the target servers are ever changing; from one moment to the next your environment may consist of four, twenty or more target hosts.  The process of determining these targets can be a tedious and time consuming task; requiring the examination of cluster member lists within the Zend Server Manager Gui or executing the ec2-describe-instances then parsing through the results for the correct group; either of these methods is time consuming and thwart with the possibility of mistyping a hostname, missing one or just breaking the process.</p>
+
+<p>I approach deployments from an angle that no human interaction (beyond security dictated by my comfort level) should be required;  a programmatic method of gathering this dynamic list of target hosts is required. To gather this list I have created and employed a library for interacting with the API interface for <a href="http://www.zend.com/en/">Zend Server</a> and <a href="http://www.zend.com/en/">Zend Server Cluster Manager</a>, <a href="https://github.com/zircote/Jazsl">Jazsl</a> (Just Another Zend Server Library.)  <a href="https://github.com/zircote/Jazsl">Jazsl</a> provides methods for all current Zend Server API calls:</p>
+
+<ul>
+    <li>clusterAddServer</li>
+    <li>clusterRemoveServer</li>
+    <li>clusterDisableServer</li>
+    <li>clusterEnableServer</li>
+    <li>clusterGetServerStatus</li>
+    <li>getSystemInfo</li>
+    <li>restartPhp</li>
+    <li>configurationExport</li>
+    <li>configurationImport</li>
+</ul>
+
+
+<p>More on these methods may be explored in the Zend Server documentation at <a href="http://www.zend.com/topics/zscm/Zend-Server-CM-Reference-Manual.pdf">Zend-Server-CM-Reference-Manual</a>.  I will assume the target stage for this will be production, and the stage files is production.rb; construction of the dynamic servers list within the production.rb requires certain dependancies:</p>
+
+<ul>
+    <li>gem: capistrano</li>
+    <li>gem: capistrano-ext</li>
+    <li>gem: json</li>
+    <li>Zend Framework</li>
+    <li>Jazsl</li>
+</ul>
+
+
+<p>These procedures will assume you have a working capistrano deployment configuration for your php project, the details of installing and configuring Jazsl are as follows. First install the pear packages for Jazsl and Zend Framework on the machine you intend to deploy from.</p>
+
+<div><script src='https://gist.github.com/.js?file='></script>
+<noscript><pre><code>&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;https://github.com/gist&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</code></pre></noscript></div>
+
+
+<p>Now you must enable the zf configuration as well as enable each of the provider within the Jazsl project you intend to utilize; for the purpose of deployments we only require the JazslProvider JazslClusterProvider. To configuration of covered in the following gist:</p>
+
+<div><script src='https://gist.github.com/4109253.js?file=config-jazsl.sh'></script>
+<noscript><pre><code>zf create config
+zf enable config.provider Jazsl_Tool_JazslProvider
+zf enable config.provider Jazsl_Tool_JazslClusterProvider</code></pre></noscript></div>
+
+
+<p>Confirm your setup and configuration of Jazsl providers by executing zf ? , the out put of which should contain:</p>
+
+<div><script src='https://gist.github.com/.js?file='></script>
+<noscript><pre><code>&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;https://github.com/gist&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</code></pre></noscript></div>
+
+
+<p>Before continuing we must configure an api key (read-only access is all we require.) To generate the api key we must log into the Zend Server Cluster Manager Gui, refer to the Zend Server documentation for details. The deployment hosts portion only requires a read-only api key. Once you have this key you can resume configuration of Jazsl tool as follows:</p>
+
+<p><a href="/images/2011/06/zend-server-cluster-apikeys.png"><img class="alignnone size-medium wp-image-317" title="zend-server-cluster-apikeys" src="/images/2011/06/zend-server-cluster-apikeys-300x248.png" alt="" width="300" height="248" /></a></p>
+
+<pre>zf add-server-key jazsl zcsm https://10.0.0.12:10082/ZendServerManager key_full xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</pre>
+
+
+<p>The parameters are described as follows:</p>
+
+<pre>zf add-server-key jazsl zendserver url keyname apikey</pre>
+
+
+<ul>
+    <li><code>zendserver</code> the identifying name for the key-set/host</li>
+    <li><code>url</code> the full Uri for the Zend Server originating this api-key set</li>
+    <li><code>keyname</code> the identifying name of the api-key given in the Zend Server Admin Gui Section</li>
+    <li><code>apikey</code> the api-key hash provided</li>
+</ul>
+
+
+<p>You may then validate its operation by executing:</p>
+
+<pre>zf cluster-status jazsl-server zcsm</pre>
+
+
+<p>where <code><strong>zcsm </strong></code>name of the key you just saved in the previous command; this command should return either an error message or a table of cluster members (provided you have cluster member)</p>
+
+<div><script src='https://gist.github.com/4109253.js?file=cluster-members.txt'></script>
+<noscript><pre><code>[ zircote ~/Workspace/Jazsl ] zf cluster-status jazsl-server zcsm
+Cluster Members:
+┌──────────┬───────────────┬───────────────┬────────────────────────────────────────────────────────────┐
+│Server ID │Status         │Instance-Name  │URI                                                         │
+├──────────┼───────────────┼───────────────┼────────────────────────────────────────────────────────────┤
+│25        │OK             │i-07982fff     │ec2-00-00-00-01.compute-1.amazonaws.com                     │
+├──────────┼───────────────┼───────────────┼────────────────────────────────────────────────────────────┤
+│28        │OK             │i-25765fff     │ec2-00-00-00-00.compute-1.amazonaws.com                     │
+├──────────┼───────────────┼───────────────┼────────────────────────────────────────────────────────────┤
+│31        │OK             │i-2e988fff     │ec2-00-00-00-00.us-west-1.compute.amazonaws.com             │
+└──────────┴───────────────┴───────────────┴────────────────────────────────────────────────────────────┘
+
+
+[ zircote ~/Workspace/Jazsl ] zf get-servers jazsl-cluster zcsm
+[&quot;ec2-00-00-00-01.compute-1.amazonaws.com&quot;,&quot;ec2-00-00-00-00.compute-1.amazonaws.com&quot;,&quot;ec2-00-00-00-00.us-west-1.compute.amazonaws.com&quot;]</code></pre></noscript></div>
+
+
+<p>Once this is confirmed you are now ready to use the jazsl-cluster tool to return the json string that will be used by Capistrano for the target lists as shown in the above gist.
+To utilize this json string we modify our production.rb file to execute the jazsl-cluster command and parse it as part of the roles determination as shown:</p>
+
+<div><script src='https://gist.github.com/4109253.js?file=production.rb'></script>
+<noscript><pre><code>require 'json'
+
+role (:app) do
+  JSON.parse(`zf get-servers jazsl`)
+end
+role (:web) do
+  JSON.parse(`zf get-servers jazsl`)
+end
+
+role (:db) do
+  JSON.parse(`zf get-server jazsl`)
+end
+
+set :rails_env,           &quot;production&quot;
+set :branch,              &quot;production&quot;
+set :repository, &quot;https://svn.myproject.com/svn/MyProject/tags/production&quot;
+</code></pre></noscript></div>
+
+
+<p>You will note for the :db roles section, I utilize a zf get-server jazsl-cluster command to return a single target host, I utilize this for database migrations which I only need to run on one instance in the cluster; while understanding that there are no static instances in an elastic environment. Finally deployment is executed as usual with capistrano: cap deploy production this will parse the servers list and execute all deployment commands on each server as usual.</p>
+
+<p>&nbsp;</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/2/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant/">Functional testing PHP SSH2 workflows with PHPUnit and Vagrant</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/26/amazon-web-services-at-ifbyphone-deck/">Amazon Web Services at Ifbyphone Deck</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/13/restful-web-services-via-rfc-2616/">ReSTful web services via RFC-2616</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/19/why-composer/">Why Composer?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/15/the-challenges-of-moving-forward/">The challenges of moving forward.</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Robert Allen -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

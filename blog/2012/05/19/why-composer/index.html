@@ -1,0 +1,311 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Why Composer? - zircote.com</title>
+  <meta name="author" content="Robert Allen">
+
+  
+  <meta name="description" content="The efforts to decouple services and isolate application tiers can be a tricky business. Currently, at Ifbyphone we are in the process of decoupling &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://zircote.com/blog/2012/05/19/why-composer/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="zircote.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">zircote.com</a></h1>
+  
+    <h2>development (in)action</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:zircote.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Why Composer?</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-19T02:33:04-05:00" pubdate data-updated="true">May 19<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>The efforts to decouple services and isolate application tiers can be a tricky business. Currently, at Ifbyphone we are in the process of decoupling many application segments and improving the agility of our development process. This effort comes at the expense of many things that are often taken for granted in many environments. It is no different at Ifbyphone. A significant pain point of this process is application dependencies.  We implement several dependencies in our applications Zend Framework, Rediska, PHPUnit and many others. The challenge is, applications often have their own deployment schedules; development processes and are often times at different stages of their life cycle.</p>
+
+
+
+
+<p>To date we have relied on PEAR to act as the manager of these dependencies. However, as virtualization of hardware and automated deployments of applications with such things as Puppet and Capistrano become more prevalent, the necessity of ‘pinning’ versions of libraries becomes crucial.  An example is Zend Framework and PHPUnit; currently PHPUnit version is 3.6.10 (at the time of this writing) yet Zend Framework 1 requires, due to interface additions to PHPUnit, PHPUnit version 3.4. It is our preference to use the latest version of PHPUnit where possible. However this preference is prohibitive when working with Zend Framework 1. While it is possible to maintain two separate installations this does not help with things such as continuous integration and only adds complexity. In addition to this, versions change rapidly in open source development and a <code>pear upgrade-all</code> is risky on production server.</p>
+
+
+
+
+<p>Enter <code>composer</code> [<a href="http://getcomposer.org/" title="http://getcomposer.org/">http://getcomposer.org/</a>], composer provides the tools to atomically maintain dependencies for a given application, to pin those versions and segregates the dependencies from other deployments and development environments.  Its near seamless implementation of Hg and git make its use simple and a pleasure.  More over, it provides the tools for deployments to reside safely along side one another without the fear of unwanted version creep or accidental conflict of versioning. Composer provides a large list of schema properties allowing for a simple yet detailed manifest of dependencies.</p>
+
+
+
+
+<p>When I began using composer I feared that it would only suffice for select packages. I was concerned that a project that did not implement a <code>composer.json</code> schema would be exempt from the manifest inclusion. I have since learned with exploration that this is in fact not the case. Having the ability to deploy libraries via archive [zip,tar, etc], git, svn (see gist below), PEAR packages, and it’s own clearing house of packages, <a href="http://packagist.org" title="http://packagist.org">http://packagist.org</a> . As a project maintainer you are given the option of defining packages within your project <code>composer.json</code> pinning versions, repository locations etc. This provides the flexibility that has been missing from PHP for years.  Github has changed the opensource community in many ways, removing the ‘fear’ of submitting changes to a project. What Github has done for development, I look to composer to do for PHP in the delivery of this mass creativity.</p>
+
+
+
+
+<p>You may learn more about <code>composer</code> at <a href="http://getcomposer.org" title="getcomposer.org">http://getcomposer.org</a>. You may find the the project github site is https://github.com/composer/composer and keep up with much of its development on its google groups list at <a href="https://groups.google.com/forum/?fromgroups#!forum/composer-dev" title="Composer-Dev">Composer-De Google Group</a>  and finally packagist at <a href="http://packagist.org" title="packagist.org">http://packagist.org</a> for a list of composer friendly projects.</p>
+
+
+
+
+<p><div><script src='https://gist.github.com/2728721.js?file='></script>
+<noscript><pre><code>{
+    &quot;name&quot;: &quot;zircote/Org&quot;,
+    &quot;type&quot;: &quot;library&quot;,
+    &quot;version&quot;: &quot;0.2.0&quot;,
+    &quot;time&quot; : &quot;2012-04-21&quot;,
+    &quot;description&quot;: &quot;New world API Order&quot;,
+    &quot;keywords&quot;: [&quot;api&quot;],
+    &quot;homepage&quot;: &quot;http://github.com/zircote/Org/&quot;,
+    &quot;repositories&quot;: [
+        {
+            &quot;type&quot;: &quot;vcs&quot;,
+            &quot;url&quot;: &quot;git@github.com:zircote/oauth2-php.git&quot;
+        },
+        {
+            &quot;type&quot;: &quot;vcs&quot;,
+            &quot;url&quot;: &quot;git@github.com:zircote/swagger-php.git&quot;
+        },
+        {
+            &quot;type&quot; : &quot;vcs&quot;,
+            &quot;url&quot; : &quot;git@github.com:zircote/Hal.git&quot;
+        },
+        {
+            &quot;type&quot; : &quot;package&quot;,
+            &quot;package&quot; : {
+                &quot;name&quot;: &quot;rediska/rediska&quot;,
+                &quot;version&quot; : &quot;master-dev&quot;,
+                &quot;source&quot; : {
+                    &quot;type&quot; : &quot;git&quot;,
+                    &quot;url&quot; : &quot;git@github.com:zircote/Rediska.git&quot;,
+                    &quot;reference&quot; : &quot;master&quot;
+                },
+                &quot;autoload&quot;: {
+                    &quot;psr-0&quot;: {&quot;Rediska&quot;: &quot;library&quot;}
+                }
+            }
+        },
+        {
+            &quot;type&quot;: &quot;package&quot;,
+            &quot;package&quot;: {
+                &quot;name&quot;: &quot;zend/zendframework&quot;,
+                &quot;version&quot; : &quot;1.11.9&quot;,
+                &quot;source&quot;: {
+                    &quot;url&quot;: &quot;http://framework.zend.com/svn/framework/standard&quot;,
+                    &quot;type&quot;: &quot;svn&quot;,
+                    &quot;reference&quot;: &quot;tags/release-1.11.9/&quot;
+                },
+                &quot;autoload&quot;: {
+                    &quot;psr-0&quot;: {
+                        &quot;Zend&quot;: &quot;library&quot;,
+                        &quot;ZendX&quot; : &quot;library&quot;
+                    }
+                },
+                &quot;config&quot;: {
+                    &quot;bin-dir&quot;: &quot;bin&quot;
+                }
+            }
+        }
+    ],
+    &quot;require&quot;: {
+        &quot;php&quot;: &quot;&gt;=5.3.3&quot;,
+        &quot;zircote/Hal&quot;: &quot;master-dev&quot;,
+        &quot;zircote/swagger-php&quot;: &quot;master-dev&quot;,
+        &quot;videlalvaro/php-amqplib&quot; : &quot;master-dev&quot;,
+        &quot;rediska/rediska&quot; : &quot;master-dev&quot;,
+        &quot;zend/zendframework&quot; : &quot;*&quot;
+    },
+    &quot;autoload&quot;: {
+        &quot;psr-0&quot;: {&quot;Org&quot;: &quot;library&quot;}
+    }
+}
+</code></pre></noscript></div>
+</p>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Robert Allen</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-19T02:33:04-05:00" pubdate data-updated="true">May 19<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://zircote.com/blog/2012/05/19/why-composer/" data-via="" data-counturl="http://zircote.com/blog/2012/05/19/why-composer/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/05/15/the-challenges-of-moving-forward/" title="Previous Post: The challenges of moving forward.">&laquo; The challenges of moving forward.</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/06/13/restful-web-services-via-rfc-2616/" title="Next Post: ReSTful web services via RFC-2616">ReSTful web services via RFC-2616 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant/">Functional testing PHP SSH2 workflows with PHPUnit and Vagrant</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/26/amazon-web-services-at-ifbyphone-deck/">Amazon Web Services at Ifbyphone Deck</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/13/restful-web-services-via-rfc-2616/">ReSTful web services via RFC-2616</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/19/why-composer/">Why Composer?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/15/the-challenges-of-moving-forward/">The challenges of moving forward.</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Robert Allen -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

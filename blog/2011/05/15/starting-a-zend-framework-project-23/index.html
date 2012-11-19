@@ -1,0 +1,561 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Starting a Zend Framework Project [2/2] - zircote.com</title>
+  <meta name="author" content="Robert Allen">
+
+  
+  <meta name="description" content="Previously I discussed the creation of a ZF project skeleton; having established the test suite, build file, phpdoc and phpcs processing, we can now &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://zircote.com/blog/2011/05/15/starting-a-zend-framework-project-23/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="zircote.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">zircote.com</a></h1>
+  
+    <h2>development (in)action</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:zircote.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Starting a Zend Framework Project [2/2]</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-15T07:41:43-05:00" pubdate data-updated="true">May 15<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Previously I discussed the creation of a ZF project skeleton; having established the test suite, build file, phpdoc and phpcs processing, we can now begin building the database models. I will also expand on relationships within the models and will cover the implementation of model relationships using Zend_Db_Table_Relationship.</p>
+
+<h2>The Database</h2>
+
+
+<p>For the purpose of this entry, I will utilize the database model described in the Zend Framework documentation; this database contains four tables:</p>
+
+<ul>
+    <li>accounts</li>
+    <li>products</li>
+    <li>bugs</li>
+    <li>bugs_products</li>
+</ul>
+
+
+<p>To create the database follow, the commands outlined below. Be sure to &#8216;cat&#8217; the contents of the following gist into db/development.sql: <div><script src='https://gist.github.com/972905.js?file=setup-db.sh'></script>
+<noscript><pre><code>prompt&gt; mkdir db
+prompt&gt; cat &gt; db/development.sql</p>
+
+<h1>Contents of development.sql</h1>
+
+<p>^c
+prompt&gt; sqlite3 --init db/development
+sqlite&gt; .read ./db/development.sql
+sqlite&gt; .tables
+accounts       bugs           bugs_products  products
+sqlite&gt; .quit</code></pre></noscript></div>
+ <div><script src='https://gist.github.com/972905.js?file=development.sql'></script>
+<noscript><pre><code>CREATE TABLE accounts (
+  account_name      VARCHAR(100) NOT NULL PRIMARY KEY
+);</p>
+
+<p>CREATE TABLE products (
+  product_id        INTEGER NOT NULL PRIMARY KEY,
+  product_name      VARCHAR(100)
+);</p>
+
+<p>CREATE TABLE bugs (
+  bug_id            INTEGER NOT NULL PRIMARY KEY,
+  bug_description   VARCHAR(100),
+  bug_status        VARCHAR(20),
+  reported_by       VARCHAR(100) REFERENCES accounts(account_name),
+  assigned_to       VARCHAR(100) REFERENCES accounts(account_name),
+  verified_by       VARCHAR(100) REFERENCES accounts(account_name)
+);</p>
+
+<p>CREATE TABLE bugs_products (
+  bug_id            INTEGER NOT NULL REFERENCES bugs,
+  product_id        INTEGER NOT NULL REFERENCES products,
+  PRIMARY KEY       (bug_id, product_id)
+);</p>
+
+<p>INSERT INTO accounts values ('zircote');
+INSERT INTO accounts values ('zombified');
+INSERT INTO accounts values ('caroro');
+INSERT INTO products (product_id,product_name) values (1,'Skulk');
+INSERT INTO products (product_id,product_name) values (2,'EveLib');
+INSERT INTO products (product_id,product_name) values  (3,'Amarium');
+INSERT INTO bugs ('bug_description','bug_status','reported_by','assigned_to','verified_by') VALUES ('minor problem with build status', 'EMERG','zircote','caroro','zombified');
+INSERT INTO bugs_products VALUES (1,2);
+INSERT INTO bugs_products VALUES (2,3);
+INSERT INTO bugs_products VALUES (3,1);</code></pre></noscript></div>
+ Now that your database is created we may generate the table models.</p>
+
+<h2>Table Models</h2>
+
+
+<p>To generate table models, we will employ the zf cli providers; it should be noted that while it is possible to create them by hand this does not maintain the manifest. .zfproject.xml . The commands to create the models are as follows: <div><script src='https://gist.github.com/972905.js?file=create-models.sh'></script>
+<noscript><pre><code>prompt&gt; zf configure db-adapter &quot;adapter= Pdo_Sqlitee&amp;dbname=../db/development&quot; development
+A db configuration for the development section has been written to the application config file.</p>
+
+<p>prompt&gt; zf create dbtable Accounts accounts
+Creating a DbTable at /Users/zircote/Workspace/ZendDb/application/models/DbTable/Accounts.php
+Updating project profile '/Users/zircote/Workspace/ZendDb/.zfproject.xml'</p>
+
+<p>prompt&gt; zf create dbtable Bugs bugsCreating a DbTable at /Users/zircote/Workspace/ZendDb/application/models/DbTable/Bugs.php
+Updating project profile '/Users/zircote/Workspace/ZendDb/.zfproject.xml'</p>
+
+<p>prompt&gt; zf create dbtable BugsProducts bugs_products
+Creating a DbTable at /Users/zircote/Workspace/ZendDb/application/models/DbTable/BugsProducts.php
+Updating project profile '/Users/zircote/Workspace/ZendDb/.zfproject.xml'</p>
+
+<p>prompt&gt; zf create dbtable Products products
+Creating a DbTable at /Users/zircote/Workspace/ZendDb/application/models/DbTable/Products.php
+Updating project profile '/Users/zircote/Workspace/ZendDb/.zfproject.xml'</code></pre></noscript></div>
+ It should be noted that additional parameters are available. The list of parameters are as follows:</p>
+
+<ul>
+    <li><strong>name: </strong>the models name, this will be in addition to
+the namespace portion; ie App_Model_DbTable_</li>
+    <li><strong>actual-table-name:</strong> the table name within the
+database</li>
+    <li><strong>module:</strong> the module the model will reside, in this
+case default in which case we submit nothing</li>
+    <li><strong>force-overwrite:</strong> whether to rewrite the model</li>
+</ul>
+
+
+<p>It should be noted that commands in the &#8216;zf&#8217; project provider will also accept parameters in the following manner <strong>-f</strong> force-rewrite <strong>-m</strong> module <strong>-n</strong> name <strong>-a</strong> actual-table-name</p>
+
+<h2>Table Relationships</h2>
+
+
+<p>The Zend_Db package also provides the tools to create and maintain relations between models enabling a series of methods that allow for child and parent queries from result row sets. As the db models are extended from Zend_Db_Table there are two properties of interest, Zend_Db_Table::<em>dependentTables and Zend_Db_Table::</em>referenceMap.</p>
+
+<p>We will begin with the ZendDb_Model_DbTable_Accounts and declare our dependant table, ZendDb_Model_DbTable_Bugs as an array member of the ZendDb_Model_DbTable_Accounts::<em>referenceMap property. Following the ZendDb_Model_DbTable_Accounts model, we will next detail the ZendDb_Model_DbTable_Bugs model and associated references, and dependencies. Within the bugs table three columns are dependencies of accounts table, reported_by, assigned_to, and verified_by each of which references accounts. This is represented in the model ZendDb_Model_DbTable_Bugs::</em>referenceMap as follows: <div><script src='https://gist.github.com/972905.js?file=Bugs.php'></script>
+<noscript><pre><code>&lt;?php
+class ZendDb_Model_DbTable_Bugs extends Zend_Db_Table_Abstract
+{</p>
+
+<pre><code>/**
+ *
+ * table name
+ * @var string
+ */
+protected $_name = 'bugs';
+/**
+ *
+ * table dependencies, this should be the class name of the model which
+ * defines the dependency.
+ * @var array
+ */
+protected $_dependentTables = array('ZendDb_Model_DbTable_BugsProducts');
+/**
+ *
+ * Reference map to parent model defined as
+ * - columns: column name (string)
+ * - refTableClass: the classname of the model definine the table
+ * - refColumns the parent objects column name representative of this
+ *    reference.
+ * onDelete: the action to take when the parent record is deleted, this
+ *     is intended to serve as a replacement for RDBMS that do no support
+ *     DRI, i.e. MyISAM, Sqlite, etc.
+ * onUpdate: the action to take when the parent record is updated, see
+ *    onDelete above.
+ *
+ * @var array
+ */
+protected $_referenceMap = array(
+    'Reporter' =&amp;gt; array(
+        'columns' =&amp;gt; 'reported_by',
+        'refTableClass' =&amp;gt; 'ZendDb_Model_DbTable_Accounts',
+        'refColumns' =&amp;gt; 'account_name'
+    ),
+    'Engineer' =&amp;gt; array(
+        'columns' =&amp;gt; 'assigned_to',
+        'refTableClass' =&amp;gt; 'ZendDb_Model_DbTable_Accounts',
+        'refColumns' =&amp;gt; 'account_name'
+    ),
+    'Verifier' =&amp;gt; array(
+        'columns' =&amp;gt; array('verified_by'),
+        'refTableClass' =&amp;gt; 'ZendDb_Model_DbTable_Accounts',
+        'refColumns' =&amp;gt; array('account_name')
+    )
+);
+</code></pre>
+
+<p>}</code></pre></noscript></div>
+ For the cascading actions for Zend_Db_Table::_referenceMap there are three class constants provided for declaration:</p>
+
+<ul>
+    <li>Zend_Db_Table::CASCADE</li>
+    <li>Zend_Db_Table::RESTRICT</li>
+    <li>Zend_Db_Table::SET_NULL</li>
+</ul>
+
+
+<p>Additional details maybe found at:</p>
+
+<ul>
+    <li><a href="http://framework.zend.com/manual/en/zend.db.table.html">Zend_Db_Table</a></li>
+    <li><a href="http://framework.zend.com/manual/en/zend.db.table.relationships.html">Zend_Db_Table Relationships</a></li>
+</ul>
+
+
+<h2>Zend_Db_Table_Definition</h2>
+
+
+<p>As an alternative to defining relationships within each model there is another option, <a href="http://framework.zend.com/manual/en/zend.db.table.definition.html"> Zend_Db_Table_Definition</a> for this projects database definitions. I would prefer to maintain the definitions within the application.ini and utilize the resource autoloader to place it within a Zend_Registry container (note: it is possible to utilize a separate .ini file for the database definition.) It will also be necessary to change the models to extend from the Zend_Db_Table instead of Zend_Db_Table_Abstract , in order to gain the constructor functionality required to define the definition and key specific to each model. Within the models we may now define our database definition as well as the definition key in the constructor. To begin the changes required to enable the table definitions, we first must create the resource entries within the application.ini. These definitions are laid out in the .ini in the same manner as an array. Note the first keyname (&#8216;resources&#8217;) is required so the bootstraper will seek to use it to find the bootstrap method within the Bootstrap class. <div><script src='https://gist.github.com/972905.js?file=application.ini'></script>
+<noscript><pre><code>[production]
+phpSettings.display_startup_errors = 0
+phpSettings.display_errors = 0
+includePaths.library = APPLICATION_PATH &quot;/../library&quot;
+bootstrap.path = APPLICATION_PATH &quot;/Bootstrap.php&quot;
+bootstrap.class = &quot;Bootstrap&quot;
+resources.frontController.controllerDirectory = APPLICATION_PATH &quot;/controllers&quot;
+resources.frontController.params.displayExceptions = 0</p>
+
+<p>resources.dbDefinition.Accounts.name = &quot;accounts&quot;
+resources.dbDefinition.Accounts.dependentTables[] = &quot;Bugs&quot;</p>
+
+<p>resources.dbDefinition.Bugs.name = &quot;bugs&quot;
+resources.dbDefinition.Bugs.dependentTables[] = &quot;ZendDb_Model_DbTable_BugsProducts&quot;
+resources.dbDefinition.Bugs.referenceMap.Reporter.columns[] = &quot;reported_by&quot;
+resources.dbDefinition.Bugs.referenceMap.Reporter.refTableClass = &quot;ZendDb_Model_DbTable_Accounts&quot;
+resources.dbDefinition.Bugs.referenceMap.Reporter.refColumns[] = &quot;account_name&quot;
+resources.dbDefinition.Bugs.referenceMap.Engineer.columns[] = &quot;assigned_to&quot;
+resources.dbDefinition.Bugs.referenceMap.Engineer.refTableClass = &quot;ZendDb_Model_DbTable_Accounts&quot;
+resources.dbDefinition.Bugs.referenceMap.Engineer.refColumns[] = &quot;account_name&quot;
+resources.dbDefinition.Bugs.referenceMap.Verifier.columns[] = &quot;verified_by&quot;
+resources.dbDefinition.Bugs.referenceMap.Verifier.refTableClass = &quot;ZendDb_Model_DbTable_Accounts&quot;
+resources.dbDefinition.Bugs.referenceMap.Verifier.refColumns[] = &quot;account_name&quot;</p>
+
+<p>resources.dbDefinition.Products.name = &quot;products&quot;
+resources.dbDefinition.Products.dependentTables[] = &quot;ZendDb_Model_DbTable_BugsProducts&quot;</p>
+
+<p>resources.dbDefinition.BugsProducts.name = &quot;bugs_products&quot;
+resources.dbDefinition.BugsProducts.referenceMap.Bug.columns[] = &quot;bug_id&quot;
+resources.dbDefinition.BugsProducts.referenceMap.Bug.refTableClass = &quot;ZendDb_Model_DbTable_Bugs&quot;
+resources.dbDefinition.BugsProducts.referenceMap.Bug.refColumns[] = &quot;bug_id&quot;
+resources.dbDefinition.BugsProducts.referenceMap.Product.columns[] = &quot;product_id&quot;
+resources.dbDefinition.BugsProducts.referenceMap.Product.refTableClass = &quot;ZendDb_Model_DbTable_Products&quot;
+resources.dbDefinition.BugsProducts.referenceMap.Product.refColumns[] = &quot;product_id&quot;</p>
+
+<p>appnamespace = &quot;ZendDb_&quot;
+[staging : production]</p>
+
+<p>[testing : production]
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1</p>
+
+<p>[development : production]
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
+resources.frontController.params.displayExceptions = 1</p>
+
+<p>resources.db.adapter = &quot;Pdo_Sqlite&quot;
+resources.db.params.dbname = APPLICATION_PATH &quot;/../db/development&quot;</code></pre></noscript></div>
+ Next we create the resource bootrap method within the Bootstrap.php. The goal of this is to load and instantiate the Zend_Db_Table_Definition object and store it within a Zend_Registry container for use by our models. <div><script src='https://gist.github.com/972905.js?file=Bootstrap.php'></script>
+<noscript><pre><code>&lt;?php
+/<em>*
+ *
+ * The Application Bootstrap
+ * @author zircote
+ * @package ZendDb
+ *
+ </em>/
+class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
+{</p>
+
+<pre><code>/**
+ *
+ * @return Zend_Db_Table_Definition
+ */
+protected function _initDbDefinition ()
+{
+    /**
+     *
+     * load the application config values so we may use them.
+     * @var Zend_Config
+     */
+    $options = $this-&amp;gt;getOption('resources');
+    /**
+     *
+     * instantiate the Db definition
+     * @var Zend_Db_Table_Definition
+     */
+    $definition = new Zend_Db_Table_Definition($options['dbDefinition']);
+    /**
+     * place the Zend_Db_Table_Definition into a registry container for
+     * access.
+     */
+    Zend_Registry::set('dbDefinition', $definition);
+    return $definition;
+}
+</code></pre>
+
+<p>}</code></pre></noscript></div>
+ Next, we must modify our models to reflect the changes, namely the constructor. Within these models constructors we pass the definition key that corresponds to the class in question as the first parameter; with the second parameter, we will pass the definition object which we will acquire from the Zend_Registry container created within the bootstrap. We must do this for all database models. <div><script src='https://gist.github.com/972905.js?file=Models.php'></script>
+<noscript><pre><code>&lt;?php
+class ZendDb_Model_DbTable_Accounts extends Zend_Db_Table
+{</p>
+
+<pre><code>public function __construct(){
+    parent::__construct('Accounts', Zend_Registry::get('dbDefinition'));
+}
+</code></pre>
+
+<p>}</p>
+
+<p>class ZendDb_Model_DbTable_Bugs extends Zend_Db_Table
+{</p>
+
+<pre><code>public function __construct(){
+    parent::__construct('Bugs', Zend_Registry::get('dbDefinition'));
+}
+</code></pre>
+
+<p>}</p>
+
+<p>class ZendDb_Model_DbTable_BugsProducts extends Zend_Db_Table
+{</p>
+
+<pre><code>public function __construct ()
+{
+    parent::__construct('BugsProducts', Zend_Registry::get('dbDefinition'));
+}
+</code></pre>
+
+<p>}</p>
+
+<p>class ZendDb_Model_DbTable_Products extends Zend_Db_Table
+{</p>
+
+<pre><code>public function __construct ()
+{
+    parent::__construct('Products', Zend_Registry::get('dbDefinition'));
+}
+</code></pre>
+
+<p>}</code></pre></noscript></div>
+ Having updated the models, application.ini and Bootstrap.php examples of their magic methods, as well as explicit calls, may be found in the Zend Framework reference guide; I have also provided the following snips to demonstrate explicit calls:  <div><script src='https://gist.github.com/972905.js?file=using-the-models.php'></script>
+<noscript><pre><code>&lt;?php</p>
+
+<pre><code>    $products = new ZendDb_Model_DbTable_Products();
+    $products = $products-&amp;gt;fetchAll();
+    foreach ($products as $product) {
+        echo '==============', PHP_EOL;
+        echo 'Product', PHP_EOL;
+        print_r($product-&amp;gt;toArray());
+        $bp = $product-&amp;gt;findManyToManyRowset(
+            'ZendDb_Model_DbTable_Bugs',  // Find This data
+            'ZendDb_Model_DbTable_BugsProducts', // Joined on this table
+            'Product');// using this rule
+        foreach ($bp as $bug) {
+            echo 'Bugs:', PHP_EOL;
+            print_r($bug-&amp;gt;toArray());
+            $reporter = $bug-&amp;gt;findParentRow(
+                'ZendDb_Model_DbTable_Accounts',
+                'Reporter');
+            echo '$engineer:', PHP_EOL;
+            print_r($reporter-&amp;gt;toArray());
+            $engineer = $bug-&amp;gt;findParentRow(
+                'ZendDb_Model_DbTable_Accounts',
+                'Engineer');
+            echo '$verifier:', PHP_EOL;
+            print_r($engineer-&amp;gt;toArray());
+            $verifier = $bug-&amp;gt;findParentRow(
+                'ZendDb_Model_DbTable_Accounts',
+                'Verifier');
+            echo '$verifier:', PHP_EOL;
+            print_r($verifier-&amp;gt;toArray());
+        }
+    }
+    echo '==============', PHP_EOL;&lt;/code&gt;&lt;/pre&gt;&lt;/noscript&gt;&lt;/div&gt;
+</code></pre>
+
+<p> To put the final touches on the database related provisioning, an often overlooked key component of the database setup is the Zend_Db_Table::$_defaultMetadataCache. The most trivial means of managing this is within the application.ini utilizing Zend_Cache_Manager via the <a href="http://framework.zend.com/manual/en/zend.application.available-resources.html#zend.application.available-resources.cachemanager">
+Zend_Application_Resource_Cachemanager</a> and detailed in enabling it for the database in <a href="http://framework.zend.com/manual/en/zend.application.available-resources.html#zend.application.available-resources.db"> Zend_Application_Resource_Db</a>. By taking the time to layout the supporting technologies into your Zend Framework Application, many headaches and obstacles may be easily avoided; to allow developers to focus on the requirements of the application. In the next post, I will explore a simple approach to database migrations utilizing <a href="http://akrabat.com/zend-framework/akrabat_db_schema_manager-zend-framework-database-migrations/">Rob Allens Akrabat library</a>, as well as, custom providers to facilitate deployment operations and application setup.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Robert Allen</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-15T07:41:43-05:00" pubdate data-updated="true">May 15<span>th</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://zircote.com/blog/2011/05/15/starting-a-zend-framework-project-23/" data-via="" data-counturl="http://zircote.com/blog/2011/05/15/starting-a-zend-framework-project-23/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/05/13/starting-a-zend-framework-project/" title="Previous Post: Starting a Zend Framework Project [1/2]">&laquo; Starting a Zend Framework Project [1/2]</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/05/31/capturing-ec2-instance-meta-data/" title="Next Post: Capturing Ec2 instance meta-data">Capturing Ec2 instance meta-data &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant/">Functional testing PHP SSH2 workflows with PHPUnit and Vagrant</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/26/amazon-web-services-at-ifbyphone-deck/">Amazon Web Services at Ifbyphone Deck</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/13/restful-web-services-via-rfc-2616/">ReSTful web services via RFC-2616</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/19/why-composer/">Why Composer?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/15/the-challenges-of-moving-forward/">The challenges of moving forward.</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Robert Allen -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

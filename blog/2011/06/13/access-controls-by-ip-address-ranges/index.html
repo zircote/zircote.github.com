@@ -1,0 +1,356 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Access Control By IP Address Ranges - zircote.com</title>
+  <meta name="author" content="Robert Allen">
+
+  
+  <meta name="description" content="Simple example of controlling access to resources based on origin IP address, this example validates origin is a private IP range. &lt;?php &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://zircote.com/blog/2011/06/13/access-controls-by-ip-address-ranges/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="zircote.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">zircote.com</a></h1>
+  
+    <h2>development (in)action</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:zircote.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Access Control by IP Address Ranges</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-13T05:37:52-05:00" pubdate data-updated="true">Jun 13<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Simple example of controlling access to resources based on origin IP address, this example validates origin is a private IP range.</p>
+
+<div><script src='https://gist.github.com/1022368.js?file=PrivateIPAssertion.php'></script>
+<noscript><pre><code>&lt;?php
+require_once 'Zend/Acl/Assert/Interface.php';
+/**
+ * 
+ * Assert the REMOTE_ADDR of the reqeust is from a private IP address
+ * @author zircote
+ *
+ */
+class PrivateIPAssertion implements Zend_Acl_Assert_Interface
+{
+    public function assert (
+        Zend_Acl $acl, Zend_Acl_Role_Interface $role = null,
+        Zend_Acl_Resource_Interface $resource = null, $privilege = null
+    )
+    {
+        return $this-&gt;_isValidIP($_SERVER['REMOTE_ADDR']);
+    }
+    /**
+     *
+     * @assert ('10.0.0.1') == true
+     * @assert ('192.168.0.1') == true
+     * @assert ('68.45.32.17') == false
+     *
+     * @param string $ip
+     * @return bool
+     */
+    protected function _isValidIP ($ip)
+    {
+        $ipLong = $this-&gt;_ip2Long($ip);
+        $ten = new Zend_Validate_Between(
+            array(
+                'min' =&gt; $this-&gt;_ip2Long('10.0.0.0'),
+                'max' =&gt; $this-&gt;_ip2Long('10.255.255.255')
+            )
+        );
+        $oneSeven = new Zend_Validate_Between(
+            array(
+                'min' =&gt; $this-&gt;_ip2Long('172.16.0.0'),
+                'max' =&gt; $this-&gt;_ip2Long('172.31.255.255')
+            )
+        );
+        $oneNine = new Zend_Validate_Between(
+            array(
+                'min' =&gt; $this-&gt;_ip2Long('192.168.0.0'),
+                'max' =&gt; $this-&gt;_ip2Long('192.168.255.255')
+            )
+        );
+        $ipLong = sprintf('%u',ip2long($ip));
+        switch (true) {
+            case $ten-&gt;isValid($ipLong):
+                return true;
+            case $oneSeven-&gt;isValid($ipLong):
+                return true;
+            case $oneNine-&gt;isValid($ipLong):
+                return true;
+            default:
+                return false;
+        }
+    }
+    protected function _ip2Long($ip)
+    {
+        return sprintf('%u',ip2long($ip));
+    }
+}</code></pre></noscript></div>
+
+
+<p>I have also added the supporting unit test, note that I am reflecting the method inorder to set it to public visibility to allow testing of it. It should also be note that in order to generate the tests you must change the protected to public so that PHPUnit will recognize the annotated assertions and generate the desired tests.</p>
+
+<div><script src='https://gist.github.com/1022368.js?file=PrivateIPAssertionTest.php'></script>
+<noscript><pre><code>&lt;?php
+/**
+ * Test class for PrivateIPAssertion.
+ * Generated by PHPUnit on 2011-06-11 at 19:38:41.
+ */
+class PrivateIPAssertionTest extends PHPUnit_Framework_TestCase
+{
+    /**
+     * @var PrivateIPAssertion
+     */
+    protected $object;
+    /**
+     *
+     * @var ReflectionMethod
+     */
+    protected $method;
+
+    /**
+     * Sets up the fixture, for example, opens a network connection.
+     * This method is called before a test is executed.
+     */
+    protected function setUp()
+    {
+        /* set the protected method visible */
+        $this-&gt;object = new PrivateIPAssertion();
+        $this-&gt;method = new ReflectionMethod('PrivateIPAssertion', '_isValidIP');
+        $this-&gt;method-&gt;setAccessible(true);
+    }
+
+    /**
+     * Tears down the fixture, for example, closes a network connection.
+     * This method is called after a test is executed.
+     */
+    protected function tearDown()
+    {
+        $this-&gt;object = null;
+        $this-&gt;method = null;
+    }
+    /**
+     * Generated from @assert ('10.0.0.1') == true.
+     */
+    public function test_isValidIP()
+    {
+        $this-&gt;assertTrue(
+          $this-&gt;method-&gt;invoke($this-&gt;object,'10.0.0.1')
+        );
+    }
+
+    /**
+     * Generated from @assert ('192.168.0.1') == true.
+     */
+    public function test_isValidIP2()
+    {
+        $this-&gt;assertTrue(
+          $this-&gt;method-&gt;invoke($this-&gt;object,'192.168.0.1')
+        );
+    }
+
+    /**
+     * Generated from @assert (68.45.32.17) == false.
+     */
+    public function test_isValidIP3()
+    {
+        $this-&gt;assertFalse(
+          $this-&gt;method-&gt;invoke($this-&gt;object,'68.45.32.17')
+        );
+    }
+}
+</code></pre></noscript></div>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Robert Allen</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-13T05:37:52-05:00" pubdate data-updated="true">Jun 13<span>th</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://zircote.com/blog/2011/06/13/access-controls-by-ip-address-ranges/" data-via="" data-counturl="http://zircote.com/blog/2011/06/13/access-controls-by-ip-address-ranges/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/06/12/zend_acl-storage-with-redis/" title="Previous Post: Zend_Acl storage with redis">&laquo; Zend_Acl storage with redis</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/06/26/zend-server-cluster-manager-and-capistrano-deployments/" title="Next Post: Zend Server Cluster Manager and Capistrano Deployments">Zend Server Cluster Manager and Capistrano Deployments &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant/">Functional testing PHP SSH2 workflows with PHPUnit and Vagrant</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/26/amazon-web-services-at-ifbyphone-deck/">Amazon Web Services at Ifbyphone Deck</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/13/restful-web-services-via-rfc-2616/">ReSTful web services via RFC-2616</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/19/why-composer/">Why Composer?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/15/the-challenges-of-moving-forward/">The challenges of moving forward.</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Robert Allen -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,446 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Zend_Acl storage with redis - zircote.com</title>
+  <meta name="author" content="Robert Allen">
+
+  
+  <meta name="description" content="Recently I have been playing around with Rediska and Zend_Acl looking at different ways to store the lists and manipulate them so I put together a &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://zircote.com/blog/2011/06/12/zend_acl-storage-with-redis/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="zircote.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">zircote.com</a></h1>
+  
+    <h2>development (in)action</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:zircote.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Zend_Acl Storage With Redis</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-12T05:58:36-05:00" pubdate data-updated="true">Jun 12<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Recently I have been playing around with Rediska and Zend_Acl looking at different ways to store the lists and manipulate them so I put together a few of my scribbles to share.</p>
+
+<p>Requirements:</p>
+
+<ul>
+    <li><a href="http://redis.io">redis</a></li>
+    <li><a href="http://rediska.geometria-lab.net/">Rediska</a></li>
+    <li><a href="http://framework.zend.com/manual/en/zend.acl.html">Zend_Acl</a></li>
+</ul>
+
+
+<p>This basic demonstrate support for multiple containers, utilizes a singleton for creation of each container. The creation of nonexistent acl containers within redis is delegated to the Rediska_Key::getOrSetValue method for initialization of the redis key being requested. This method uses the Acls name (&#8216;BugsService&#8217;) through ReflectionClass to locate the proper creation controls.</p>
+
+<div><script src='https://gist.github.com/1019146.js?file=RediskaAcl.php'></script>
+<noscript><pre><code>&lt;?php
+
+class RediskaAcl extends Zend_Acl
+{
+    /**
+     *
+     * @var Rediska_Key
+     */
+    protected $_redis;
+    /**
+     *
+     * @var string
+     */
+    protected $_key;
+    /**
+     *
+     * @param string $key
+     */
+    public function __construct($key)
+    {
+        $this-&gt;_key = $key;
+    }
+    /**
+     *
+     */
+    protected function _getRedis()
+    {
+        if(!$this-&gt;_redis){
+            $redis = new Rediska_Key($this-&gt;_key);
+            $this-&gt;setRedis($redis);
+        }
+        return $this-&gt;_redis;
+    }
+    /**
+     *
+     * @param Rediska_Key_Abstract $redis
+     */
+    public function setRedis(Rediska_Key_Abstract $redis)
+    {
+        $this-&gt;_redis = $redis;
+    }
+    /**
+     *
+     * @param Zend_Acl $acl
+     */
+    public function saveAcl()
+    {
+        $this-&gt;_getRedis()-&gt;setValue($this);
+    }
+    /**
+     * Rediska_Key::getOrSetValue checks if the keys exists if not it uses the
+     * provided object and executes the chained method to set the value returned
+     * by the method
+     * @param string $key
+     */
+    public function getAcl($key)
+    {
+        $reflection = new ReflectionClass('Model_'.$key.'Acl');
+        return $this-&gt;_getRedis()-&gt;getOrSetValue($reflection-&gt;newInstance())
+            -&gt;getAcl();
+    }
+}
+
+</code></pre></noscript></div>
+
+
+<p><code>SomeAclService::getInstance($aclName)</code> returns the <code>RediskaAcl</code> container with name: <code>$aclName</code>.</p>
+
+<div><script src='https://gist.github.com/1019146.js?file=SomeAclService.php'></script>
+<noscript><pre><code>&lt;?php
+class SomeAclService
+{
+    /**
+     *
+     * Enter description here ...
+     * @var unknown_type
+     */
+    private static $_instance = array();
+    /**
+     *
+     * Enforce singleton and prevent access to constructor.
+     */
+    private function __construct()
+    {
+    }
+    /**
+     *
+     * prevent cloning
+     */
+    private function __clone()
+    {
+    }
+
+    /**
+     * provide name of an acl container being requested
+     * @return RediskaAcl
+     */
+    public static function getInstance($key)
+    {
+        if(
+            !array_key_exists($key, self::$_instance) ||
+            !self::$_instance[$key] instanceof RediskaAcl
+        ){
+            $instance = new RediskaAcl($key);
+            $acl = $instance-&gt;getAcl($key);
+            if($acl instanceof RediskaAcl){
+                self::$_instance[$key] = $acl;
+            }
+        }
+        return self::$_instance[$key];
+    }
+}</code></pre></noscript></div>
+
+
+<p><code>RediskaAcl</code> extends <code>Zend_Acl</code>, providing methods:
+<code>getAcl()</code> returns the object, creating the object and saving to the redis namespace if it does not exist
+<code>setAcl()</code>, allows a manual save of the current Acl in the event it is modified.
+<code>setRedis()</code> allows for run time Rediska instance configuration.</p>
+
+<p><code>Model_BugsServiceAcl</code> provides the mechanisms by which first time creation of the Acl is realized, this may be a Mapper to the database models that would generate the Acl and return the <code>RediskaAcl</code> object that is then saved to the redis namespace.</p>
+
+<div><script src='https://gist.github.com/1019146.js?file=Model_BugsServiceAcl.php'></script>
+<noscript><pre><code>&lt;?php
+/**
+ *
+ * This could be a mechanism that builds acl lists from the database or file
+ * based storage.
+ * @author zircote
+ *
+ */
+class Model_BugsServiceAcl
+{
+    public function getAcl()
+    {
+        $acl = new RediskaAcl('BugsService');
+        $acl-&gt;removeRoleAll()-&gt;removeAll();
+        $acl-&gt;addRole(new Zend_Acl_Role('guest'))
+            -&gt;addRole(new Zend_Acl_Role('member'),'guest')
+            -&gt;addRole(new Zend_Acl_Role('admin'), 'member')
+            -&gt;addRole(new Zend_Acl_Role('someAdmin'), 'admin')
+            -&gt;addRole(new Zend_Acl_Role('someMember'), 'member')
+            -&gt;addRole(new Zend_Acl_Role('someGuest'), 'guest')
+            -&gt;addResource(new Zend_Acl_Resource('someMemberResource'))
+            -&gt;addResource(new Zend_Acl_Resource('someGuestResource'))
+            -&gt;addResource(new Zend_Acl_Resource('someAdminResource'))
+            -&gt;deny()
+            -&gt;allow('guest', 'someGuestResource')
+            -&gt;allow('member', 'someMemberResource')
+            -&gt;allow('admin', 'someAdminResource');
+        return $acl;
+    }
+}</code></pre></noscript></div>
+
+
+<p><code>RedisAclTest</code> demonstrates the use and verification of proper functionality of the Acl roles and resources.</p>
+
+<div><script src='https://gist.github.com/1019146.js?file=RediskaAclTest.php'></script>
+<noscript><pre><code>&lt;?php
+require_once 'Rediska.php';
+require_once '../example/RediskaAcl.php';
+require_once '../example/SomeAclService.php';
+require_once '../example/model/BugsServiceAcl.php';
+require_once 'PHPUnit/Framework/TestCase.php';
+/**
+ * RediskaAcl test case.
+ */
+class RediskaAclTest extends PHPUnit_Framework_TestCase
+{
+    /**
+     * @var RediskaAcl
+     */
+    private $RediskaAcl;
+    /**
+     * Prepares the environment before running a test.
+     */
+    protected function setUp ()
+    {
+        parent::setUp();
+        $rediska = new Rediska();
+
+        $this-&gt;RediskaAcl = SomeAclService::getInstance('BugsService');
+    }
+    /**
+     * Cleans up the environment after running a test.
+     */
+    protected function tearDown ()
+    {
+        $this-&gt;RediskaAcl = null;
+        parent::tearDown();
+    }
+    /**
+     *
+     */
+    public function testAssertions()
+    {
+        $acl = $this-&gt;RediskaAcl;
+        $this-&gt;assertTrue($acl-&gt;isAllowed('someGuest', 'someGuestResource'));
+        $this-&gt;assertTrue($acl-&gt;isAllowed('someAdmin', 'someAdminResource'));
+        $this-&gt;assertTrue($acl-&gt;isAllowed('someMember', 'someMemberResource'));
+        /* verify proper denial */
+        $this-&gt;assertFalse($acl-&gt;isAllowed('someGuest', 'someAdminResource'));
+        $this-&gt;assertFalse($acl-&gt;isAllowed('someGuest', 'someAdminResource'));
+        $this-&gt;assertFalse($acl-&gt;isAllowed('someGuest', 'someMemberResource'));
+        $this-&gt;assertFalse($acl-&gt;isAllowed('someMember', 'someAdminResource'));
+    }
+}
+</code></pre></noscript></div>
+
+
+<p>Finally a short example of runtime usage</p>
+
+<div><script src='https://gist.github.com/1019146.js?file=assert.php'></script>
+<noscript><pre><code>&lt;?php
+$rediska = new Rediska();
+echo SomeAclService::getInstance('BugsService')
+    -&gt;isAllowed('someUser', 'someResource') ? 'allowed' : 'denied';
+</code></pre></noscript></div>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Robert Allen</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-12T05:58:36-05:00" pubdate data-updated="true">Jun 12<span>th</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://zircote.com/blog/2011/06/12/zend_acl-storage-with-redis/" data-via="" data-counturl="http://zircote.com/blog/2011/06/12/zend_acl-storage-with-redis/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/06/04/testing-web-service-clients-with-zend-framework/" title="Previous Post: Testing Web-Service Clients with Zend Framework">&laquo; Testing Web-Service Clients with Zend Framework</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/06/13/access-controls-by-ip-address-ranges/" title="Next Post: Access Control By IP Address Ranges">Access Control By IP Address Ranges &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant/">Functional testing PHP SSH2 workflows with PHPUnit and Vagrant</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/26/amazon-web-services-at-ifbyphone-deck/">Amazon Web Services at Ifbyphone Deck</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/13/restful-web-services-via-rfc-2616/">ReSTful web services via RFC-2616</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/19/why-composer/">Why Composer?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/15/the-challenges-of-moving-forward/">The challenges of moving forward.</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Robert Allen -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

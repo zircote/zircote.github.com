@@ -1,0 +1,2034 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[zircote.com]]></title>
+  <link href="http://zircote.com/atom.xml" rel="self"/>
+  <link href="http://zircote.com/"/>
+  <updated>2012-11-19T00:38:53-06:00</updated>
+  <id>http://zircote.com/</id>
+  <author>
+    <name><![CDATA[Robert Allen]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Functional testing PHP SSH2 workflows with PHPUnit and Vagrant]]></title>
+    <link href="http://zircote.com/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant/"/>
+    <updated>2012-09-03T20:35:48-05:00</updated>
+    <id>http://zircote.com/blog/2012/09/03/functional-testing-php-ssh2-workflows-with-phpunit-and-vagrant</id>
+    <content type="html"><![CDATA[<p>When <code><code>$this->markTestIncomplete()</code></code> just won’t do. Enter Vagrant.</p>
+
+
+
+
+<p>To begin with the tools you will need to become familiar with at as follows:</p>
+
+
+
+
+<p><strong>Vagrant</strong>: <a href="http://vagrantup.com" title="http://vagrantup.com">http://vagrantup.com</a>
+You will find many good write-ups on its installation and use. For the sake of brevity I will provide links to a few I found useful and not provide much detail on this. I suggest begining here: <a href="http://vagrantup.com/v1/docs/getting-started/index.html" title="http://vagrantup.com/v1/docs/getting-started/index.html">http://vagrantup.com/v1/docs/getting-started/index.html</a></p>
+
+
+
+
+<p><strong>PHPUnit</strong>: <a href="http://www.phpunit.de" title="http://www.phpunit.de">http://www.phpunit.de</a></p>
+
+
+
+
+<p>There are four ssh2 authentication methods provided with the php ssh2 tools:</p>
+
+
+
+
+<ul>
+<li><strong>ssh2_auth_hostbased_file</strong> — Authenticate using a public hostkey</li>
+<li><strong>ssh2_auth_none</strong> — Authenticate as &#8220;none&#8221;</li>
+<li><strong>ssh2_auth_password</strong> — Authenticate over SSH using a plain password</li>
+<li><strong>ssh2_auth_pubkey_file</strong> — Authenticate using a public key</li>
+</ul>
+
+
+
+
+<p>For my project I needed to functionally validate a workflow of uploading a file to a server utilizing <strong>ssh2_auth_password</strong> and <strong>ssh2_auth_pubkey</strong>. I need to test the following to validate my results:</p>
+
+
+
+
+<ul>
+<li>Can I authenticate with the desired method?</li>
+<li>Can I validate the fingerprint of the servers key?</li>
+<li>Can I put the contents of a file to a known path on the remote server?</li>
+<li>Can I validate those contents and destination filename are as expected?</li>
+</ul>
+
+
+
+
+<p>To accomplish these goals I require an environment with a known public and private key this provides the fingerprint and both known keys to establish the connection without much work. For password based authentication I need an environment that will allow non-tty password based auth over ssh (this feature is generally disabled and must be changed at vagrant provisioning or you must create a image that is configured.) Not wanting to create a custom box for this case I utilize the provisioning tools built into vagrant and sed. From here it’s really a matter of writing tests and running vagrant, take a look at the gist for examples I have provided.</p>
+
+
+
+
+<p>Example Gist <a href="https://gist.github.com/3612867">https://gist.github.com/3612867</a></p>
+
+
+
+
+<p>The TL;DR:</p>
+
+
+
+
+<ol>
+<li>Write your tests</li>
+<li>Fetch the Vagrant SSH keys</li>
+<li>Create or grab the example VagrantFIle</li>
+<li>run `vagrant init`</li>
+<li>run `vagrant up`</li>
+<li>run the tests</li>
+<li>rinse / repeat</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Amazon Web Services at Ifbyphone Deck]]></title>
+    <link href="http://zircote.com/blog/2012/06/26/amazon-web-services-at-ifbyphone-deck/"/>
+    <updated>2012-06-26T20:21:26-05:00</updated>
+    <id>http://zircote.com/blog/2012/06/26/amazon-web-services-at-ifbyphone-deck</id>
+    <content type="html"><![CDATA[<p>Presented to Soliant Consulting, Chicago, IL 2012/06/26
+<script async class="speakerdeck-embed" data-id="4fea17d5cd9eca002200a65d" data-ratio="1.3333333333333333" src="http://zircote.com//speakerdeck.com/assets/embed.js"></script></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ReSTful web services via RFC-2616]]></title>
+    <link href="http://zircote.com/blog/2012/06/13/restful-web-services-via-rfc-2616/"/>
+    <updated>2012-06-13T01:00:58-05:00</updated>
+    <id>http://zircote.com/blog/2012/06/13/restful-web-services-via-rfc-2616</id>
+    <content type="html"><![CDATA[<p>My slides relating to my presentation at the inaugural <a href="http://www.meetup.com/API-Craft-Chicago/" title="API-Craft Chicago Meetup" target="_blank">API-Craft Chicago Meetup</a>.</p>
+
+
+
+
+<script async class="speakerdeck-embed" data-id="4fd7e426a14e86001f002168" data-ratio="1.299492385786802" src="http://zircote.com//speakerdeck.com/assets/embed.js"></script>
+
+
+
+
+<p><a href="https://speakerdeck.com/u/zircote/p/restful-web-services-via-rfc-1" title="ResTful Web Services via RFC-2616" target="_blank"></a></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Why Composer?]]></title>
+    <link href="http://zircote.com/blog/2012/05/19/why-composer/"/>
+    <updated>2012-05-19T02:33:04-05:00</updated>
+    <id>http://zircote.com/blog/2012/05/19/why-composer</id>
+    <content type="html"><![CDATA[<p>The efforts to decouple services and isolate application tiers can be a tricky business. Currently, at Ifbyphone we are in the process of decoupling many application segments and improving the agility of our development process. This effort comes at the expense of many things that are often taken for granted in many environments. It is no different at Ifbyphone. A significant pain point of this process is application dependencies.  We implement several dependencies in our applications Zend Framework, Rediska, PHPUnit and many others. The challenge is, applications often have their own deployment schedules; development processes and are often times at different stages of their life cycle.</p>
+
+
+
+
+<p>To date we have relied on PEAR to act as the manager of these dependencies. However, as virtualization of hardware and automated deployments of applications with such things as Puppet and Capistrano become more prevalent, the necessity of ‘pinning’ versions of libraries becomes crucial.  An example is Zend Framework and PHPUnit; currently PHPUnit version is 3.6.10 (at the time of this writing) yet Zend Framework 1 requires, due to interface additions to PHPUnit, PHPUnit version 3.4. It is our preference to use the latest version of PHPUnit where possible. However this preference is prohibitive when working with Zend Framework 1. While it is possible to maintain two separate installations this does not help with things such as continuous integration and only adds complexity. In addition to this, versions change rapidly in open source development and a <code>pear upgrade-all</code> is risky on production server.</p>
+
+
+
+
+<p>Enter <code>composer</code> [<a href="http://getcomposer.org/" title="http://getcomposer.org/">http://getcomposer.org/</a>], composer provides the tools to atomically maintain dependencies for a given application, to pin those versions and segregates the dependencies from other deployments and development environments.  Its near seamless implementation of Hg and git make its use simple and a pleasure.  More over, it provides the tools for deployments to reside safely along side one another without the fear of unwanted version creep or accidental conflict of versioning. Composer provides a large list of schema properties allowing for a simple yet detailed manifest of dependencies.</p>
+
+
+
+
+<p>When I began using composer I feared that it would only suffice for select packages. I was concerned that a project that did not implement a <code>composer.json</code> schema would be exempt from the manifest inclusion. I have since learned with exploration that this is in fact not the case. Having the ability to deploy libraries via archive [zip,tar, etc], git, svn (see gist below), PEAR packages, and it’s own clearing house of packages, <a href="http://packagist.org" title="http://packagist.org">http://packagist.org</a> . As a project maintainer you are given the option of defining packages within your project <code>composer.json</code> pinning versions, repository locations etc. This provides the flexibility that has been missing from PHP for years.  Github has changed the opensource community in many ways, removing the ‘fear’ of submitting changes to a project. What Github has done for development, I look to composer to do for PHP in the delivery of this mass creativity.</p>
+
+
+
+
+<p>You may learn more about <code>composer</code> at <a href="http://getcomposer.org" title="getcomposer.org">http://getcomposer.org</a>. You may find the the project github site is https://github.com/composer/composer and keep up with much of its development on its google groups list at <a href="https://groups.google.com/forum/?fromgroups#!forum/composer-dev" title="Composer-Dev">Composer-De Google Group</a>  and finally packagist at <a href="http://packagist.org" title="packagist.org">http://packagist.org</a> for a list of composer friendly projects.</p>
+
+
+
+
+<p><div><script src='https://gist.github.com/2728721.js?file='></script>
+<noscript><pre><code>{
+    &quot;name&quot;: &quot;zircote/Org&quot;,
+    &quot;type&quot;: &quot;library&quot;,
+    &quot;version&quot;: &quot;0.2.0&quot;,
+    &quot;time&quot; : &quot;2012-04-21&quot;,
+    &quot;description&quot;: &quot;New world API Order&quot;,
+    &quot;keywords&quot;: [&quot;api&quot;],
+    &quot;homepage&quot;: &quot;http://github.com/zircote/Org/&quot;,
+    &quot;repositories&quot;: [
+        {
+            &quot;type&quot;: &quot;vcs&quot;,
+            &quot;url&quot;: &quot;git@github.com:zircote/oauth2-php.git&quot;
+        },
+        {
+            &quot;type&quot;: &quot;vcs&quot;,
+            &quot;url&quot;: &quot;git@github.com:zircote/swagger-php.git&quot;
+        },
+        {
+            &quot;type&quot; : &quot;vcs&quot;,
+            &quot;url&quot; : &quot;git@github.com:zircote/Hal.git&quot;
+        },
+        {
+            &quot;type&quot; : &quot;package&quot;,
+            &quot;package&quot; : {
+                &quot;name&quot;: &quot;rediska/rediska&quot;,
+                &quot;version&quot; : &quot;master-dev&quot;,
+                &quot;source&quot; : {
+                    &quot;type&quot; : &quot;git&quot;,
+                    &quot;url&quot; : &quot;git@github.com:zircote/Rediska.git&quot;,
+                    &quot;reference&quot; : &quot;master&quot;
+                },
+                &quot;autoload&quot;: {
+                    &quot;psr-0&quot;: {&quot;Rediska&quot;: &quot;library&quot;}
+                }
+            }
+        },
+        {
+            &quot;type&quot;: &quot;package&quot;,
+            &quot;package&quot;: {
+                &quot;name&quot;: &quot;zend/zendframework&quot;,
+                &quot;version&quot; : &quot;1.11.9&quot;,
+                &quot;source&quot;: {
+                    &quot;url&quot;: &quot;http://framework.zend.com/svn/framework/standard&quot;,
+                    &quot;type&quot;: &quot;svn&quot;,
+                    &quot;reference&quot;: &quot;tags/release-1.11.9/&quot;
+                },
+                &quot;autoload&quot;: {
+                    &quot;psr-0&quot;: {
+                        &quot;Zend&quot;: &quot;library&quot;,
+                        &quot;ZendX&quot; : &quot;library&quot;
+                    }
+                },
+                &quot;config&quot;: {
+                    &quot;bin-dir&quot;: &quot;bin&quot;
+                }
+            }
+        }
+    ],
+    &quot;require&quot;: {
+        &quot;php&quot;: &quot;&gt;=5.3.3&quot;,
+        &quot;zircote/Hal&quot;: &quot;master-dev&quot;,
+        &quot;zircote/swagger-php&quot;: &quot;master-dev&quot;,
+        &quot;videlalvaro/php-amqplib&quot; : &quot;master-dev&quot;,
+        &quot;rediska/rediska&quot; : &quot;master-dev&quot;,
+        &quot;zend/zendframework&quot; : &quot;*&quot;
+    },
+    &quot;autoload&quot;: {
+        &quot;psr-0&quot;: {&quot;Org&quot;: &quot;library&quot;}
+    }
+}
+</code></pre></noscript></div>
+</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The challenges of moving forward.]]></title>
+    <link href="http://zircote.com/blog/2012/05/15/the-challenges-of-moving-forward/"/>
+    <updated>2012-05-15T15:47:15-05:00</updated>
+    <id>http://zircote.com/blog/2012/05/15/the-challenges-of-moving-forward</id>
+    <content type="html"><![CDATA[<p>As business moves forward, technology expands into new concepts and applications of theory, and Ifbyphone is no exception. Unlike most startups we hear about these days, creating solutions with the latest technologies, developing new markets and the freedom of a clean backlog. We find ourselves at Ifbyphone with technical debt, established customer expectations and a backlog of tasks that can be daunting on a good day. This isn’t to say these challenges are insurmountable. They do, however, pose not so unique challenges; for every aspect of the company. Luckily we have a great team of software engineers and support staff working hard each day to distill the backlog to the most valuable sprint tasks each week so that we may deliver the most value to our customers.</p>
+
+
+
+
+<p>Recently we have begun several initiatives to bring more stability and agility to our development process, including upgrading software, implementing new platform services and implementing peer code reviews. Of the new platform services recently implemented or that are in the process of implementation are: Redis, Zend Server, CometD, MongoDB, MySQL, Amazon Web Services, RabbitMQ, Puppet, OAuth2 and others. Working with a list of technologies such as this is daunting when you consider the imperative goal of not introducing any service outages. This requires vast amounts of planning, testing and preparation, but most importantly communication. Communication with one another, with our customers, and with our upstream providers is key to a successful endeavor; all of which leads us to further expand our list of initiatives to modernize and improve our services and provide a great service to our clients. We have implemented improved database change control, software deployments and continuous integration; however we are still looking forward by planning to address such challenges as improved reporting, improved statistical analysis, capacity scaling, monitoring, security enhancements and many more enhancements.</p>
+
+
+
+
+<p>We are not nor do we believe we are unique in these challenges: many companies around the world are faced with similar obstacles. The difference is often times the application of theory, money and manpower. Mistakes are made, but the lessons gleaned from them are invaluable to growth and progress. The greatest lessons learned are the seemingly obvious ones; where one looks back and wonders, “Why (or how) did we let this happen?” Our most recent efforts have been focused on database improvements: upgrading hardware and versioning, but also updating legacy code to implement more efficient database drivers. Vast quantities of code have been refactored: the entire team was sequestered in a conference room for multiple days to peruse diff files and perform peer code reviews. It was challenging, tedious and monotonous, yet successful. The lessons we are able to take away from this are such:</p>
+
+
+
+
+<ul>
+    <li>Do not let fear paralyze the progress; it only gets harder the longer you wait.</li>
+    <li>Keep the team involved. Large projects should always have full team involvement.</li>
+    <ul>
+    <li>Succeed as a team or fail as a team.</li>
+    <li>Communicate with one another. While sequestering the team in a room is not always the preferred method of team interaction; the simple act of shared hardship can foster camaraderie.</li>
+    </ul>
+</ul>
+
+
+
+
+<p>I am a big fan of peer code reviews and this particular undertaking has only served to bolster my support of this process: both the reviewer and the reviewed can take from each session many lessons that go well beyond the simple technicalities of the code. The junior reviewer learns restraint and constructive mentorship of the peer developers he has reviewed; while from the senior developers being reviewed, he/she learns to be more assertive and prepared in getting results ‘without authority.’ This collectively provides a great opportunity and experience in their career. As developers being reviewed, we learn to interact with each other in harmonious ways, to openly communicate our goals and methods. We are at times humbled and learn to put aside our egos (<sarcasm>not that I have ever met an egotistical developer </sarcasm>) and embrace critique.</p>
+
+
+
+
+<p>Today at Ifbyphone we have many projects well underway and even more on the backlog; there are no shortages of challenges to be undertaken, and frankly I wouldn’t have it any other way. I am fortunate to be in a place professionally where I absolutely love what I do: I am challenged daily, work with a great group of people and have excellent leaders to keep me on track. Over the years I have learned that the best jobs are often the hard ones and all of those constraints of technical debt that pose the greatest challenge—while frustrating—give the greatest rewards.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[What is an expert?]]></title>
+    <link href="http://zircote.com/blog/2011/12/29/what-is-an-expert/"/>
+    <updated>2011-12-29T16:28:52-06:00</updated>
+    <id>http://zircote.com/blog/2011/12/29/what-is-an-expert</id>
+    <content type="html"><![CDATA[<p>One of the joys of my current profession is constant exposure to
+individuals and organizations that label themselves “experts” in any given
+discipline. Having been exposed to this perk yet again this holiday season, I
+feel compelled to draft my thoughts on the subject. It should be noted I do not
+claim to be an expert in any given discipline; I do however feel my experience
+lends itself to a unique perspective on many topics and subjects. My technical
+career spans several fields seemingly unrelated and diverse. I have been
+employed professionally as the following in no particular order:</p>
+
+<ul>
+    <li>Automotive Technician</li>
+<ul>
+    <li><a title="ASE" href="https://www.ase.com/default.aspx" target="_blank">ASE</a> Certified Master Auto, L1, Body and Heavy Truck</li>
+    <li>Automatic Transmissions</li>
+    <li>Electronics Drivability</li>
+    <li>Diesel Fuel Injection</li>
+    <li>Heavy Line</li>
+    <li>Fuel &amp; Ignition pit crew in an <a title="ARCA" href="http://www.arcaracing.com/" target="_blank">ARCA</a> stock car team</li>
+</ul>
+    <li>Director of Information technology for a Fortune 500 company.</li>
+    <li>Shop Foreman for the manufacturing and maintenance of oil-field equipment.</li>
+    <li>Garde Manger and Saucier Chef.</li>
+    <li>Software Developer and Software Architect.</li>
+</ul>
+
+
+<p>There is more; for the sake of brevity, I have kept this list short. For
+many years, I have kept this list a secret professionally, as it often sparks
+questions of ability, sanity and reliability. My lack of formal secondary
+education is often raised in job interviews and is just as often difficult to
+address, depending on the job market. With my introductions complete, I would
+like to share my thoughts on what does and does not make an expert. The list of
+things I believe that do make an expert will most assuredly be a list much
+smaller than what is generally accepted.</p>
+
+<h3>The expert</h3>
+
+
+<p><span>It is my belief that to become an expert in any field one must know
+enough to not be entirely sure of all aspects of a given problem. An expert will
+have the experience and wisdom to know there are no simple solutions; that all
+problems can and usually do have multiple facets. This expert will know that
+answers cannot come from one book, author, magazine or periodical; but rather
+from the mistakes and pains of failure. This individual will recognize that
+while there is the most common solution, there will one day be that problem
+that is rarely seen; knowing this and knowing how to address it is the making
+of an expert.</span></p>
+
+<h3>Not the expert</h3>
+
+
+<p>An individual reading one or two books that present canned problems and
+solutions as examples does not make a person an expert regardless of how well
+this person absorbs the lessons. This individual possesses only enough knowledge
+to begin the path to understanding one or two facets of the possibilities that
+can and will arise. It is important to understand that these publications have
+carefully filtered these problems for the most common denominator and to be
+publicly consumable. These solutions are merely best case recipes one can
+hope for and, often times, serve no real world problem solving knowledge on
+the topic.  Until the individual can readily find oneself presented with
+problems that does not return results in a Google search and solve these
+problems without the help of IRC or any others, he should not claim the title
+of expert in such matters.</p>
+
+<p>Commercially there are also companies that ply their wares, posing as experts
+in a given problem field hoping to take your money and make you happy. Far too
+often, I find these companies have a narrow range of problems they solve and it
+is far too easy to get started on a solution only to discover your particular
+use case is not supported or solved by the experts&#8217; offerings. This is similar
+to the individual case of not having seen enough of the problems or simply
+not having possessed the user base to be adaquate to solve the problem.</p>
+
+<h3>In Summary</h3>
+
+
+<p>Ultimately, it is important to recognize that consultant companies are often
+motivated for more selfish reasons than the individual to obfuscate their
+status, or lack thereof, as experts, so that they may lure us into a contractual
+obligation.  For individuals, it is often ignorance, narcissism and/or pride
+that often motivates the proclamations of subject matter experts from all parts
+of life. The holidays are especially bountiful for examining these persons to
+watch them in the wild and view their natural behaviors. Whether it is a parent
+instructing you in the disciplines of child rearing or a CEO expounding the
+joys of the latest whiz-bang idea they read on Joe Schmoes Blog; it is
+up to us non-experts to filter the wheat from the chaff, filter the
+good from the trash.</p>
+
+<p>&nbsp;</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A quick ternary joyride.]]></title>
+    <link href="http://zircote.com/blog/2011/11/17/a-quick-ternary-joyride/"/>
+    <updated>2011-11-17T23:59:31-06:00</updated>
+    <id>http://zircote.com/blog/2011/11/17/a-quick-ternary-joyride</id>
+    <content type="html"><![CDATA[<p>I am not a fan of @ but I have not found a way to use the new ternary operator without otherwise throwing the notice.</p>
+
+<pre class="brush:shell">[ zircote ~/Workspace/CtaTrack ] php -a
+Interactive shell
+
+php > $v = array();
+php > echo $v['test']?: 'no';
+PHP Notice:  Undefined index: test in php shell code on line 1
+no
+php > echo @$v['test']?: 'no';
+no
+php > $v['test'] = 'yes';
+php > echo @$v['test']?: 'no';
+yes
+php ></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The revolution around us...]]></title>
+    <link href="http://zircote.com/blog/2011/09/08/the-revolution-around-us/"/>
+    <updated>2011-09-08T02:05:38-05:00</updated>
+    <id>http://zircote.com/blog/2011/09/08/the-revolution-around-us</id>
+    <content type="html"><![CDATA[<p>I was remembering back to 1997 when I was working in IT for a fortune 500 as the stir for Y2K upgrades were on the rise, buyouts of smaller companies were daily and the transition from copper pair telecommunications systems were being replaced by VOIP. The latter was an odd transition; the use of a somewhat new thing (Ethernet) was being retasked to now handle phone traffic which heretofore was managed not by IT but rather by tel-co. This transition meant that the phone systems which had to date been managed by groups of switch technicians and troubleshooting performed with tone generators, butt-sets and amplifiers where now handled by neck-bearded pale-faced sociophobes in the basement  (not exactly) where no one dared venture. Many lost their jobs unable to embrace the change, many couldn&#8217;t make the transition believing it would pass and some embraced it striving to stay on the curve.</p>
+
+<p>Enter 2011, a new revolution has been well under way reminding me of those days long since passed; the cloud. While some see the cloud as just the most recent fad, a passing annoyance or the next thing to crash and burn; I however believe this is the next revolution. There will be those that will lose their jobs refusing to embrace the inevitable, more will not make the transition believing it will pass and some will successfully embrace it riding the curve. Much like the tel-co department of old, ops groups will now have to begin thinking more like a developer; it will require them to become part of the development process designing and interacting with aspects not specifically relating to the assets and hardware. Similarly, developers will have to become more mindful of ops related requirements that intersect their daily thought processes; considering technical details of deployment, concurrency and the like. The ability for even the most meagerly funded organizations to have as robust and thoroughly sound infrastructure as a Fortune 500, by which they may build, grow and continuously deliver their message to the world; making the cloud a cornerstone that is here to stay.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Prowl Push Notifications with Zend_Log]]></title>
+    <link href="http://zircote.com/blog/2011/07/02/prowl-push-notifications-with-zend_log/"/>
+    <updated>2011-07-02T23:13:18-05:00</updated>
+    <id>http://zircote.com/blog/2011/07/02/prowl-push-notifications-with-zend_log</id>
+    <content type="html"><![CDATA[<p>I wanted a contained method to send push notifications from various tasks and perhaps even a list of recipients for critical alerts; all the while still be able to hook into existing application code and error reporting. This lead me to writing Skulk_Log_Writer_Prowl as part of the <del>0.1.4</del> 0.1.5 release of the <a href="https://github.com/zircote/Skulk">Skulk</a> package.</p>
+
+<p>While currently simple in implementation it provides configurable support for provider keys, single or multiple recipient keys, linking URL and notice title. I may add layout support for more detailed messaging formats later with Zend_Layout. Implementing the  Zend_Log_Writer API, drop in use with minor configuration details is as follows:</p>
+
+<div><script src='https://gist.github.com/1061734.js?file=prowl-logging.php'></script>
+<noscript><pre><code>&lt;?php
+
+$prowl = array(
+    'apikey' =&gt; '072a7159e...e36ebe57',
+//  'apikey' =&gt; array('072a7159e...e36ebe57','072a7159e...e36ebe57','072a7159e...e36ebe57'), //for multi-keys
+    'priority' =&gt; Skulk_Client_Message::PRIORITY_EMERGENCY, // optional 
+    'url' =&gt; 'http://www.zircote.com/admin/console', // optional url to forward the user to.
+    'event' =&gt; 'Error logging via Prowl with Zend_Log', // optional Your message header 
+//  'providerkey' =&gt; '072a7159e9e8f......e7765cd11c229e36ebe57' // optional 
+);
+$prowlWriter = Skulk_Log_Writer_Prowl::factory($prowl);
+$prowlWriter-&gt;addFilter(new Zend_Log_Filter_Priority(Zend_Log::EMERG));
+$zendLog = new Zend_Log($prowlWriter);
+$zendLog-&gt;info('This wont be sent');
+$zendLog-&gt;emerg('this is a emerg test 1');
+$zendLog-&gt;emerg('this is a emerg test 2 ');
+$zendLog-&gt;emerg('this is a emerg test 3 ');</code></pre></noscript></div>
+
+
+<p>The messages received should appear something like these:</p>
+
+<p><a href="http://zircote.com/images/2011/07/skulk_log_list.png"><img class="alignnone size-medium wp-image-332" title="skulk_log_list" src="http://zircote.com/images/2011/07/skulk_log_list-200x300.png" alt="Skulk Log Output" width="200" height="300" /></a> <a href="http://zircote.com/images/2011/07/skulk_log_pop.png"><img class="alignnone size-medium wp-image-333" title="skulk_log_pop" src="http://zircote.com/images/2011/07/skulk_log_pop-200x300.png" alt="" width="200" height="300" /></a></p>
+
+<p>EDIT:</p>
+
+<p>I have also added recently a working yet rough Zend_Mail transport for prowl as well will expand tests and finalize it after the holidays:</p>
+
+<div><script src='https://gist.github.com/1061734.js?file=prowl-mail.php'></script>
+<noscript><pre><code>&lt;?php
+$prowl = array(
+    'apikey' =&gt; '072a7159e...e36ebe57',
+    'priority' =&gt; Skulk_Client_Message::PRIORITY_NORMAL,
+    'url' =&gt; 'http://www.zircote.com/admin/console',
+    'event' =&gt; 'Error logging via Prowl with Zend_Log',
+//    'providerkey' =&gt; '072a7159e9e8f......e7765cd11c229e36ebe57'
+);
+$tansport = new Skulk_Mail_Transport_Prowl($prowl)
+$mail = new Zend_Mail();
+$mail-&gt;setBodyText('this is a skulk test')
+    -&gt;send($transport);</code></pre></noscript></div>
+
+
+<p>For more information on:</p>
+
+<ul>
+    <li><a href="https://www.prowlapp.com">ProwlApp</a></li>
+    <li><a href="https://github.com/zircote/Skulk">Skulk</a></li>
+    <li><a href="http://framework.zend.com/manual/en/zend.log.writers.html">Zend_Log_Writers Documentation</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Zend Server Cluster Manager and Capistrano Deployments]]></title>
+    <link href="http://zircote.com/blog/2011/06/26/zend-server-cluster-manager-and-capistrano-deployments/"/>
+    <updated>2011-06-26T03:17:39-05:00</updated>
+    <id>http://zircote.com/blog/2011/06/26/zend-server-cluster-manager-and-capistrano-deployments</id>
+    <content type="html"><![CDATA[<p>One of the challenges of deploying applications in an elastic environment is the target servers are ever changing; from one moment to the next your environment may consist of four, twenty or more target hosts.  The process of determining these targets can be a tedious and time consuming task; requiring the examination of cluster member lists within the Zend Server Manager Gui or executing the ec2-describe-instances then parsing through the results for the correct group; either of these methods is time consuming and thwart with the possibility of mistyping a hostname, missing one or just breaking the process.</p>
+
+<p>I approach deployments from an angle that no human interaction (beyond security dictated by my comfort level) should be required;  a programmatic method of gathering this dynamic list of target hosts is required. To gather this list I have created and employed a library for interacting with the API interface for <a href="http://www.zend.com/en/">Zend Server</a> and <a href="http://www.zend.com/en/">Zend Server Cluster Manager</a>, <a href="https://github.com/zircote/Jazsl">Jazsl</a> (Just Another Zend Server Library.)  <a href="https://github.com/zircote/Jazsl">Jazsl</a> provides methods for all current Zend Server API calls:</p>
+
+<ul>
+    <li>clusterAddServer</li>
+    <li>clusterRemoveServer</li>
+    <li>clusterDisableServer</li>
+    <li>clusterEnableServer</li>
+    <li>clusterGetServerStatus</li>
+    <li>getSystemInfo</li>
+    <li>restartPhp</li>
+    <li>configurationExport</li>
+    <li>configurationImport</li>
+</ul>
+
+
+<p>More on these methods may be explored in the Zend Server documentation at <a href="http://www.zend.com/topics/zscm/Zend-Server-CM-Reference-Manual.pdf">Zend-Server-CM-Reference-Manual</a>.  I will assume the target stage for this will be production, and the stage files is production.rb; construction of the dynamic servers list within the production.rb requires certain dependancies:</p>
+
+<ul>
+    <li>gem: capistrano</li>
+    <li>gem: capistrano-ext</li>
+    <li>gem: json</li>
+    <li>Zend Framework</li>
+    <li>Jazsl</li>
+</ul>
+
+
+<p>These procedures will assume you have a working capistrano deployment configuration for your php project, the details of installing and configuring Jazsl are as follows. First install the pear packages for Jazsl and Zend Framework on the machine you intend to deploy from.</p>
+
+<div><script src='https://gist.github.com/.js?file='></script>
+<noscript><pre><code>&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;https://github.com/gist&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</code></pre></noscript></div>
+
+
+<p>Now you must enable the zf configuration as well as enable each of the provider within the Jazsl project you intend to utilize; for the purpose of deployments we only require the JazslProvider JazslClusterProvider. To configuration of covered in the following gist:</p>
+
+<div><script src='https://gist.github.com/4109253.js?file=config-jazsl.sh'></script>
+<noscript><pre><code>zf create config
+zf enable config.provider Jazsl_Tool_JazslProvider
+zf enable config.provider Jazsl_Tool_JazslClusterProvider</code></pre></noscript></div>
+
+
+<p>Confirm your setup and configuration of Jazsl providers by executing zf ? , the out put of which should contain:</p>
+
+<div><script src='https://gist.github.com/.js?file='></script>
+<noscript><pre><code>&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;https://github.com/gist&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</code></pre></noscript></div>
+
+
+<p>Before continuing we must configure an api key (read-only access is all we require.) To generate the api key we must log into the Zend Server Cluster Manager Gui, refer to the Zend Server documentation for details. The deployment hosts portion only requires a read-only api key. Once you have this key you can resume configuration of Jazsl tool as follows:</p>
+
+<p><a href="http://zircote.com/images/2011/06/zend-server-cluster-apikeys.png"><img class="alignnone size-medium wp-image-317" title="zend-server-cluster-apikeys" src="http://zircote.com/images/2011/06/zend-server-cluster-apikeys-300x248.png" alt="" width="300" height="248" /></a></p>
+
+<pre>zf add-server-key jazsl zcsm https://10.0.0.12:10082/ZendServerManager key_full xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</pre>
+
+
+<p>The parameters are described as follows:</p>
+
+<pre>zf add-server-key jazsl zendserver url keyname apikey</pre>
+
+
+<ul>
+    <li><code>zendserver</code> the identifying name for the key-set/host</li>
+    <li><code>url</code> the full Uri for the Zend Server originating this api-key set</li>
+    <li><code>keyname</code> the identifying name of the api-key given in the Zend Server Admin Gui Section</li>
+    <li><code>apikey</code> the api-key hash provided</li>
+</ul>
+
+
+<p>You may then validate its operation by executing:</p>
+
+<pre>zf cluster-status jazsl-server zcsm</pre>
+
+
+<p>where <code><strong>zcsm </strong></code>name of the key you just saved in the previous command; this command should return either an error message or a table of cluster members (provided you have cluster member)</p>
+
+<div><script src='https://gist.github.com/4109253.js?file=cluster-members.txt'></script>
+<noscript><pre><code>[ zircote ~/Workspace/Jazsl ] zf cluster-status jazsl-server zcsm
+Cluster Members:
+┌──────────┬───────────────┬───────────────┬────────────────────────────────────────────────────────────┐
+│Server ID │Status         │Instance-Name  │URI                                                         │
+├──────────┼───────────────┼───────────────┼────────────────────────────────────────────────────────────┤
+│25        │OK             │i-07982fff     │ec2-00-00-00-01.compute-1.amazonaws.com                     │
+├──────────┼───────────────┼───────────────┼────────────────────────────────────────────────────────────┤
+│28        │OK             │i-25765fff     │ec2-00-00-00-00.compute-1.amazonaws.com                     │
+├──────────┼───────────────┼───────────────┼────────────────────────────────────────────────────────────┤
+│31        │OK             │i-2e988fff     │ec2-00-00-00-00.us-west-1.compute.amazonaws.com             │
+└──────────┴───────────────┴───────────────┴────────────────────────────────────────────────────────────┘
+
+
+[ zircote ~/Workspace/Jazsl ] zf get-servers jazsl-cluster zcsm
+[&quot;ec2-00-00-00-01.compute-1.amazonaws.com&quot;,&quot;ec2-00-00-00-00.compute-1.amazonaws.com&quot;,&quot;ec2-00-00-00-00.us-west-1.compute.amazonaws.com&quot;]</code></pre></noscript></div>
+
+
+<p>Once this is confirmed you are now ready to use the jazsl-cluster tool to return the json string that will be used by Capistrano for the target lists as shown in the above gist.
+To utilize this json string we modify our production.rb file to execute the jazsl-cluster command and parse it as part of the roles determination as shown:</p>
+
+<div><script src='https://gist.github.com/4109253.js?file=production.rb'></script>
+<noscript><pre><code>require 'json'
+
+role (:app) do
+  JSON.parse(`zf get-servers jazsl`)
+end
+role (:web) do
+  JSON.parse(`zf get-servers jazsl`)
+end
+
+role (:db) do
+  JSON.parse(`zf get-server jazsl`)
+end
+
+set :rails_env,           &quot;production&quot;
+set :branch,              &quot;production&quot;
+set :repository, &quot;https://svn.myproject.com/svn/MyProject/tags/production&quot;
+</code></pre></noscript></div>
+
+
+<p>You will note for the :db roles section, I utilize a zf get-server jazsl-cluster command to return a single target host, I utilize this for database migrations which I only need to run on one instance in the cluster; while understanding that there are no static instances in an elastic environment. Finally deployment is executed as usual with capistrano: cap deploy production this will parse the servers list and execute all deployment commands on each server as usual.</p>
+
+<p>&nbsp;</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Access Control By IP Address Ranges]]></title>
+    <link href="http://zircote.com/blog/2011/06/13/access-controls-by-ip-address-ranges/"/>
+    <updated>2011-06-13T05:37:52-05:00</updated>
+    <id>http://zircote.com/blog/2011/06/13/access-controls-by-ip-address-ranges</id>
+    <content type="html"><![CDATA[<p>Simple example of controlling access to resources based on origin IP address, this example validates origin is a private IP range.</p>
+
+<div><script src='https://gist.github.com/1022368.js?file=PrivateIPAssertion.php'></script>
+<noscript><pre><code>&lt;?php
+require_once 'Zend/Acl/Assert/Interface.php';
+/**
+ * 
+ * Assert the REMOTE_ADDR of the reqeust is from a private IP address
+ * @author zircote
+ *
+ */
+class PrivateIPAssertion implements Zend_Acl_Assert_Interface
+{
+    public function assert (
+        Zend_Acl $acl, Zend_Acl_Role_Interface $role = null,
+        Zend_Acl_Resource_Interface $resource = null, $privilege = null
+    )
+    {
+        return $this-&gt;_isValidIP($_SERVER['REMOTE_ADDR']);
+    }
+    /**
+     *
+     * @assert ('10.0.0.1') == true
+     * @assert ('192.168.0.1') == true
+     * @assert ('68.45.32.17') == false
+     *
+     * @param string $ip
+     * @return bool
+     */
+    protected function _isValidIP ($ip)
+    {
+        $ipLong = $this-&gt;_ip2Long($ip);
+        $ten = new Zend_Validate_Between(
+            array(
+                'min' =&gt; $this-&gt;_ip2Long('10.0.0.0'),
+                'max' =&gt; $this-&gt;_ip2Long('10.255.255.255')
+            )
+        );
+        $oneSeven = new Zend_Validate_Between(
+            array(
+                'min' =&gt; $this-&gt;_ip2Long('172.16.0.0'),
+                'max' =&gt; $this-&gt;_ip2Long('172.31.255.255')
+            )
+        );
+        $oneNine = new Zend_Validate_Between(
+            array(
+                'min' =&gt; $this-&gt;_ip2Long('192.168.0.0'),
+                'max' =&gt; $this-&gt;_ip2Long('192.168.255.255')
+            )
+        );
+        $ipLong = sprintf('%u',ip2long($ip));
+        switch (true) {
+            case $ten-&gt;isValid($ipLong):
+                return true;
+            case $oneSeven-&gt;isValid($ipLong):
+                return true;
+            case $oneNine-&gt;isValid($ipLong):
+                return true;
+            default:
+                return false;
+        }
+    }
+    protected function _ip2Long($ip)
+    {
+        return sprintf('%u',ip2long($ip));
+    }
+}</code></pre></noscript></div>
+
+
+<p>I have also added the supporting unit test, note that I am reflecting the method inorder to set it to public visibility to allow testing of it. It should also be note that in order to generate the tests you must change the protected to public so that PHPUnit will recognize the annotated assertions and generate the desired tests.</p>
+
+<div><script src='https://gist.github.com/1022368.js?file=PrivateIPAssertionTest.php'></script>
+<noscript><pre><code>&lt;?php
+/**
+ * Test class for PrivateIPAssertion.
+ * Generated by PHPUnit on 2011-06-11 at 19:38:41.
+ */
+class PrivateIPAssertionTest extends PHPUnit_Framework_TestCase
+{
+    /**
+     * @var PrivateIPAssertion
+     */
+    protected $object;
+    /**
+     *
+     * @var ReflectionMethod
+     */
+    protected $method;
+
+    /**
+     * Sets up the fixture, for example, opens a network connection.
+     * This method is called before a test is executed.
+     */
+    protected function setUp()
+    {
+        /* set the protected method visible */
+        $this-&gt;object = new PrivateIPAssertion();
+        $this-&gt;method = new ReflectionMethod('PrivateIPAssertion', '_isValidIP');
+        $this-&gt;method-&gt;setAccessible(true);
+    }
+
+    /**
+     * Tears down the fixture, for example, closes a network connection.
+     * This method is called after a test is executed.
+     */
+    protected function tearDown()
+    {
+        $this-&gt;object = null;
+        $this-&gt;method = null;
+    }
+    /**
+     * Generated from @assert ('10.0.0.1') == true.
+     */
+    public function test_isValidIP()
+    {
+        $this-&gt;assertTrue(
+          $this-&gt;method-&gt;invoke($this-&gt;object,'10.0.0.1')
+        );
+    }
+
+    /**
+     * Generated from @assert ('192.168.0.1') == true.
+     */
+    public function test_isValidIP2()
+    {
+        $this-&gt;assertTrue(
+          $this-&gt;method-&gt;invoke($this-&gt;object,'192.168.0.1')
+        );
+    }
+
+    /**
+     * Generated from @assert (68.45.32.17) == false.
+     */
+    public function test_isValidIP3()
+    {
+        $this-&gt;assertFalse(
+          $this-&gt;method-&gt;invoke($this-&gt;object,'68.45.32.17')
+        );
+    }
+}
+</code></pre></noscript></div>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Zend_Acl storage with redis]]></title>
+    <link href="http://zircote.com/blog/2011/06/12/zend_acl-storage-with-redis/"/>
+    <updated>2011-06-12T05:58:36-05:00</updated>
+    <id>http://zircote.com/blog/2011/06/12/zend_acl-storage-with-redis</id>
+    <content type="html"><![CDATA[<p>Recently I have been playing around with Rediska and Zend_Acl looking at different ways to store the lists and manipulate them so I put together a few of my scribbles to share.</p>
+
+<p>Requirements:</p>
+
+<ul>
+    <li><a href="http://redis.io">redis</a></li>
+    <li><a href="http://rediska.geometria-lab.net/">Rediska</a></li>
+    <li><a href="http://framework.zend.com/manual/en/zend.acl.html">Zend_Acl</a></li>
+</ul>
+
+
+<p>This basic demonstrate support for multiple containers, utilizes a singleton for creation of each container. The creation of nonexistent acl containers within redis is delegated to the Rediska_Key::getOrSetValue method for initialization of the redis key being requested. This method uses the Acls name (&#8216;BugsService&#8217;) through ReflectionClass to locate the proper creation controls.</p>
+
+<div><script src='https://gist.github.com/1019146.js?file=RediskaAcl.php'></script>
+<noscript><pre><code>&lt;?php
+
+class RediskaAcl extends Zend_Acl
+{
+    /**
+     *
+     * @var Rediska_Key
+     */
+    protected $_redis;
+    /**
+     *
+     * @var string
+     */
+    protected $_key;
+    /**
+     *
+     * @param string $key
+     */
+    public function __construct($key)
+    {
+        $this-&gt;_key = $key;
+    }
+    /**
+     *
+     */
+    protected function _getRedis()
+    {
+        if(!$this-&gt;_redis){
+            $redis = new Rediska_Key($this-&gt;_key);
+            $this-&gt;setRedis($redis);
+        }
+        return $this-&gt;_redis;
+    }
+    /**
+     *
+     * @param Rediska_Key_Abstract $redis
+     */
+    public function setRedis(Rediska_Key_Abstract $redis)
+    {
+        $this-&gt;_redis = $redis;
+    }
+    /**
+     *
+     * @param Zend_Acl $acl
+     */
+    public function saveAcl()
+    {
+        $this-&gt;_getRedis()-&gt;setValue($this);
+    }
+    /**
+     * Rediska_Key::getOrSetValue checks if the keys exists if not it uses the
+     * provided object and executes the chained method to set the value returned
+     * by the method
+     * @param string $key
+     */
+    public function getAcl($key)
+    {
+        $reflection = new ReflectionClass('Model_'.$key.'Acl');
+        return $this-&gt;_getRedis()-&gt;getOrSetValue($reflection-&gt;newInstance())
+            -&gt;getAcl();
+    }
+}
+
+</code></pre></noscript></div>
+
+
+<p><code>SomeAclService::getInstance($aclName)</code> returns the <code>RediskaAcl</code> container with name: <code>$aclName</code>.</p>
+
+<div><script src='https://gist.github.com/1019146.js?file=SomeAclService.php'></script>
+<noscript><pre><code>&lt;?php
+class SomeAclService
+{
+    /**
+     *
+     * Enter description here ...
+     * @var unknown_type
+     */
+    private static $_instance = array();
+    /**
+     *
+     * Enforce singleton and prevent access to constructor.
+     */
+    private function __construct()
+    {
+    }
+    /**
+     *
+     * prevent cloning
+     */
+    private function __clone()
+    {
+    }
+
+    /**
+     * provide name of an acl container being requested
+     * @return RediskaAcl
+     */
+    public static function getInstance($key)
+    {
+        if(
+            !array_key_exists($key, self::$_instance) ||
+            !self::$_instance[$key] instanceof RediskaAcl
+        ){
+            $instance = new RediskaAcl($key);
+            $acl = $instance-&gt;getAcl($key);
+            if($acl instanceof RediskaAcl){
+                self::$_instance[$key] = $acl;
+            }
+        }
+        return self::$_instance[$key];
+    }
+}</code></pre></noscript></div>
+
+
+<p><code>RediskaAcl</code> extends <code>Zend_Acl</code>, providing methods:
+<code>getAcl()</code> returns the object, creating the object and saving to the redis namespace if it does not exist
+<code>setAcl()</code>, allows a manual save of the current Acl in the event it is modified.
+<code>setRedis()</code> allows for run time Rediska instance configuration.</p>
+
+<p><code>Model_BugsServiceAcl</code> provides the mechanisms by which first time creation of the Acl is realized, this may be a Mapper to the database models that would generate the Acl and return the <code>RediskaAcl</code> object that is then saved to the redis namespace.</p>
+
+<div><script src='https://gist.github.com/1019146.js?file=Model_BugsServiceAcl.php'></script>
+<noscript><pre><code>&lt;?php
+/**
+ *
+ * This could be a mechanism that builds acl lists from the database or file
+ * based storage.
+ * @author zircote
+ *
+ */
+class Model_BugsServiceAcl
+{
+    public function getAcl()
+    {
+        $acl = new RediskaAcl('BugsService');
+        $acl-&gt;removeRoleAll()-&gt;removeAll();
+        $acl-&gt;addRole(new Zend_Acl_Role('guest'))
+            -&gt;addRole(new Zend_Acl_Role('member'),'guest')
+            -&gt;addRole(new Zend_Acl_Role('admin'), 'member')
+            -&gt;addRole(new Zend_Acl_Role('someAdmin'), 'admin')
+            -&gt;addRole(new Zend_Acl_Role('someMember'), 'member')
+            -&gt;addRole(new Zend_Acl_Role('someGuest'), 'guest')
+            -&gt;addResource(new Zend_Acl_Resource('someMemberResource'))
+            -&gt;addResource(new Zend_Acl_Resource('someGuestResource'))
+            -&gt;addResource(new Zend_Acl_Resource('someAdminResource'))
+            -&gt;deny()
+            -&gt;allow('guest', 'someGuestResource')
+            -&gt;allow('member', 'someMemberResource')
+            -&gt;allow('admin', 'someAdminResource');
+        return $acl;
+    }
+}</code></pre></noscript></div>
+
+
+<p><code>RedisAclTest</code> demonstrates the use and verification of proper functionality of the Acl roles and resources.</p>
+
+<div><script src='https://gist.github.com/1019146.js?file=RediskaAclTest.php'></script>
+<noscript><pre><code>&lt;?php
+require_once 'Rediska.php';
+require_once '../example/RediskaAcl.php';
+require_once '../example/SomeAclService.php';
+require_once '../example/model/BugsServiceAcl.php';
+require_once 'PHPUnit/Framework/TestCase.php';
+/**
+ * RediskaAcl test case.
+ */
+class RediskaAclTest extends PHPUnit_Framework_TestCase
+{
+    /**
+     * @var RediskaAcl
+     */
+    private $RediskaAcl;
+    /**
+     * Prepares the environment before running a test.
+     */
+    protected function setUp ()
+    {
+        parent::setUp();
+        $rediska = new Rediska();
+
+        $this-&gt;RediskaAcl = SomeAclService::getInstance('BugsService');
+    }
+    /**
+     * Cleans up the environment after running a test.
+     */
+    protected function tearDown ()
+    {
+        $this-&gt;RediskaAcl = null;
+        parent::tearDown();
+    }
+    /**
+     *
+     */
+    public function testAssertions()
+    {
+        $acl = $this-&gt;RediskaAcl;
+        $this-&gt;assertTrue($acl-&gt;isAllowed('someGuest', 'someGuestResource'));
+        $this-&gt;assertTrue($acl-&gt;isAllowed('someAdmin', 'someAdminResource'));
+        $this-&gt;assertTrue($acl-&gt;isAllowed('someMember', 'someMemberResource'));
+        /* verify proper denial */
+        $this-&gt;assertFalse($acl-&gt;isAllowed('someGuest', 'someAdminResource'));
+        $this-&gt;assertFalse($acl-&gt;isAllowed('someGuest', 'someAdminResource'));
+        $this-&gt;assertFalse($acl-&gt;isAllowed('someGuest', 'someMemberResource'));
+        $this-&gt;assertFalse($acl-&gt;isAllowed('someMember', 'someAdminResource'));
+    }
+}
+</code></pre></noscript></div>
+
+
+<p>Finally a short example of runtime usage</p>
+
+<div><script src='https://gist.github.com/1019146.js?file=assert.php'></script>
+<noscript><pre><code>&lt;?php
+$rediska = new Rediska();
+echo SomeAclService::getInstance('BugsService')
+    -&gt;isAllowed('someUser', 'someResource') ? 'allowed' : 'denied';
+</code></pre></noscript></div>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Testing Web-Service Clients with Zend Framework]]></title>
+    <link href="http://zircote.com/blog/2011/06/04/testing-web-service-clients-with-zend-framework/"/>
+    <updated>2011-06-04T14:49:30-05:00</updated>
+    <id>http://zircote.com/blog/2011/06/04/testing-web-service-clients-with-zend-framework</id>
+    <content type="html"><![CDATA[<p>It seems the majority of my time these days is spent writing clients to consume all of the fantastic web-services that people and companies create for us, we are the fortunate beneficiaries of these peoples efforts. Developing clients to consume web-services has at times the additional sticky points that other efforts development may not, there may be a  case were we can not afford to make actual real-live calls to an endpoint (no test sandbox, monetary charges or we simply do not possess actual access to the endpoint.) In these case and most especially while testing we do not want to make &#8216;real-live&#8217; calls to the endpoint. It is not nor should it be the purpose of our tests to test the endpoints performance. A functional test of an endpoint is unrelated to the client libraries we have developed and wish to test and as such should never be dependent on the endpoint for testing its performance characteristics.</p>
+
+<p>I hate reinventing the wheel for common problems that many very smart people have already solved and solved well; which is why most of my personal development is based on a framework, specifically Zend Framework.  The Zend Framework has great support for testing in a vast majority of its components and for the purpose of this article we will be utilizing the <a title="Zend_Http_Client" href="http://framework.zend.com/manual/en/zend.http.html" target="_blank">Zend_Http_Client</a> for the examples.</p>
+
+<p>The strategy for testing web-services is to simply mock the Zend_Http_Client_Adapter_* the request employs; each test will decide in the setup of the test what status code will be sent, what headers and what the body content will contain. The approach I take with this is creating static files within a fixtures directory ( tests/fixtures/http/someEndpoint.200.xml),  making an effort to identify each documents purpose and how it should be used in the test. I may include in these files the any number of unwanted errors, malformed documents entities in an attempt to expose weaknesses in my handling, (this is especially handy when bugs are discovered that are undocumented in the provider API or unforeseen in development):</p>
+
+<div><script src='https://gist.github.com/1007931.js?file=accountStatus.200.xml'></script>
+<noscript><pre><code>&lt;?xml version='1.0' encoding='UTF-8'?&gt;
+&lt;eveapi version=&quot;2&quot;&gt;
+  &lt;currentTime&gt;2010-10-05 20:28:55&lt;/currentTime&gt;
+  &lt;result&gt;
+    &lt;userID&gt;3000000&lt;/userID&gt;
+    &lt;paidUntil&gt;2011-01-01 00:00:00&lt;/paidUntil&gt;
+    &lt;createDate&gt;2004-01-01 00:00:00&lt;/createDate&gt;
+    &lt;logonCount&gt;9999&lt;/logonCount&gt;
+    &lt;logonMinutes&gt;9999&lt;/logonMinutes&gt;
+    &lt;rowset name=&quot;Offers&quot; key=&quot;offerID&quot; columns=&quot;offerID,offeredDate,from,to,ISK&quot; /&gt;
+  &lt;/result&gt;
+  &lt;cachedUntil&gt;2010-10-05 20:33:55&lt;/cachedUntil&gt;
+&lt;/eveapi&gt;</code></pre></noscript></div>
+
+
+<p>Examples of the http response status and content-type should reside in strings similar to the following (note additional headers may be appended following this forming the expected document preamble:</p>
+
+<div><script src='https://gist.github.com/.js?file='></script>
+<noscript><pre><code>&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;https://github.com/gist&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</code></pre></noscript></div>
+
+
+<p>The test belows demonstrates the key points of setting up the test; the setup method provisions the class being tested which in this case extends the Zend_Http_Client. This provides a method <code>setAdapter</code>; with this method we are able to provide the Zend_Http_Client_Adapter_Test for use in our testing. We will test one method, <code>accountStatus</code> and are only demonstrating one test case <code>testApiSuccess</code> within this test case we read in the fixtures file contents and append them to the <code>responseHeader</code> we declared in the #setUp method; this string is passed to the call:<code>$this-&gt;Api-&gt;getAdapter()-&gt;setResponse($fixture);</code> and becomes the desired result of our web-service call. This process of mock returns affords us the ability to generate infinite result sets across a varying range of expected or anticipated failure scenarios.</p>
+
+<div><script src='https://gist.github.com/.js?file='></script>
+<noscript><pre><code>&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;https://github.com/gist&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</code></pre></noscript></div>
+
+
+
+
+<div><script src='https://gist.github.com/.js?file='></script>
+<noscript><pre><code>&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;https://github.com/gist&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</code></pre></noscript></div>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Adding DocBlox to your Continuous Integration]]></title>
+    <link href="http://zircote.com/blog/2011/06/02/adding-docblox-to-your-continuous-integration/"/>
+    <updated>2011-06-02T15:03:50-05:00</updated>
+    <id>http://zircote.com/blog/2011/06/02/adding-docblox-to-your-continuous-integration</id>
+    <content type="html"><![CDATA[<p>Recently inspired by <a href="http://sebastian-bergmann.de/">Sebastian Bergmanns</a>, <a href="http://jenkins-php.org">jenkins-php.org</a> I have begun making a push to put all of my projects both personal and professional under continuous integration management; however one project I work with was so large it was impossible to complete the build. This lead me to discover <a href="http://www.docblox-project.org/">DocBlox</a>: &#8221;a Documentation Generation Application (DGA) for use with PHP applications.&#8221; It was built with this problem in mind and is gaining rapid adoption throughout the PHP community.</p>
+
+<p>Integrating DocBlox in your Jenkins instance is simple and straight forward implementing the changes are as follows:</p>
+
+<p>Discover and install DocBlox.</p>
+
+<address>*note DocBlox requires libxslt support within PHP as well as <a title="GraphViz" href="http://www.graphviz.org/" target="_blank">http://www.graphviz.org/</a>.</address>
+
+
+<div><script src='https://gist.github.com/1004580.js?file=pear.install'></script>
+<noscript><pre><code># DocBlox does require xsl support
+sudo apt-get install php5-xsl # or equivelant for your OS
+
+sudo pear channel-discover pear.michelf.com # a dependency channel for docblox
+sudo pear channel-discover pear.docblox-project.org
+sudo pear install docblox/DocBlox</code></pre></noscript></div>
+
+
+<p>Convert your build.xml to run docblox.</p>
+
+<div><script src='https://gist.github.com/1004580.js?file=build.xml.diff'></script>
+<noscript><pre><code>diff --git build.xml build.xml
+index 0342c23..2608ddf 100644
+--- build.xml
++++ build.xml
+@@ -26,7 +26,7 @@
+     &lt;/target&gt;
+ 
+     &lt;target name=&quot;parallelTasks&quot;
+-        description=&quot;Run the pdepend, phpmd, phpcpd, phpcs, phpdoc and phploc tasks in parallel using a maximum of 2 threads.&quot;&gt;
++        description=&quot;Run the pdepend, phpmd, phpcpd, phpcs, docblox and phploc tasks in parallel using a maximum of 2 threads.&quot;&gt;
+         &lt;parallel threadCount=&quot;2&quot;&gt;
+             &lt;sequential&gt;
+                 &lt;antcall target=&quot;pdepend&quot; /&gt;
+@@ -34,7 +34,7 @@
+             &lt;/sequential&gt;
+             &lt;antcall target=&quot;phpcpd&quot; /&gt;
+             &lt;antcall target=&quot;phpcs&quot; /&gt;
+-            &lt;antcall target=&quot;phpdoc&quot; /&gt;
++            &lt;antcall target=&quot;docblox&quot; /&gt;
+             &lt;antcall target=&quot;phploc&quot; /&gt;
+             &lt;antcall target=&quot;phpcb&quot; /&gt;
+         &lt;/parallel&gt;
+@@ -83,9 +83,9 @@
+         &lt;/exec&gt;
+     &lt;/target&gt;
+ 
+-    &lt;target name=&quot;phpdoc&quot; description=&quot;Generate API documentation using PHPDocumentor&quot;&gt;
+-        &lt;exec executable=&quot;phpdoc&quot;&gt;
+-            &lt;arg line=&quot;-d ${source} -t ${basedir}/build/api&quot; /&gt;
++    &lt;target name=&quot;docblox&quot; description=&quot;Generate API documentation using DocBlox&quot;&gt;
++        &lt;exec executable=&quot;docblox&quot;&gt;
++            &lt;arg line=&quot;run -d ${source} -t ${basedir}/build/api&quot; /&gt;
+         &lt;/exec&gt;
+     &lt;/target&gt;
+ </code></pre></noscript></div>
+
+
+<p>&nbsp;</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Capturing Ec2 instance meta-data]]></title>
+    <link href="http://zircote.com/blog/2011/05/31/capturing-ec2-instance-meta-data/"/>
+    <updated>2011-05-31T03:16:47-05:00</updated>
+    <id>http://zircote.com/blog/2011/05/31/capturing-ec2-instance-meta-data</id>
+    <content type="html"><![CDATA[<p>A simple class to grab the meta data of an EC2 instance for shell scripting as well as use in other actions on the server. I utilize it as part of the cluster member adding and deleting when autoscaling instances.</p>
+
+<div><script src='https://gist.github.com/999797.js?file='></script>
+<noscript><pre><code>&lt;?php
+require_once 'Zend/Service/Abstract.php';
+/**
+ * 
+ * 
+ * @author zircote@zircote.com
+ * 
+ * &lt;code&gt;
+ * &lt;?php
+ * $metadata = new Zircote_Service_Ec2_Metadata;
+ * echo $metadata-&gt;amiID;
+ * echo $metadata-&gt;hostname;
+ * echo $metadata-&gt;instanceId
+ * echo $metadata-&gt;kernelId
+ * echo $metadata-&gt;userData;
+ * echo $metadata-&gt;publicHostname;
+ * &lt;/code&gt;
+ * &lt;p&gt;CLI example (but note curl -s would probably be more suitable)&lt;/p&gt;
+ * &lt;code&gt;
+ * #!/usr/bin/env php
+ * &lt;?php
+ * require_once 'Zircote/Service/Ec2/Metadata.php';
+ * $metadata = new Zircote_Service_Ec2_Metadata;
+ * try{
+ *     file_put_contents('php://stdout',$metadata-&gt;__get($_SERVER['argv'][1]));
+ * } catch (Exception $e){
+ *     file_put_contents('php://stderr', $e-&gt;getMessage());
+ *     exit(0);
+ * }
+ * &lt;/code&gt;
+ */
+class Zircote_Service_Ec2_Metadata extends Zend_Service_Abstract
+{
+    protected $_endpoint = 'http://169.254.169.254';
+    protected $_methods = array(
+        'amiID' =&gt; '/latest/meta-data/ami-id',
+        'amiLaunchIndex' =&gt; '/latest/meta-data/ami-launch-index',
+        'amiManifestPath' =&gt; '/latest/meta-data/ami-manifest-path',
+        'ancestorAmiIds' =&gt; '/latest/meta-data/ancestor-ami-ids',
+        'blockDeviceMapping' =&gt; '/latest/meta-data/block-device-mapping/',
+        'hostname' =&gt; '/latest/meta-data/hostname',
+        'instanceAction' =&gt; '/latest/meta-data/instance-action',
+        'instanceId' =&gt; '/latest/meta-data/instance-id',
+        'instanceType' =&gt; '/latest/meta-data/instance-type',
+        'kernelId' =&gt; '/latest/meta-data/kernel-id',
+        'localHostname' =&gt; '/latest/meta-data/local-hostname',
+        'localIpv4' =&gt; '/latest/meta-data/local-ipv4',
+        'placement' =&gt; '/latest/meta-data/placement/',
+        'publicHostname' =&gt; '/latest/meta-data/public-hostname',
+        'publicIpv4' =&gt; '/latest/meta-data/public-ipv4',
+        'publicKeys' =&gt; '/latest/meta-data/public-keys/',
+        'ramdiskId' =&gt; '/latest/meta-data/ramdisk-id',
+        'reservationId' =&gt; '/latest/meta-data/reservation-id',
+        'securityGroups' =&gt; '/latest/meta-data/security-groups',
+        'userData' =&gt; '/latest/user-data',
+    );
+
+    public function __get($name)
+    {
+        if(!array_key_exists($name, $this-&gt;_methods)){
+            throw new Exception(sprintf('method [%s] does not exist', $name));
+        }
+        self::getHttpClient()-&gt;setUri($this-&gt;_endpoint)
+            -&gt;getUri()-&gt;setPath($this-&gt;_methods[$name]);
+        $result = self::getHttpClient()-&gt;request();
+        if($result-&gt;getStatus() == 200){
+            return $result-&gt;getBody();
+        } else {
+            return false;
+        }
+    }
+}</code></pre></noscript></div>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Starting a Zend Framework Project [2/2]]]></title>
+    <link href="http://zircote.com/blog/2011/05/15/starting-a-zend-framework-project-23/"/>
+    <updated>2011-05-15T07:41:43-05:00</updated>
+    <id>http://zircote.com/blog/2011/05/15/starting-a-zend-framework-project-23</id>
+    <content type="html"><![CDATA[<p>Previously I discussed the creation of a ZF project skeleton; having established the test suite, build file, phpdoc and phpcs processing, we can now begin building the database models. I will also expand on relationships within the models and will cover the implementation of model relationships using Zend_Db_Table_Relationship.</p>
+
+<h2>The Database</h2>
+
+
+<p>For the purpose of this entry, I will utilize the database model described in the Zend Framework documentation; this database contains four tables:</p>
+
+<ul>
+    <li>accounts</li>
+    <li>products</li>
+    <li>bugs</li>
+    <li>bugs_products</li>
+</ul>
+
+
+<p>To create the database follow, the commands outlined below. Be sure to &#8216;cat&#8217; the contents of the following gist into db/development.sql: <div><script src='https://gist.github.com/972905.js?file=setup-db.sh'></script>
+<noscript><pre><code>prompt&gt; mkdir db
+prompt&gt; cat &gt; db/development.sql</p>
+
+<h1>Contents of development.sql</h1>
+
+<p>^c
+prompt&gt; sqlite3 --init db/development
+sqlite&gt; .read ./db/development.sql
+sqlite&gt; .tables
+accounts       bugs           bugs_products  products
+sqlite&gt; .quit</code></pre></noscript></div>
+ <div><script src='https://gist.github.com/972905.js?file=development.sql'></script>
+<noscript><pre><code>CREATE TABLE accounts (
+  account_name      VARCHAR(100) NOT NULL PRIMARY KEY
+);</p>
+
+<p>CREATE TABLE products (
+  product_id        INTEGER NOT NULL PRIMARY KEY,
+  product_name      VARCHAR(100)
+);</p>
+
+<p>CREATE TABLE bugs (
+  bug_id            INTEGER NOT NULL PRIMARY KEY,
+  bug_description   VARCHAR(100),
+  bug_status        VARCHAR(20),
+  reported_by       VARCHAR(100) REFERENCES accounts(account_name),
+  assigned_to       VARCHAR(100) REFERENCES accounts(account_name),
+  verified_by       VARCHAR(100) REFERENCES accounts(account_name)
+);</p>
+
+<p>CREATE TABLE bugs_products (
+  bug_id            INTEGER NOT NULL REFERENCES bugs,
+  product_id        INTEGER NOT NULL REFERENCES products,
+  PRIMARY KEY       (bug_id, product_id)
+);</p>
+
+<p>INSERT INTO accounts values ('zircote');
+INSERT INTO accounts values ('zombified');
+INSERT INTO accounts values ('caroro');
+INSERT INTO products (product_id,product_name) values (1,'Skulk');
+INSERT INTO products (product_id,product_name) values (2,'EveLib');
+INSERT INTO products (product_id,product_name) values  (3,'Amarium');
+INSERT INTO bugs ('bug_description','bug_status','reported_by','assigned_to','verified_by') VALUES ('minor problem with build status', 'EMERG','zircote','caroro','zombified');
+INSERT INTO bugs_products VALUES (1,2);
+INSERT INTO bugs_products VALUES (2,3);
+INSERT INTO bugs_products VALUES (3,1);</code></pre></noscript></div>
+ Now that your database is created we may generate the table models.</p>
+
+<h2>Table Models</h2>
+
+
+<p>To generate table models, we will employ the zf cli providers; it should be noted that while it is possible to create them by hand this does not maintain the manifest. .zfproject.xml . The commands to create the models are as follows: <div><script src='https://gist.github.com/972905.js?file=create-models.sh'></script>
+<noscript><pre><code>prompt&gt; zf configure db-adapter &quot;adapter= Pdo_Sqlitee&amp;dbname=../db/development&quot; development
+A db configuration for the development section has been written to the application config file.</p>
+
+<p>prompt&gt; zf create dbtable Accounts accounts
+Creating a DbTable at /Users/zircote/Workspace/ZendDb/application/models/DbTable/Accounts.php
+Updating project profile '/Users/zircote/Workspace/ZendDb/.zfproject.xml'</p>
+
+<p>prompt&gt; zf create dbtable Bugs bugsCreating a DbTable at /Users/zircote/Workspace/ZendDb/application/models/DbTable/Bugs.php
+Updating project profile '/Users/zircote/Workspace/ZendDb/.zfproject.xml'</p>
+
+<p>prompt&gt; zf create dbtable BugsProducts bugs_products
+Creating a DbTable at /Users/zircote/Workspace/ZendDb/application/models/DbTable/BugsProducts.php
+Updating project profile '/Users/zircote/Workspace/ZendDb/.zfproject.xml'</p>
+
+<p>prompt&gt; zf create dbtable Products products
+Creating a DbTable at /Users/zircote/Workspace/ZendDb/application/models/DbTable/Products.php
+Updating project profile '/Users/zircote/Workspace/ZendDb/.zfproject.xml'</code></pre></noscript></div>
+ It should be noted that additional parameters are available. The list of parameters are as follows:</p>
+
+<ul>
+    <li><strong>name: </strong>the models name, this will be in addition to
+the namespace portion; ie App_Model_DbTable_</li>
+    <li><strong>actual-table-name:</strong> the table name within the
+database</li>
+    <li><strong>module:</strong> the module the model will reside, in this
+case default in which case we submit nothing</li>
+    <li><strong>force-overwrite:</strong> whether to rewrite the model</li>
+</ul>
+
+
+<p>It should be noted that commands in the &#8216;zf&#8217; project provider will also accept parameters in the following manner <strong>-f</strong> force-rewrite <strong>-m</strong> module <strong>-n</strong> name <strong>-a</strong> actual-table-name</p>
+
+<h2>Table Relationships</h2>
+
+
+<p>The Zend_Db package also provides the tools to create and maintain relations between models enabling a series of methods that allow for child and parent queries from result row sets. As the db models are extended from Zend_Db_Table there are two properties of interest, Zend_Db_Table::<em>dependentTables and Zend_Db_Table::</em>referenceMap.</p>
+
+<p>We will begin with the ZendDb_Model_DbTable_Accounts and declare our dependant table, ZendDb_Model_DbTable_Bugs as an array member of the ZendDb_Model_DbTable_Accounts::<em>referenceMap property. Following the ZendDb_Model_DbTable_Accounts model, we will next detail the ZendDb_Model_DbTable_Bugs model and associated references, and dependencies. Within the bugs table three columns are dependencies of accounts table, reported_by, assigned_to, and verified_by each of which references accounts. This is represented in the model ZendDb_Model_DbTable_Bugs::</em>referenceMap as follows: <div><script src='https://gist.github.com/972905.js?file=Bugs.php'></script>
+<noscript><pre><code>&lt;?php
+class ZendDb_Model_DbTable_Bugs extends Zend_Db_Table_Abstract
+{</p>
+
+<pre><code>/**
+ *
+ * table name
+ * @var string
+ */
+protected $_name = 'bugs';
+/**
+ *
+ * table dependencies, this should be the class name of the model which
+ * defines the dependency.
+ * @var array
+ */
+protected $_dependentTables = array('ZendDb_Model_DbTable_BugsProducts');
+/**
+ *
+ * Reference map to parent model defined as
+ * - columns: column name (string)
+ * - refTableClass: the classname of the model definine the table
+ * - refColumns the parent objects column name representative of this
+ *    reference.
+ * onDelete: the action to take when the parent record is deleted, this
+ *     is intended to serve as a replacement for RDBMS that do no support
+ *     DRI, i.e. MyISAM, Sqlite, etc.
+ * onUpdate: the action to take when the parent record is updated, see
+ *    onDelete above.
+ *
+ * @var array
+ */
+protected $_referenceMap = array(
+    'Reporter' =&amp;gt; array(
+        'columns' =&amp;gt; 'reported_by',
+        'refTableClass' =&amp;gt; 'ZendDb_Model_DbTable_Accounts',
+        'refColumns' =&amp;gt; 'account_name'
+    ),
+    'Engineer' =&amp;gt; array(
+        'columns' =&amp;gt; 'assigned_to',
+        'refTableClass' =&amp;gt; 'ZendDb_Model_DbTable_Accounts',
+        'refColumns' =&amp;gt; 'account_name'
+    ),
+    'Verifier' =&amp;gt; array(
+        'columns' =&amp;gt; array('verified_by'),
+        'refTableClass' =&amp;gt; 'ZendDb_Model_DbTable_Accounts',
+        'refColumns' =&amp;gt; array('account_name')
+    )
+);
+</code></pre>
+
+<p>}</code></pre></noscript></div>
+ For the cascading actions for Zend_Db_Table::_referenceMap there are three class constants provided for declaration:</p>
+
+<ul>
+    <li>Zend_Db_Table::CASCADE</li>
+    <li>Zend_Db_Table::RESTRICT</li>
+    <li>Zend_Db_Table::SET_NULL</li>
+</ul>
+
+
+<p>Additional details maybe found at:</p>
+
+<ul>
+    <li><a href="http://framework.zend.com/manual/en/zend.db.table.html">Zend_Db_Table</a></li>
+    <li><a href="http://framework.zend.com/manual/en/zend.db.table.relationships.html">Zend_Db_Table Relationships</a></li>
+</ul>
+
+
+<h2>Zend_Db_Table_Definition</h2>
+
+
+<p>As an alternative to defining relationships within each model there is another option, <a href="http://framework.zend.com/manual/en/zend.db.table.definition.html"> Zend_Db_Table_Definition</a> for this projects database definitions. I would prefer to maintain the definitions within the application.ini and utilize the resource autoloader to place it within a Zend_Registry container (note: it is possible to utilize a separate .ini file for the database definition.) It will also be necessary to change the models to extend from the Zend_Db_Table instead of Zend_Db_Table_Abstract , in order to gain the constructor functionality required to define the definition and key specific to each model. Within the models we may now define our database definition as well as the definition key in the constructor. To begin the changes required to enable the table definitions, we first must create the resource entries within the application.ini. These definitions are laid out in the .ini in the same manner as an array. Note the first keyname (&#8216;resources&#8217;) is required so the bootstraper will seek to use it to find the bootstrap method within the Bootstrap class. <div><script src='https://gist.github.com/972905.js?file=application.ini'></script>
+<noscript><pre><code>[production]
+phpSettings.display_startup_errors = 0
+phpSettings.display_errors = 0
+includePaths.library = APPLICATION_PATH &quot;/../library&quot;
+bootstrap.path = APPLICATION_PATH &quot;/Bootstrap.php&quot;
+bootstrap.class = &quot;Bootstrap&quot;
+resources.frontController.controllerDirectory = APPLICATION_PATH &quot;/controllers&quot;
+resources.frontController.params.displayExceptions = 0</p>
+
+<p>resources.dbDefinition.Accounts.name = &quot;accounts&quot;
+resources.dbDefinition.Accounts.dependentTables[] = &quot;Bugs&quot;</p>
+
+<p>resources.dbDefinition.Bugs.name = &quot;bugs&quot;
+resources.dbDefinition.Bugs.dependentTables[] = &quot;ZendDb_Model_DbTable_BugsProducts&quot;
+resources.dbDefinition.Bugs.referenceMap.Reporter.columns[] = &quot;reported_by&quot;
+resources.dbDefinition.Bugs.referenceMap.Reporter.refTableClass = &quot;ZendDb_Model_DbTable_Accounts&quot;
+resources.dbDefinition.Bugs.referenceMap.Reporter.refColumns[] = &quot;account_name&quot;
+resources.dbDefinition.Bugs.referenceMap.Engineer.columns[] = &quot;assigned_to&quot;
+resources.dbDefinition.Bugs.referenceMap.Engineer.refTableClass = &quot;ZendDb_Model_DbTable_Accounts&quot;
+resources.dbDefinition.Bugs.referenceMap.Engineer.refColumns[] = &quot;account_name&quot;
+resources.dbDefinition.Bugs.referenceMap.Verifier.columns[] = &quot;verified_by&quot;
+resources.dbDefinition.Bugs.referenceMap.Verifier.refTableClass = &quot;ZendDb_Model_DbTable_Accounts&quot;
+resources.dbDefinition.Bugs.referenceMap.Verifier.refColumns[] = &quot;account_name&quot;</p>
+
+<p>resources.dbDefinition.Products.name = &quot;products&quot;
+resources.dbDefinition.Products.dependentTables[] = &quot;ZendDb_Model_DbTable_BugsProducts&quot;</p>
+
+<p>resources.dbDefinition.BugsProducts.name = &quot;bugs_products&quot;
+resources.dbDefinition.BugsProducts.referenceMap.Bug.columns[] = &quot;bug_id&quot;
+resources.dbDefinition.BugsProducts.referenceMap.Bug.refTableClass = &quot;ZendDb_Model_DbTable_Bugs&quot;
+resources.dbDefinition.BugsProducts.referenceMap.Bug.refColumns[] = &quot;bug_id&quot;
+resources.dbDefinition.BugsProducts.referenceMap.Product.columns[] = &quot;product_id&quot;
+resources.dbDefinition.BugsProducts.referenceMap.Product.refTableClass = &quot;ZendDb_Model_DbTable_Products&quot;
+resources.dbDefinition.BugsProducts.referenceMap.Product.refColumns[] = &quot;product_id&quot;</p>
+
+<p>appnamespace = &quot;ZendDb_&quot;
+[staging : production]</p>
+
+<p>[testing : production]
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1</p>
+
+<p>[development : production]
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
+resources.frontController.params.displayExceptions = 1</p>
+
+<p>resources.db.adapter = &quot;Pdo_Sqlite&quot;
+resources.db.params.dbname = APPLICATION_PATH &quot;/../db/development&quot;</code></pre></noscript></div>
+ Next we create the resource bootrap method within the Bootstrap.php. The goal of this is to load and instantiate the Zend_Db_Table_Definition object and store it within a Zend_Registry container for use by our models. <div><script src='https://gist.github.com/972905.js?file=Bootstrap.php'></script>
+<noscript><pre><code>&lt;?php
+/<em>*
+ *
+ * The Application Bootstrap
+ * @author zircote
+ * @package ZendDb
+ *
+ </em>/
+class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
+{</p>
+
+<pre><code>/**
+ *
+ * @return Zend_Db_Table_Definition
+ */
+protected function _initDbDefinition ()
+{
+    /**
+     *
+     * load the application config values so we may use them.
+     * @var Zend_Config
+     */
+    $options = $this-&amp;gt;getOption('resources');
+    /**
+     *
+     * instantiate the Db definition
+     * @var Zend_Db_Table_Definition
+     */
+    $definition = new Zend_Db_Table_Definition($options['dbDefinition']);
+    /**
+     * place the Zend_Db_Table_Definition into a registry container for
+     * access.
+     */
+    Zend_Registry::set('dbDefinition', $definition);
+    return $definition;
+}
+</code></pre>
+
+<p>}</code></pre></noscript></div>
+ Next, we must modify our models to reflect the changes, namely the constructor. Within these models constructors we pass the definition key that corresponds to the class in question as the first parameter; with the second parameter, we will pass the definition object which we will acquire from the Zend_Registry container created within the bootstrap. We must do this for all database models. <div><script src='https://gist.github.com/972905.js?file=Models.php'></script>
+<noscript><pre><code>&lt;?php
+class ZendDb_Model_DbTable_Accounts extends Zend_Db_Table
+{</p>
+
+<pre><code>public function __construct(){
+    parent::__construct('Accounts', Zend_Registry::get('dbDefinition'));
+}
+</code></pre>
+
+<p>}</p>
+
+<p>class ZendDb_Model_DbTable_Bugs extends Zend_Db_Table
+{</p>
+
+<pre><code>public function __construct(){
+    parent::__construct('Bugs', Zend_Registry::get('dbDefinition'));
+}
+</code></pre>
+
+<p>}</p>
+
+<p>class ZendDb_Model_DbTable_BugsProducts extends Zend_Db_Table
+{</p>
+
+<pre><code>public function __construct ()
+{
+    parent::__construct('BugsProducts', Zend_Registry::get('dbDefinition'));
+}
+</code></pre>
+
+<p>}</p>
+
+<p>class ZendDb_Model_DbTable_Products extends Zend_Db_Table
+{</p>
+
+<pre><code>public function __construct ()
+{
+    parent::__construct('Products', Zend_Registry::get('dbDefinition'));
+}
+</code></pre>
+
+<p>}</code></pre></noscript></div>
+ Having updated the models, application.ini and Bootstrap.php examples of their magic methods, as well as explicit calls, may be found in the Zend Framework reference guide; I have also provided the following snips to demonstrate explicit calls:  <div><script src='https://gist.github.com/972905.js?file=using-the-models.php'></script>
+<noscript><pre><code>&lt;?php</p>
+
+<pre><code>    $products = new ZendDb_Model_DbTable_Products();
+    $products = $products-&amp;gt;fetchAll();
+    foreach ($products as $product) {
+        echo '==============', PHP_EOL;
+        echo 'Product', PHP_EOL;
+        print_r($product-&amp;gt;toArray());
+        $bp = $product-&amp;gt;findManyToManyRowset(
+            'ZendDb_Model_DbTable_Bugs',  // Find This data
+            'ZendDb_Model_DbTable_BugsProducts', // Joined on this table
+            'Product');// using this rule
+        foreach ($bp as $bug) {
+            echo 'Bugs:', PHP_EOL;
+            print_r($bug-&amp;gt;toArray());
+            $reporter = $bug-&amp;gt;findParentRow(
+                'ZendDb_Model_DbTable_Accounts',
+                'Reporter');
+            echo '$engineer:', PHP_EOL;
+            print_r($reporter-&amp;gt;toArray());
+            $engineer = $bug-&amp;gt;findParentRow(
+                'ZendDb_Model_DbTable_Accounts',
+                'Engineer');
+            echo '$verifier:', PHP_EOL;
+            print_r($engineer-&amp;gt;toArray());
+            $verifier = $bug-&amp;gt;findParentRow(
+                'ZendDb_Model_DbTable_Accounts',
+                'Verifier');
+            echo '$verifier:', PHP_EOL;
+            print_r($verifier-&amp;gt;toArray());
+        }
+    }
+    echo '==============', PHP_EOL;&lt;/code&gt;&lt;/pre&gt;&lt;/noscript&gt;&lt;/div&gt;
+</code></pre>
+
+<p> To put the final touches on the database related provisioning, an often overlooked key component of the database setup is the Zend_Db_Table::$_defaultMetadataCache. The most trivial means of managing this is within the application.ini utilizing Zend_Cache_Manager via the <a href="http://framework.zend.com/manual/en/zend.application.available-resources.html#zend.application.available-resources.cachemanager">
+Zend_Application_Resource_Cachemanager</a> and detailed in enabling it for the database in <a href="http://framework.zend.com/manual/en/zend.application.available-resources.html#zend.application.available-resources.db"> Zend_Application_Resource_Db</a>. By taking the time to layout the supporting technologies into your Zend Framework Application, many headaches and obstacles may be easily avoided; to allow developers to focus on the requirements of the application. In the next post, I will explore a simple approach to database migrations utilizing <a href="http://akrabat.com/zend-framework/akrabat_db_schema_manager-zend-framework-database-migrations/">Rob Allens Akrabat library</a>, as well as, custom providers to facilitate deployment operations and application setup.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Starting a Zend Framework Project [1/2]]]></title>
+    <link href="http://zircote.com/blog/2011/05/13/starting-a-zend-framework-project/"/>
+    <updated>2011-05-13T14:29:23-05:00</updated>
+    <id>http://zircote.com/blog/2011/05/13/starting-a-zend-framework-project</id>
+    <content type="html"><![CDATA[<p>Recently I have been asked to introduce and assist with starting Zend Framework projects; over time I have learned through trial, error and banging my head against a wall a few tricks, shortcuts and nuances. In this series I will take the life cycle of a Zend Framework project from beginning to never-end and cover each portion as completely as I can and provide a place for discussion to improve my process or detail it further. It should be clear the intent of this article is not to discuss development methodology or any process outside of the scope of using Zend Framework itself.</p>
+
+<h1>A project is born.</h1>
+
+
+<p>Beginning with a name for the project established (for the purpose of this write-up I have decided on ZendDB) we should begin by creating the project reference within Eclipse, Zend Studio or your preferred editors method. Before we begin any code creation or development we need to insure we have the required tools on our system to begin.<div><script src='https://gist.github.com/970586.js?file=setup-pear.sh'></script>
+<noscript><pre><code>#discover all relevant channels
+sudo pear channel-discover pear.zfcampus.org/
+sudo pear channel-discover pear.phpunit.de
+sudo pear channel-discover components.ez.no
+sudo pear channel-discover pear.symfony-project.com</p>
+
+<h1>install required/desired packages</h1>
+
+<p>sudo pear install PHPDocumentor
+sudo pear install PHP_CodeSniffer
+sudo pear install --alldeps phpunit/PHPUnit
+sudo pear install --alldeps zfcampus/ZF</p>
+
+<p></code></pre></noscript></div>
+ Following this we must establish where we will edit, build and work on the project and initialize the project contents using the <strong>zf</strong> tool, create additional directories for build and validation.<div><script src='https://gist.github.com/970586.js?file=build-dirs.sh'></script>
+<noscript><pre><code># If you use Zend Studio or Eclipse PDT create a new</p>
+
+<h1><code>PHP Project</code> named ZfBugs in your workspace</h1>
+
+<h1>workspace could easily be in /usr/local/zend/apache2/htdocs</h1>
+
+<h1>if you utilize Zend Server the location is up to you</h1>
+
+<p>cd ~/${Workspace}
+zf create project ZendDb</p>
+
+<h1>create the build structure, build.xml and build container</h1>
+
+<p>touch ZendDb/build.xml</p>
+
+<h1>edit the build.xml</h1>
+
+<p>mkdir ZendDb/build
+cd ZendDb/build
+touch phpcs.xml phpunit.xml</code></pre></noscript></div>
+ The build related files and directories tie all components into a collective suite of tools, utilizing ant or phing we will be able to execute all reports as one single command. This practice also lays the foundation for continuous integration, which this project will evolve into as time goes on. To enable each of these tools we will use we must create their associated configurations, begin by editing build.phpcs.xml <div><script src='https://gist.github.com/970586.js?file=phpcs.xml'></script>
+<noscript><pre><code>#edit the phpcs.xml&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;ruleset name=&quot;Zend Standard&quot;&gt;</p>
+
+<pre><code>&amp;lt;description&amp;gt;Zend Standard, exclude extraneous&amp;lt;/description&amp;gt;
+&amp;lt;exclude-pattern&amp;gt;*/tests/*&amp;lt;/exclude-pattern&amp;gt;
+&amp;lt;exclude-pattern&amp;gt;*/db/*&amp;lt;/exclude-pattern&amp;gt;
+&amp;lt;exclude-pattern&amp;gt;*.js&amp;lt;/exclude-pattern&amp;gt;
+&amp;lt;exclude-pattern&amp;gt;*.css&amp;lt;/exclude-pattern&amp;gt;
+&amp;lt;rule ref=&amp;quot;Zend&amp;quot; /&amp;gt;
+</code></pre>
+
+<p>&lt;/ruleset&gt;</code></pre></noscript></div>
+ I have intentionally kept this example simple and to the point, I strongly recommend you visit the <a href="http://pear.php.net/package/PHP_CodeSniffer/">PHP_CodeSniffer</a> project for more details on its capabilities. Once complete the PHPUnit configuration is setup with the various types of reports it should generate, the test suites it will cover.<div><script src='https://gist.github.com/970586.js?file=phpunit.xml'></script>
+<noscript><pre><code>&lt;phpunit bootstrap=&quot;../tests/bootstrap.php&quot;&gt;</p>
+
+<pre><code>&amp;lt;testsuite name=&amp;quot;ZendDb Test Suite&amp;quot;&amp;gt;
+    &amp;lt;directory&amp;gt;../tests/application&amp;lt;/directory&amp;gt;
+&amp;lt;/testsuite&amp;gt;
+&amp;lt;testsuite name=&amp;quot;ZendDb Test Suite&amp;quot;&amp;gt;
+    &amp;lt;directory&amp;gt;../tests/library&amp;lt;/directory&amp;gt;
+&amp;lt;/testsuite&amp;gt;
+&amp;lt;logging&amp;gt;
+    &amp;lt;log type=&amp;quot;coverage-html&amp;quot; target=&amp;quot;coverage&amp;quot; title=&amp;quot;ZendDb&amp;quot;
+        charset=&amp;quot;UTF-8&amp;quot; yui=&amp;quot;true&amp;quot; highlight=&amp;quot;true&amp;quot; lowUpperBound=&amp;quot;35&amp;quot;
+        highLowerBound=&amp;quot;70&amp;quot; /&amp;gt;
+&amp;lt;/logging&amp;gt;
+&amp;lt;filter&amp;gt;
+    &amp;lt;whitelist&amp;gt;
+        &amp;lt;directory suffix=&amp;quot;.php&amp;quot;&amp;gt;library/&amp;lt;/directory&amp;gt;
+    &amp;lt;/whitelist&amp;gt;
+&amp;lt;/filter&amp;gt;
+</code></pre>
+
+<p>&lt;/phpunit&gt;</code></pre></noscript></div>
+ For more details on PHPUnits report capabilities and xml configuration options visit the <a href="http://www.phpunit.de/manual/current/en/appendixes.configuration.html">PHPUnit Documentation</a>. Now this is established we may bring it all together with the ant build.xml file. This file will allow us to create/remove required build artifacts, report directories and execute phpunit, phpcs and phpdoc all in a single stack.<div><script src='https://gist.github.com/970586.js?file=build.xml'></script>
+<noscript><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;project name=&quot;ZendDb&quot; default=&quot;build&quot; basedir=&quot;.&quot;&gt;</p>
+
+<pre><code>&amp;lt;property name=&amp;quot;source&amp;quot; value=&amp;quot;.&amp;quot; /&amp;gt;
+&amp;lt;target name=&amp;quot;clean&amp;quot; description=&amp;quot;Clean up and create report directories&amp;quot;&amp;gt;
+    &amp;lt;!-- This will clear previous files and directories, then create 
+        them for the next run --&amp;gt;
+    &amp;lt;delete dir=&amp;quot;${basedir}/build/api&amp;quot; /&amp;gt;
+    &amp;lt;delete dir=&amp;quot;${basedir}/build/coverage&amp;quot; /&amp;gt;
+    &amp;lt;delete dir=&amp;quot;${basedir}/build/logs&amp;quot; /&amp;gt;
+    &amp;lt;mkdir dir=&amp;quot;${basedir}/build/api&amp;quot; /&amp;gt;
+    &amp;lt;mkdir dir=&amp;quot;${basedir}/build/coverage&amp;quot; /&amp;gt;
+    &amp;lt;mkdir dir=&amp;quot;${basedir}/build/logs&amp;quot; /&amp;gt;
+    &amp;lt;touch file=&amp;quot;${basedir}/build/logs/codeSniffer.txt&amp;quot; /&amp;gt;
+&amp;lt;/target&amp;gt;
+&amp;lt;target name=&amp;quot;phpunit&amp;quot; description=&amp;quot;Run PHPUnit&amp;quot;&amp;gt;
+    &amp;lt;exec executable=&amp;quot;phpunit&amp;quot; failonerror=&amp;quot;true&amp;quot;&amp;gt;
+        &amp;lt;arg line=&amp;quot;-c ${basedir}/build/phpunit.xml&amp;quot; /&amp;gt;
+    &amp;lt;/exec&amp;gt;
+&amp;lt;/target&amp;gt;
+&amp;lt;target name=&amp;quot;phpcs&amp;quot; description=&amp;quot;Generate codeSniffer.txt using PHP_CodeSniffer&amp;quot;&amp;gt;
+    &amp;lt;exec executable=&amp;quot;phpcs&amp;quot;&amp;gt;
+        &amp;lt;arg
+            line=&amp;quot;--report=full
+          --report-file=${basedir}/build/logs/codeSniffer.txt
+          --standard=${basedir}/build/phpcs.xml
+          ${basedir}&amp;quot; /&amp;gt;
+    &amp;lt;/exec&amp;gt;
+&amp;lt;/target&amp;gt;
+&amp;lt;target name=&amp;quot;phpdoc&amp;quot; description=&amp;quot;Generate API documentation using PHPDocumentor&amp;quot;&amp;gt;
+    &amp;lt;exec executable=&amp;quot;phpdoc&amp;quot;&amp;gt;
+        &amp;lt;arg line=&amp;quot;-d ${source} -t ${basedir}/build/api&amp;quot; /&amp;gt;
+    &amp;lt;/exec&amp;gt;
+&amp;lt;/target&amp;gt;
+&amp;lt;target name=&amp;quot;build&amp;quot; depends=&amp;quot;clean,phpunit,phpcs,phpdoc&amp;quot; /&amp;gt;
+</code></pre>
+
+<p>&lt;/project&gt;</code></pre></noscript></div>
+ For a more detailed overview of an ant build file please see <a href="http://ant.apache.org/manual/using.html">Apache Ant</a>; it should also be noted that <a href="http://www.phing.info/trac/">Phing</a> is a php alternative to ant and should be interoperable with ant. To utilize the build script you need only execute <strong>ant </strong> within the top-level directory of the project, the example file provided will create phpdocs, code sniff the project and execute all unit tests. Reports will be stored within build/* for review.</p>
+
+<p>In the next edition to this I will cover database configuration and model creation.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Cleaning up your product]]></title>
+    <link href="http://zircote.com/blog/2011/05/11/cleaning-up-your-product/"/>
+    <updated>2011-05-11T04:41:25-05:00</updated>
+    <id>http://zircote.com/blog/2011/05/11/cleaning-up-your-product</id>
+    <content type="html"><![CDATA[<p>I recently made the embarrassing mistake of creating a push request to a well respected PHP author&#8217;s project and to my horror I saw he had to &#8216;detabify&#8217; my push. I had recently reset my Zend Studio workspace and neglected to reconfigure the default format standard from PHP => Zend.</p>
+
+<p>Once I sorted out my studio client, I began to look into ways to test this all before it&#8217;s even committed, to insure I have not overlooked a detail. To help with syntax, formatting and style, I have employed <a title="PHP_CodeSniffer" href="http://pear.php.net/package/PHP_CodeSniffer" target="_blank">PHP_CodeSniffer</a>, a <a title="http://pear.php.net" href="http://pear.php.net" target="_blank">PEAR</a> package. Its use is simple and straightforward with informational documentation; Rulesets or Sniffs are varying and customizable in the form of a ruleset xml file. Available Sniff Collections are grouped as follows:</p>
+
+<ul>
+    <li>Generic</li>
+    <li><a title="SquizLabs" href="http://www.squizlabs.com/php-codesniffer" target="_blank">Squiz</a></li>
+    <li><a title="PHP.NET Coding Standard" href="http://svn.php.net/viewvc/php/php-src/trunk/CODING_STANDARDS?view=markup" target="_blank">PHP</a></li>
+    <li><a title="Zend Coding Standards" href="http://framework.zend.com/manual/en/coding-standard.html" target="_blank">Zend</a></li>
+    <li><a title="PEAR Coding Standards" href="http://pear.php.net/manual/en/coding-standards.php" target="_blank">PEAR</a></li>
+</ul>
+
+
+<p>Each brings its own standards ruleset for customization. I have chosen to implement the Zend Sniff in  the form of a file named phpcs.xml, I exclude certain file types <em>.js, </em>.css all test files, data files and, for good measure, .svn directories.</p>
+
+<div><script src='https://gist.github.com/965058.js?file='></script>
+<noscript><pre><code>&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;ruleset name=&quot;Zend Standard&quot;&gt;
+    &lt;description&gt;A custom coding standard&lt;/description&gt;
+    &lt;exclude-pattern&gt;*/tests/*&lt;/exclude-pattern&gt;
+    &lt;exclude-pattern&gt;*/data/*&lt;/exclude-pattern&gt;
+    &lt;exclude-pattern&gt;*/.svn/*&lt;/exclude-pattern&gt;
+    &lt;exclude-pattern&gt;*.js&lt;/exclude-pattern&gt;
+    &lt;exclude-pattern&gt;*.css&lt;/exclude-pattern&gt;
+    &lt;rule ref=&quot;Zend&quot; /&gt;
+&lt;/ruleset&gt;</code></pre></noscript></div>
+
+
+<p>I place this file in a directory inside <project_dir>/tests/build/ where you place your file strictly depends ons on your personal preferences. To install PHP_CodeSniffer execute the following commands:</p>
+
+<div><script src='https://gist.github.com/.js?file='></script>
+<noscript><pre><code>&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;https://github.com/gist&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</code></pre></noscript></div>
+
+
+<p>There are several choices of reports, for the purpose of command line reporting I choose one or all:</p>
+
+<ul>
+    <li>source [provides a description of what rules the violations are related]</li>
+    <li>full [detail of all violations in the code base, line of violation and rule</li>
+    <li>summary [ a high level assessment of all rule violations]</li>
+</ul>
+
+
+<p>Examples of the report type&#8217;s outlines and the associated commands to produce each with the afore mentioned rules file.</p>
+
+<p>[gist id=&#8221;965105&#8221;/]</p>
+
+<p>While it&#8217;s possible, the report will be sizable depending on the projects size; however this is an opportune time to begin cleaning up your existing code base; but more importantly, it gives you the tools required to insure your code is clean, consistant and within community expectations.</p>
+
+<p>If you, your project or employer have your own specification of code standards, I would encourage you to create your own rule set in combinations. Should the existing sniffs not be sufficient, it&#8217;s advised to create your own sniffs to accommodate your needs.</p>
+
+<p>The <a title="PHP_CodeSniffer" href="http://pear.php.net/package/PHP_CodeSniffer" target="_blank">PHP_CodeSniffer</a> project provides an annotated xml ruleset file to serve as a guideline and tutor; as well as the documentation associated with its use.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Skulk PEAR release 0.1.2]]></title>
+    <link href="http://zircote.com/blog/2011/05/09/skulk-pear-release-0-1-2/"/>
+    <updated>2011-05-09T02:40:46-05:00</updated>
+    <id>http://zircote.com/blog/2011/05/09/skulk-pear-release-0-1-2</id>
+    <content type="html"><![CDATA[<p>I am happy to announce the release of Skulk 0.1.2 for use with <a title="prowlapp" href="https://www.prowlapp.com" target="_blank">Prowl</a>. This release introduces a command line zf provider for your messaging pleasure. More on its use and source code may be found at github@<a title="Skulk" href="https://github.com/zircote/Skulk" target="_blank">Skulk</a>.</p>
+
+<p>For PEAR installation and channel information, please see: <a href="http://pear.zircote.com/" target="_blank">http://pear.zircote.com/</a> for more details.</p>
+
+<h3>Setting up and using the Provider</h3>
+
+
+<p>Create the user config file for Zend_Tool</p>
+
+<pre><code>zf create config </code></pre>
+
+
+<div><code>It will be located at <code>~/.zf.ini and can be o</code>pened in your preferred editor. Insure the Skulk library directory is in the include path, then execute the following:</code></div>
+
+
+<pre><code>$ zf enable config.provider Skulk_Tool_ProwlProvider Provider/Manifest 'Skulk_Tool_ProwlProvider' was enabled for usage with Zend Tool. </code></pre>
+
+
+<p>You are ready to set up the configuration and send a message.</p>
+
+<pre><code>$ zf ? prowl Zend Framework Command Line Console Tool v1.11.5 Actions supported by provider "Prowl" Prowl zf addkey prowl keyname apikey zf delkey prowl keyname zf send-message prowl message priority[=normal] description url </code></pre>
+
+
+<p>Add your API key(s) with the following command:</p>
+
+<pre><code>zf addkey prowl <keyname> <prowl-apiKey> </code></pre>
+
+
+<p>Now send a message:</p>
+
+<pre><code>$ zf send-message prowl 'test message' 988 messages left until May 8, 2011 5:58:48 PM</code></pre>
+
+
+<p>&nbsp;</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Writing a custom provider]]></title>
+    <link href="http://zircote.com/blog/2011/05/08/writing-a-custom-provider/"/>
+    <updated>2011-05-08T21:30:08-05:00</updated>
+    <id>http://zircote.com/blog/2011/05/08/writing-a-custom-provider</id>
+    <content type="html"><![CDATA[<p>I decided I wanted to have a CLI interface to my Skulk library and provide a method to send messages from scripts without requiring any additional coding overhead. To do this I employed the Zend_Tool CLI [zf] and began by deciding on the functionality it would possess. After some thought, I settled ultimately that sending messages would be sufficient for the time being; however, it would require some supporting methods for api key management, naming, adding and deleting.</p>
+
+<pre class="brush:php">class Skulk_Tool_ProwlProvider extends Zend_Tool_Project_Provider_Abstract
+{
+}</pre>
+
+
+<p>I started the process by creating the provider class Skulk_Tool_ProwlProvider; the &#8220;Provider&#8221; portion of the name is important as the IncludePathLoader will not otherwise recognize the class as such and extending the Zend_Tool_Project_Provider_Abstract.</p>
+
+<pre class="brush:php">require_once ('Zend/Tool/Project/Provider/Abstract.php');
+class Skulk_Tool_ProwlProvider extends Zend_Tool_Project_Provider_Abstract{
+    public function addkey($keyname, $apikey){
+    }
+    public function delkey($keyname){
+    }
+    public function sendMessage($message, $priority = 'normal', $description = null, $url = null){
+    }
+}</pre>
+
+
+<p>Having established the class we may now move on to the public methods. We have established our required methods as follows:</p>
+
+<ul>
+    <li>Adding an api key</li>
+    <li>Removing an apikey</li>
+    <li>Sending a message</li>
+</ul>
+
+
+<pre class="brush:php">require_once ('Zend/Tool/Project/Provider/Abstract.php');
+
+class Skulk_Tool_ProwlProvider extends Zend_Tool_Project_Provider_Abstract{
+
+    public function addkey($keyname, $apikey){
+        if(!$this->_registry->getConfig()->skulk){
+            $skulk = array(
+                'defaults' => array( 'priority' => 'normal'),
+                'keys' => array($keyname => $apikey)
+            );
+            $this->_registry->getConfig ()->skulk = $skulk;
+            $this->_registry->getConfig ()->save();
+        } else {
+            if($this->_registry->getConfig()->skulk->keys){
+                $this->_registry->getConfig()->skulk->keys->$keyname = $apikey;
+            } else {
+                $this->_registry->getConfig()->skulk->keys = array();
+                $this->_registry->getConfig()->skulk->keys->$keyname = $apikey;
+            }
+            $this->_registry->getConfig ()->save();
+        }
+    }
+}</pre>
+
+
+<p>To add the API key we will need to be able to write to the configuration file in the user&#8217;s home directory or where otherwise specified at runtime. This will require interaction with the internal registry property; testing if the relevant properties exist in the configuration, modify it in the event it does or initialize it if not. We perform the various configuration operations through the _registry property as demonstrated in the example below adding the required options followed by the save method to write the configuration file.</p>
+
+<pre class="brush:php">$this->_registry->getResponse()
+    ->appendContent('api key saved!', array('color' => 'green'));</pre>
+
+
+<p>We also may want to provide feedback to the user regarding the status of the operation. This also is provided through the access of the _registry property with the response object, which may be formatted for color, tab depth, centering and blocking. For the purpose of this demonstration, we will use the color decorator to make the output green, leaving our example well established and ready for the next steps.</p>
+
+<pre class="brush:php">    public function addkey($keyname, $apikey){
+        $skulk = $this->_registry->getConfig()->skulk;
+        if(!$skulk){
+            $this->_registry->getResponse()
+                ->appendContent('initializing default config for Skulk...', array('color' => 'cyan'))
+                ->appendContent('default priority [normal]...', array('color' => 'cyan'));
+            $skulk = array(
+                'defaults' => array( 'priority' => 'normal'),
+                'keys' => array($keyname => $apikey)
+            );
+            $this->_registry->getConfig ()->skulk = $skulk;
+            $this->_registry->getConfig ()->save();
+        } else {
+            if($this->_registry->getConfig()->skulk->keys){
+                $this->_registry->getConfig()->skulk->keys->$keyname = $apikey;
+            } else {
+                $this->_registry->getConfig()->skulk->keys = array();
+                $this->_registry->getConfig()->skulk->keys->$keyname = $apikey;
+            }
+            $this->_registry->getConfig ()->save();
+        }
+        $this->_registry->getResponse()
+            ->appendContent('api key saved!', array('color' => 'green'));
+    }</pre>
+
+
+<p>Now to add the delkey method using the same tools as before, with the addition of an unset on the existing property followed by the save method, as in the addkey logic writing the file with the updated values.</p>
+
+<pre class="brush:php">    public function delkey($keyname){
+        $config = $this->_registry->getConfig();
+        if($config->skulk->keys->$keyname){
+            unset($config->skulk->keys->$keyname);
+            $this->_registry->getConfig ()->save();
+            $this->_registry->getResponse()
+                ->appendContent($keyname . ' apikey removed...', array('color' => 'red'));
+        } else {
+            $this->_registry->getResponse()
+                ->appendContent($keyname . ' apikey does not exist...', array('color' => 'red'));
+        }
+    }</pre>
+
+
+<p>Finally this brings us to the sendMessage call, which will require ancillary methods to create the outgoing message container, the API object that sends the message as well as a priorities method to convert users input into a value expected by the API actor. The details of which are less about Providers and more about the code being employed, leaving us with a final product ready to send messages to an iOS device near you.</p>
+
+<pre class="brush:php">require_once ('Zend/Tool/Project/Provider/Abstract.php');
+
+/**
+ * @author zircote
+ *
+ * zf enable config.provider Skulk_Tool_ProwlProvider
+ * zf create config
+ * zf ? prowl
+ */
+class Skulk_Tool_ProwlProvider extends Zend_Tool_Project_Provider_Abstract
+    implements Zend_Tool_Framework_Provider_Pretendable{
+    /**
+     *
+     * @var Skulk_Client_Message
+     */
+    protected $message;
+    /**
+     *
+     * @var Skulk_Client
+     */
+    protected $api;
+    /**
+     *
+     * @example zf addkey prowl iPhone sdf234g9i24t09j23r...
+     * @param string $keyname
+     * @param string $apikey
+     */
+    public function addkey($keyname, $apikey){
+        $skulk = $this->_registry->getConfig()->skulk;
+        if(!$skulk){
+            $this->_registry->getResponse()
+                ->appendContent('initializing default config for Skulk...', array('color' => 'cyan'))
+                ->appendContent('default priority [normal]...', array('color' => 'cyan'));
+            $skulk = array(
+                'defaults' => array( 'priority' => 'normal'),
+                'keys' => array($keyname => $apikey)
+            );
+            $this->_registry->getConfig ()->skulk = $skulk;
+            $this->_registry->getConfig ()->save();
+        } else {
+            if($this->_registry->getConfig()->skulk->keys){
+                $this->_registry->getConfig()->skulk->keys->$keyname = $apikey;
+            } else {
+                $this->_registry->getConfig()->skulk->keys = array();
+                $this->_registry->getConfig()->skulk->keys->$keyname = $apikey;
+            }
+            $this->_registry->getConfig ()->save();
+        }
+        $this->_registry->getResponse()
+            ->appendContent('api key saved!', array('color' => 'green'));
+    }
+
+    /**
+     *
+     * zf delkey prowl iPhone
+     * @param string $keyname
+     */
+    public function delkey($keyname){
+        $config = $this->_registry->getConfig();
+        if($config->skulk->keys->$keyname){
+            unset($config->skulk->keys->$keyname);
+            $this->_registry->getConfig ()->save();
+            $this->_registry->getResponse()
+                ->appendContent($keyname . ' apikey removed...', array('color' => 'red'));
+        } else {
+            $this->_registry->getResponse()
+                ->appendContent($keyname . ' apikey does not exist...', array('color' => 'red'));
+        }
+    }
+
+    /**
+     *
+     * zf send-message prowl 'test message' normal 'long description here' 'http://zircote.com'
+     * @param string $message
+     * @param string $priority
+     * @param string $url
+     * @param string $description
+     */
+    public function sendMessage($message, $priority = 'normal', $description = null, $url = null){
+        $this->_init();
+        $this->message->setApikey($this->apikeys->toArray())
+            ->setEvent($message)
+            ->setPriority($this->getPriority($priority))
+            ->setDescription($description ? $description : $message);
+        if(null !== $url){
+            $this->message->setUrl($url);
+        }
+        $response = $this->api->add($this->message);
+        $result = $response->getResult();
+        if(key_exists('success', $result)){
+            $this->_registry->getResponse()
+                ->appendContent($response->getRemaining() . ' messages left until '
+                 . $response->getResetDate(), array('color' => 'cyan'));
+        } else {
+            $this->_registry->getResponse()
+                ->appendContent($result['error']['detail'], array('color' => 'red'));
+        }
+
+    }
+
+    /**
+     *
+     * returns integer value for priorityfrom a simple string
+     * @param string $priority
+     * @return integer
+     */
+    protected function getPriority($priority){
+        $priorities = array(
+            'verylow' => Skulk_Client_Message::PRIORITY_VERYLOW,
+            'normal' => Skulk_Client_Message::PRIORITY_NORMAL,
+            'moderate' => Skulk_Client_Message::PRIORITY_MODERATE,
+            'high' => Skulk_Client_Message::PRIORITY_HIGH,
+            'emergency' => Skulk_Client_Message::PRIORITY_EMERGENCY
+        );
+        return  $priorities[strtolower($priority)];
+    }
+
+    protected function _init(){
+        $this->apikeys = $this->_registry->getConfig()->skulk->keys;
+        require_once 'Skulk/Client.php';
+        require_once 'Skulk/Client/Message.php';
+        $this->message = new Skulk_Client_Message();
+        $this->api = new Skulk_Client;
+    }
+
+}</pre>
+
+
+<p>When completed it affords us the functionality list:</p>
+
+<pre class="brush:shell">$ zf ? prowl
+Zend Framework Command Line Console Tool v1.11.5
+Actions supported by provider "Prowl"
+  Prowl
+    zf addkey prowl keyname apikey
+    zf delkey prowl keyname
+    zf send-message prowl message priority[=normal] description url</pre>
+
+]]></content>
+  </entry>
+  
+</feed>
